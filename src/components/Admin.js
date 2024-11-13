@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from './utils/supabaseClient';
+import { supabase } from './utils/supabaseClient'; // Ensure the correct supabase client is initialized
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faClipboardList, faUsers, faSignOutAlt, faExclamationCircle, faSpinner, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faClipboardList, faUsers, faSignOutAlt, faExclamationCircle, faSpinner, faCheckCircle, faUser } from '@fortawesome/free-solid-svg-icons';
 import adminlogo from './public/parktracklogo.png';
 
 const Admin = () => {
@@ -14,13 +13,18 @@ const Admin = () => {
   const [solvedCount, setSolvedCount] = useState(0);
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
-
-  const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    navigate('/admin-login');  // Changed to '/admin-login' for redirect
-  };
+  const [session, setSession] = useState(null); // State for storing session
 
   useEffect(() => {
+    const checkSession = async () => {
+      const { data: sessionData } = await supabase.auth.getSession(); // Fetch current session
+      setSession(sessionData);
+    };
+
+    // Check session on component mount
+    checkSession();
+
+    // Fetch report counts
     const fetchReportCounts = async () => {
       try {
         const { data: pendingReports, error: pendingError } = await supabase
@@ -28,7 +32,6 @@ const Admin = () => {
           .select('*')
           .eq('progress', 0)
           .is('remarks', null);
-
         if (pendingError) throw pendingError;
         setPendingCount(pendingReports.length);
 
@@ -37,7 +40,6 @@ const Admin = () => {
           .select('*')
           .eq('progress', 1)
           .not('remarks', 'is', null);
-
         if (onProgressError) throw onProgressError;
         setOnProgressCount(onProgressReports.length);
 
@@ -46,7 +48,6 @@ const Admin = () => {
           .select('*')
           .eq('progress', 2)
           .not('remarks', 'is', null);
-
         if (solvedError) throw solvedError;
         setSolvedCount(solvedReports.length);
       } catch (error) {
@@ -56,19 +57,30 @@ const Admin = () => {
 
     fetchReportCounts();
 
-    // Set the initial date
+    // Set the current date and time
     const today = new Date();
     setCurrentDate(today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
-
-    // Update time every second
     const timer = setInterval(() => {
       const now = new Date();
       setCurrentTime(now.toLocaleTimeString());
     }, 1000);
 
-    // Clean up interval on component unmount
-    return () => clearInterval(timer);
+    return () => clearInterval(timer); // Clean up timer
   }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut(); // Log out from Supabase
+    localStorage.removeItem('isAuthenticated'); // Clear authentication state
+    navigate('/admin-login'); // Redirect to login page
+  };
+
+  if (!session) {
+    return (
+      <div>
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className='admin1-container'>
@@ -79,7 +91,7 @@ const Admin = () => {
         </div>
         <div className='admin1-dashboard'>
           <button className="admin1-sidebar-button" onClick={() => navigate('/Admin')}>
-            <FontAwesomeIcon icon={faHome} className="admin1-icon" /> {/* Updated to house icon */}
+            <FontAwesomeIcon icon={faHome} className="admin1-icon" />
             Dashboard
           </button>
           <button className="admin1-sidebar-button" onClick={() => navigate('/Pending')}>
@@ -104,18 +116,18 @@ const Admin = () => {
             <span className="admin1-header-text">DASHBOARD</span>
           </div>
           <div className="admin1-profile">
-  <div className="admin1-profile-name">
-    <span>Office of Student Affairs</span> {/* Name section */}
-    <br />
-    <span>Admin</span> {/* Admin title section */}
-  </div>
-  <FontAwesomeIcon icon={faUser} className="admin1-profile-icon" />
-</div>
+            <div className="admin1-profile-name">
+              <span>Office of Student Affairs</span>
+              <br />
+              <span>Admin</span>
+            </div>
+            <FontAwesomeIcon icon={faUser} className="admin1-profile-icon" />
+          </div>
         </div>
         <div className="admin1-no-edge-box">
           <div className="admin1-parktrack-title">PARKTRACK</div>
           <div className="dashboard-content">
-            {/* Other content here if needed */}
+            {/* Add any additional content here if needed */}
           </div>
 
           <div className="admin1-progress-container">
@@ -157,13 +169,14 @@ const Admin = () => {
               <p>{currentTime}</p>
             </div>
           </div>
-            {/* Footer */}
-      <footer className="admin1-footer">
-        <p>&copy; 2024 PARKTRACK INC Tel: +639355380789 | Got bugs or errors? Contact us here: support@parktrack.com</p>
-      </footer>
-    </div>
+
+          {/* Footer */}
+          <footer className="admin1-footer">
+            <p>&copy; 2024 PARKTRACK INC Tel: +639355380789 | Got bugs or errors? Contact us here: support@parktrack.com</p>
+          </footer>
         </div>
       </div>
+    </div>
   );
 };
 

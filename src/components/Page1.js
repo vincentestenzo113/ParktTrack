@@ -18,6 +18,13 @@ const Page1 = () => {
   const [hasCooldown, setHasCooldown] = useState(false);
   const [cooldownTime, setCooldownTime] = useState(0);
 
+  const tips = [
+    "Remember to submit proof for all complaints to increase processing speed.",
+    "Check your cooldown status before submitting another report.",
+    "Use clear descriptions for incidents to help the admin team understand the issue.",
+    "Click on 'View Remarks' to see feedback from the admin team."
+  ];
+
   useEffect(() => {
     const fetchUserData = async () => {
       const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -198,7 +205,7 @@ const Page1 = () => {
               <table>
                 <thead>
                   <tr>
-                    <th>Ticket #</th> {/* New column for Ticket # */}
+                    <th>Ticket #</th>
                     <th>Student ID</th>
                     <th>Date and Time Submitted</th>
                     <th>Date and Time Solved</th>
@@ -233,60 +240,81 @@ const Page1 = () => {
                      className="page1-view-remarks-button"
                      onClick={() => handleShowRemarks(complaint.remarks)}
                    >
-                     {complaint.remarks ? 'View Remarks' : 'No Remarks'}
+                     View Remarks
                    </button>
                  </td>
-                 <td style={{ backgroundColor: complaint.status.color, color: 'white' }}>
+                 <td style={{ backgroundColor: complaint.status.color }}>
                    {complaint.status.text}
                  </td>
-               </tr>                                             
-                  ))}
-                </tbody>
-              </table>
-            </div>            
-              ) : (
-                <p>No complaints found.</p>
-              )}
-            </>
-          ) : (
-            <>
-              <h2 className="page1-user-name">{userInfo.name}</h2>
-              <p><strong>Student ID:</strong> {userInfo.student_id}</p>
-              <p><strong>Name:</strong> {userInfo.name}</p>
-              <p><strong>Email:</strong> {userInfo.email}</p>
-              {hasCooldown && (
-                <p className="cooldown-message">
-                  You can submit a new report in: {formatCooldownTime(cooldownTime)}
-                </p>
-              )}
-            </>
-          )}
-        </div>
-      </div>
-      {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Remarks</h2>
-            <ul>
-              {selectedRemarks.map((remark, index) => (
-                <li key={index}>{remark}</li>
-              ))}
-            </ul>
-            <button onClick={closeModal}>Close</button>
-          </div>
-        </div>
-      )}
-      {isProofModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Proof of Incident</h2>
-            <img src={proofUrl} alt="Proof of Incident" />
-            <button onClick={closeProofModal}>Close</button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+               </tr>
+             ))}
+           </tbody>
+         </table>
+       </div>
+     ) : (
+       <p>No complaints found.</p>
+     )}
+   </>
+ ) : (
+   <>
+     <h3>Your Profile:</h3>
+     <div className="page1-profile">
+       <p><strong>Name:</strong> {userInfo.name}</p>
+       <p><strong>Email:</strong> {userInfo.email}</p>
+       <p><strong>Student ID:</strong> {userInfo.student_id}</p>
+       <p>
+         <strong>Cooldown Status:</strong>
+         {hasCooldown
+           ? ` You can submit a report after ${formatCooldownTime(cooldownTime)}.`
+           : ' You can submit a report now.'}
+       </p>
+     </div>
+     <div className="page1-tips">
+       <h4>Helpful Tips:</h4>
+       <ul>
+         {tips.map((tip, index) => (
+           <li key={index}>{tip}</li>
+         ))}
+       </ul>
+     </div>
+   </>
+ )}
+ </div>
+</div>
+
+{isProofModalOpen && (
+ <div className="page1-modal">
+   <div className="page1-modal-content">
+     <span className="page1-modal-close" onClick={closeProofModal}>
+       &times;
+     </span>
+     <img src={proofUrl} alt="Proof of Incident" className="page1-modal-image" />
+   </div>
+ </div>
+)}
+
+{isModalOpen && (
+ <div className="page1-modal">
+   <div className="page1-modal-content">
+     <span className="page1-modal-close" onClick={closeModal}>
+       &times;
+     </span>
+     <h3>Remarks:</h3>
+     <ul>
+       {selectedRemarks.length > 0
+         ? selectedRemarks.map((remark, index) => (
+             <li key={index}>{remark}</li>
+           ))
+         : <li>No remarks available.</li>}
+     </ul>
+   </div>
+ </div>
+)}
+     <footer className="page1-footer">
+        <p>&copy; 2024 PARKTRACK INC Tel: +639355380789 | Got bugs or errors? Contact us here: support@parktrack.com</p>
+      </footer>
+</div>
+);
 };
 
 export default Page1;
