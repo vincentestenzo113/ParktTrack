@@ -151,7 +151,7 @@ const Pending = () => {
       </div>
       <div className="admin1-content">
         <div className="admin1-report-container">
-          <div className='admin1-table-title'>Pending</div>
+          <div className='admin1-table-title'>Pending Complaints</div>
           {loading ? (
             <p>Loading reports...</p>
           ) : reports.length > 0 ? (

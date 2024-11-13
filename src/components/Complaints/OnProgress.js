@@ -186,7 +186,7 @@ const OnProgress = () => {
       </div>
       <div className="admin1-content">
         <div className="admin1-report-container">
-          <div className='admin1-table-title'>On Progress</div>
+          <div className='admin1-table-title'>On Progress Complaints</div>
           {loading ? (
             <p>Loading reports...</p>
           ) : reports.length > 0 ? (

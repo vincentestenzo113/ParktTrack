@@ -126,6 +126,7 @@ const Admin = () => {
         </div>
         <div className="admin1-no-edge-box">
           <div className="admin1-parktrack-title">PARKTRACK</div>
+          <div className='admin1-reports-title'>COMPLAINTS PROGRESS</div>
           <div className="dashboard-content">
             {/* Add any additional content here if needed */}
           </div>

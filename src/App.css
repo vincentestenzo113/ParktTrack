@@ -1589,7 +1589,15 @@ tr:nth-child(even) {
   padding: 10px;  /* Add some padding around the title */
   text-transform: uppercase;  /* Uppercase for added emphasis */
 }
-
+.admin1-reports-title {
+  font-size: 1em;  /* Increased font size for better visibility */
+  color: #060E57;  /* Keeping the original color */
+  margin-bottom: 20px;  /* Space below the title */
+  font-weight: bold;  /* Make the font bold */
+  text-align: center;  /* Center the text */
+  padding: 10px;  /* Add some padding around the title */
+  text-transform: uppercase;  /* Uppercase for added emphasis */
+}
 
 .admin1-complaints {
   display: flex;
@@ -1619,14 +1627,14 @@ tr:nth-child(even) {
   gap: 50px;
   border-radius: 10px;
   min-height: 250px; /* Ensure a minimum height for the whole section */
-  margin-top: 30px; /* Push this section to the bottom */
+  margin-top: 10px; /* Push this section to the bottom */
 }
 /* Date Section */
 .date-container {
   background-color: #333;
   color: #fff;
   border-radius: 10px;
-  padding: 20px;
+  padding: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   font-size: 1.5rem;
   text-align: center;
@@ -1699,7 +1707,7 @@ tr:nth-child(even) {
   align-items: center;
   width: 100%; /* Full width of the container */
   height: 200px; /* Adjust height as needed */
-  margin-top: 70px; /* Push the container towards the middle of the page */
+  margin-top: 10px; /* Push the container towards the middle of the page */
 }
 
 .admin1-pending,
@@ -1754,7 +1762,7 @@ tr:nth-child(even) {
 }
 
 .admin1-table-title {
-  color: whitesmoke;
+  color: #060E57;
   font-size: x-large;
 }
 

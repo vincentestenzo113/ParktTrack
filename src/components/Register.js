@@ -23,7 +23,10 @@ const Register = () => {
       .matches(/^[0-9]{10}$/, 'Student ID must be exactly 10 digits')
       .required('Student ID is required'),
     name: Yup.string().required('Full name is required'),
-    email: Yup.string().email('Invalid email format').required('Required'),
+    email: Yup.string()
+      .email('Invalid email format')
+      .required('Required')
+      .notOneOf(['admin@gmail.com'], 'This email is not allowed'), // Custom validation to prevent 'admin@gmail.com'
     password: Yup.string().min(6, 'Password must be at least 6 characters long').required('Password is required'),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
@@ -68,7 +71,7 @@ const Register = () => {
         toast.error(`Error saving profile data: ${profileError.message}`);
         return;
       }
-      
+
       toast.success('Registration successful! Please check your email to confirm your account.');
       navigate('/'); // Redirect to the home page after successful registration
     } catch (error) {

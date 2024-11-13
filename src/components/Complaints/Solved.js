@@ -113,7 +113,7 @@ const Solved = () => {
 
       <div className="admin1-content">
         <div className='admin1-header-container'>
-          <div className='admin1-table-title'>Solved Reports</div>
+          <div className='admin1-table-title'>Solved Complaints</div>
         </div>
         <div className="admin1-report-container">
           {loading ? (
