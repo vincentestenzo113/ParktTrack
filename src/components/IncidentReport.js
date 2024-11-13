@@ -27,7 +27,7 @@ const IncidentReport = () => {
       }
 
       if (existingReports.length > 0) {
-        const lastSubmittedAt = new Date(existingReports[0].submitted_at);
+        const lastSubmittedAt = new Date(existingReports[1].submitted_at);
         const currentTime = new Date();
         const timeDiff = currentTime - lastSubmittedAt; // Difference in milliseconds
 

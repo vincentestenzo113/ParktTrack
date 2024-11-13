@@ -65,7 +65,7 @@ const Page1 = () => {
       .select('submitted_at')
       .eq('student_id', userInfo.student_id)
       .order('submitted_at', { ascending: false })
-      .limit(1);
+      .limit(2);
 
     if (error) {
       console.error('Error fetching cooldown status:', error.message);
@@ -265,8 +265,8 @@ const Page1 = () => {
        <p>
          <strong>Cooldown Status:</strong>
          {hasCooldown
-           ? ` You can submit a report after ${formatCooldownTime(cooldownTime)}.`
-           : ' You can submit a report now.'}
+           ? ` If you submitted 2 reports today, you can submit another 2 reports after ${formatCooldownTime(cooldownTime)}.`
+           : ' You can submit 2 reports today.'}
        </p>
      </div>
      <div className="page1-tips">
