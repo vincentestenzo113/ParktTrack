@@ -13,7 +13,6 @@ import OnProgress from './components/Complaints/OnProgress';
 import Solved from './components/Complaints/Solved';
 import AdminLogin from './components/AdminLogin'; // Admin Login component
 import ProtectedRoute from './components/utils/ProtectedRoutes';
-import { supabase } from './components/utils/supabaseClient'; // Adjust based on your actual import
 
 
 function App() {

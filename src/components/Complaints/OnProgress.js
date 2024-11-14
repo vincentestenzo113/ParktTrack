@@ -8,7 +8,7 @@ import { faTachometerAlt, faClipboard, faClipboardCheck, faClipboardList, faUser
 const OnProgress = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [selectedStudentId] = useState(null);
   const [remarksInput, setRemarksInput] = useState('');
   const [showSendModal, setShowSendModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);

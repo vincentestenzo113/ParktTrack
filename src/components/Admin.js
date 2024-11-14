@@ -7,7 +7,6 @@ import adminlogo from './public/parktracklogo.png';
 
 const Admin = () => {
   const navigate = useNavigate();
-  const [slotsLeft] = useState(10);
   const [pendingCount, setPendingCount] = useState(0);
   const [onProgressCount, setOnProgressCount] = useState(0);
   const [solvedCount, setSolvedCount] = useState(0);
