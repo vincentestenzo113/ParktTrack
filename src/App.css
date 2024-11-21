@@ -1,0 +1,2728 @@
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.menu-icon {
+  font-size: 30px;
+  margin-left: 10px;
+  color: #ffff;
+  cursor: pointer;
+}
+
+.side-bar {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content:start;
+  z-index: 1;
+  background-color: #ffff;
+}
+
+@media (max-width: 768px) {
+  .side-bar {
+    display: none; /* Hide sidebar on smaller screens */
+  }
+}
+
+/* General Layout */
+/* Add a gradient background and a soft texture */
+.dashboard2-container {
+  background-image: url("/src/components/public/background.jpg");
+  background-size: cover; /* Ensures the background image covers the entire container */
+  background-position: center center; /* Centers the background image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  padding: 20px 50px 0px 50px;
+  color: white;
+  font-family: 'Proxima nova', sans-serif;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+
+/* Header styling */
+.dashboard2-header {
+  text-align: center;
+  margin: 24px 50px 0px 0;
+  font-size: clamp(18px, 6vw, 30px);
+}
+
+@media (max-width: 660px) {
+  .dashboard2-header img{
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+  .dashboard2-header {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  .dashboard2-container {
+    padding: 15px;
+   }
+}
+
+.dashboard2-parktracklogo {
+  height: 1em; /* Matches the h1 font size */
+  margin-left: 1em;
+   /* Adds space between the icon and text */
+}
+/* Slogan Section */
+.dashboard2-slogan-section {
+  text-align: center;
+  margin-bottom: 50px;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.dashboard2-slogan-text {
+  font-size: clamp(16px, 4vw, 22px); /* Slightly larger for better visibility */
+  font-weight: 600; /* Slightly reduced weight to avoid it being too bold */
+  color: #ffffff; /* Changed to pure white for better contrast */
+  margin-bottom: 15px; /* Increased bottom margin for better spacing */
+  font-style: italic;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Added a subtle shadow for better contrast */
+  line-height: 1.4; /* Increased line height for better readability */
+}
+
+
+/* Features Section */
+.dashboard2-features-section {
+  margin-top: 20px;
+  padding: 30px 0;
+  border-radius: 10px;
+}
+
+.dashboard2-features-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Added a subtle shadow for better contrast */
+  line-height: 1.4; /* Increased line height for better readability */
+}
+
+.dashboard2-features-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.dashboard2-feature-item {
+  text-align: center;
+  background: #1e2a78;
+  padding: 20px;
+  border-radius: 10px;
+  width: 200px;
+  box-shadow: 0 4px 8px rgba(253, 253, 253, 0.1);
+  margin: 20px;
+}
+
+.dashboard2-feature-title {
+  margin-top: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #f3f4f6;
+  font-style: italic;
+}
+
+.dashboard2-feature-description {
+  font-size: 16px;
+  color: #f3f4f6;
+}
+
+/* Slots Section */
+.dashboard2-slots-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  padding: 20px;
+  color:#000b22;
+  border-radius: 50%;
+  width: 220px;
+  height: 220px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.dashboard2-slots-container::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  border-radius: 50%;
+  background-image: linear-gradient(to right, blue, rgb(0, 234, 255));;
+}
+
+.dashboard2-slots-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0px 20px 40px 0px rgba( 255, 118, 142, 0.3);
+  position: relative;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.dashboard2-slots-text {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: clamp(16px, 4vw, 20px);
+  font-weight: bold;
+  color: #74727a;
+  line-height: 1em;
+  margin-top: 10px;
+}
+
+.dashboard2-slots-number {
+  color: #2a2833;
+  font-size: clamp(50px, 6vw, 70px);
+  margin: 15px;
+  font-weight: 700;
+  line-height: 1em;
+}
+
+/* Get Started Button */
+.dashboard2-get-started-container {
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.dashboard2-get-started-button {
+  background-color: #1529e0;
+  color: white;
+  font-size: 22px; /* Increased font size */
+  padding: 20px 40px; /* Increased padding for larger button */
+  border: none;
+  cursor: pointer;
+  border-radius: 8px; /* Slightly rounded corners */
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+  width: auto;
+}
+
+.dashboard2-get-started-button:hover {
+  background-color: #0e1d8f; /* Darker shade for hover effect */
+}
+
+@media (max-width: 768px) {
+  .features-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .slots-container {
+    flex-direction: column;
+  }
+}
+
+
+.Profile {
+  width: 100%;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.Profile img {
+  height: 100px;
+  width: 100px;
+}
+
+/* Admin */
+
+/* Container for the admin page layout */
+.admin-container {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  flex-grow: 11;
+  overflow-y: scroll;
+}
+
+/* Style for the title in the report container */
+.report-title {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  padding-left: 20px;
+  z-index: 1;
+  background-color: #ffff;
+}
+
+/* Report container styling */
+.report-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* Background image styling for the report container */
+.report-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("/src/components/public/background.jpg");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.8;
+  filter: blur(2px);
+}
+
+/* Styling for header container */
+.header-container {
+  background-color: #3b5159;
+  display: flex;
+  height: 40px;
+  z-index: 1;
+}
+
+/* Progress container layout */
+.progress-container {
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Styles for progress items */
+.progress-container div {
+  height: 180px;
+  width: 25%;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Pending report item styling */
+.progress-container .pending {
+  background-color: #ff6363;
+  cursor: pointer;
+}
+
+.pending-icon {
+  display: flex;
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  margin: 20px;
+}
+
+/* On Progress report item styling */
+.progress-container {
+  padding: 20px;
+}
+
+.admin1-pending {
+  background-color: #f8d7da; /* Light red */
+  border: 1px solid #bd0113; /* Darker red border */
+  border-radius: 10px; /* Rounded corners */
+  padding: 10px; /* Internal padding */
+  text-align: center; /* Centers content */
+  cursor: pointer; /* Changes cursor on hover */
+  transition: background-color 0.3s; /* Smooth transition on hover */
+}
+
+.admin1-pending:hover {
+  background-color: #f5c6cb; /* Darker red on hover */
+}
+
+.admin1-onprogress {
+  background-color: #ffeeba; /* Orange */
+  border: 1px solid #ffeeba; /* Darker orange border */
+  border-radius: 10px; /* Rounded corners */
+  padding: 10px; /* Internal padding */
+  text-align: center; /* Centers content */
+  cursor: pointer; /* Changes cursor on hover */
+  transition: background-color 0.3s; /* Smooth transition on hover */
+}
+
+.admin1-onprogress:hover {
+  background-color: #ffe8a1; /* Darker orange on hover */
+}
+
+.admin1-solved {
+  background-color: #d4edda; /* Light green */
+  border: 1px solid #c3e6cb; /* Darker green border */
+  border-radius: 10px; /* Rounded corners */
+  padding: 10px; /* Internal padding */
+  text-align: center; /* Centers content */
+  cursor: pointer; /* Changes cursor on hover */
+  transition: background-color 0.3s; /* Smooth transition on hover */
+}
+
+.admin1-solved:hover {
+  background-color: #c3e6cb; /* Darker green on hover */
+}
+
+.admin1-logo {
+  display: flex;
+  align-items: center; /* Aligns items vertically in the center */
+}
+
+.admin1-logo-image {
+  height: 50px; /* Set this to the height you need */
+  width: auto; /* Keeps the image aspect ratio */
+  margin-right: 10px; /* Space between the image and text */
+}
+
+.admin1-logo-text {
+  font-size: 24px; /* Adjust to match image height */
+  line-height: 1.2; /* Controls spacing between "PARK" and "TRACK" */
+}
+
+/*admin1 modal*/
+
+.admin1-send-button {
+  text-align: center; /* Center the buttons in the cell */
+}
+/*admin1 table*/
+
+
+.admin1-users-table {
+  width: 100%; /* Full width of the container */
+  border-collapse: collapse; /* Remove space between table cells */
+  margin-top: 20px; /* Space above the table */
+  font-family: Proxima nova, sans-serif; /* Font style for the table */
+  background-color: #f9f9f9; /* Light background color */
+  border-collapse: collapse;
+}
+.admin1-solved-table {
+  width: 100%; /* Full width of the container */
+  border-collapse: collapse; /* Remove space between table cells */
+  margin-top: 20px; /* Space above the table */
+  font-family: Proxima nova, sans-serif; /* Font style for the table */
+  background-color: #f9f9f9; /* Light background color */
+  border-collapse: collapse;
+}
+
+.page-content {
+  margin-left: 250px; /* Adjust the left margin to the width of the sidebar */
+  padding: 20px; /* Optional: Adds space around the content */
+}
+
+.admin1-users-table th,
+.admin1-users-table td {
+  padding: 12px 15px; /* Padding inside cells */
+  text-align: left; /* Align text to the left */
+  border-bottom: 1px solid #ddd; /* Light border between rows */
+}
+
+.admin1-users-table th {
+  background-color: #060E57; /* Dark background for header */
+  color: white; /* White text for header */
+}
+
+.admin1-users-table tr:hover {
+  background-color: rgba(6, 14, 87, 0.1); /* Light hover effect for rows */
+}
+
+.admin1-table-title {
+  font-size: 24px; /* Larger title font size */
+  font-weight: bold; /* Bold title */
+  margin-bottom: 10px; /* Space below the title */
+  color: #060E57; /* Color matching your theme */
+}
+
+.admin1-view-proof-button,
+.admin1-view-remarks-button,
+.admin1-send-remarks-button {
+  background-color: #007bff; /* Blue background */
+  color: white; /* White text color */
+  border-radius: 5px; /* Rounded corners */
+  padding: 8px 12px; /* Internal padding */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 0.9em; /* Slightly smaller font size */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background and scaling */
+}
+
+
+.admin1-send-remarks-button {
+  background-color: #28a745; /* Green background for Send Remarks */
+}
+
+.admin1-send-remarks-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+.admin1-view-remarks-button {
+  background-color: #ffc107; /* Yellow background for View Remarks */
+}
+
+.admin1-view-remarks-button:hover {
+  background-color: #e0a800; /* Darker yellow on hover */
+}
+
+.admin1-modal {
+  position: fixed; /* Fixed positioning to cover the viewport */
+  top: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex; /* Use flexbox to center content */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 1000; /* Ensure modal appears above other content */
+}
+
+.admin1-modal-content {
+  background: white; /* White background for the modal */
+  border-radius: 8px; /* Rounded corners */
+  padding: 20px; /* Internal spacing */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  width: 90%; /* Modal width (adjust as needed) */
+  max-width: 400px; /* Max width for larger screens */
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Arrange children vertically */
+}
+
+.admin1-modal-content h2 {
+  margin-bottom: 15px; /* Space below the title */
+  font-size: 1.5em; /* Title size */
+  text-align: center; /* Center title text */
+}
+
+textarea {
+  resize: none; /* Disable resizing */
+  height: 100px; /* Fixed height */
+  margin-bottom: 15px; /* Space below the textarea */
+  padding: 10px; /* Internal padding */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 1em; /* Font size */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.admin1-send-button, .admin1-cancel-button {
+  padding: 10px 15px; /* Internal padding for buttons */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  color: white; /* Text color */
+  font-size: 1em; /* Font size */
+  cursor: pointer; /* Pointer on hover */
+  margin: 5px 0; /* Vertical spacing between buttons */
+}
+
+.admin1-send-button {
+  background-color: #4CAF50; /* Green background for send button */
+}
+
+.admin1-cancel-button {
+  background-color: #f44336; /* Red background for cancel button */
+}
+
+
+/*count*/ 
+.count {
+  font-size: 1.5em; /* Larger font for count */
+  font-weight: bold; /* Makes count bold */
+}
+
+.label {
+  font-size: 1em; /* Standard font size for labels */
+}
+
+/* Table title styling based on status */
+.table-title-pending, .table-title-onprogress, .table-title-solved {
+  margin-top: 20px;
+  padding: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  z-index: 1;
+}
+
+.table-title-pending {
+  background-color: #ff6363;
+}
+
+.table-title-onprogress {
+  background-color: #ffac63;
+}
+
+.table-title-solved {
+  background-color: #84ff74;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .progress-container {
+    flex-direction: column;
+  }
+
+  .progress-container .pending,
+  .progress-container .onprogress,
+  .progress-container .solved {
+    width: 80%; /* Adjust width for smaller screens */
+  }
+
+  html {
+    font-size: 10px; /* Base font size for mobile */
+  }
+  
+  .users-table {
+    min-width: 369px;
+  }
+}
+
+/* Report container list styling */
+.report-container h2 {
+  color: #060E57;
+}
+
+.report-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.report-container li {
+  border: 1px solid #060E57;
+  border-radius: 5px;
+  margin: 5px 0;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+/* User list styling */
+.user-list {
+  margin-top: 20px;
+}
+
+.user-list h3 {
+  color: #060E57;
+}
+
+/* Login/Register */
+/* Login.css */
+/* Styles for Login Page */
+.login1-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Change to column to stack the title and login container */
+  height: 100vh;
+  background-image: url("/src/components/public/background.jpg"); /* Set the background image */
+  background-size: cover; /* Make the background cover the entire page */
+  background-position: center; /* Center the background image */
+}
+
+.login1-title {
+  font-size: 4rem; /* Large font size for the title */
+  color: #FFFFFF; /* White color for the title */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Shadow for better visibility */
+  margin-bottom: 20px; /* Space between title and container */
+}
+
+.login1-container {
+  background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background for better visibility */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 400px; /* Fixed width for the login box */
+  position: relative; /* Required for positioning the header */
+}
+
+.login1-header-container {
+  display: flex;
+  justify-content: space-between; /* Align header elements */
+  align-items: center; /* Center align vertically */
+  width: 100%; /* Ensure the header container takes full width */
+}
+
+.login1-header-container {
+  display: flex;
+  justify-content: flex-start; /* Aligns header elements to the left */
+  align-items: center; /* Center align vertically */
+  position: absolute; /* Allows for positioning within the page */
+  top: 20px; /* Distance from the top */
+  left: 20px; /* Distance from the left */
+}
+
+.login1-back-button {
+  background-color: transparent;
+  color: #060E57; /* Text color matches the primary color */
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 65%;
+}
+
+.login1-header {
+  color: #060E57; /* Header color matches the primary color */
+  margin: 0; /* Reset margin for proper alignment */
+}
+
+.login1-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px; /* Add space between header and form */
+}
+
+.login1-form-group {
+  margin-bottom: 15px;
+  text-align: left; /* Align labels and inputs */
+}
+
+.login1-form-label {
+  font-weight: bold;
+  color: #060E57; /* Label color */
+}
+
+.login1-form-input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.login1-error-message {
+  color: red;
+  font-size: 12px;
+}
+
+.login1-button-group {
+  display: flex;
+  justify-content: space-between; /* Align buttons on either side */
+}
+
+.login1-submit-button {
+  background-color: #060E57; /* Primary button color */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login1-register-button {
+  background-color: #ccc; /* Secondary button color */
+  color: #060E57; /* Text color */
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login1-submit-button:hover,
+.login1-register-button:hover {
+  opacity: 0.9; /* Slightly darker on hover */
+}
+body {
+  font-family: 'Roboto', sans-serif; /* Set the body font to Roboto */
+}
+
+.login1-header {
+  font-family: 'Roboto', sans-serif; /* Use Roboto for the header */
+  font-size: 2rem; /* Adjust the header font size */
+}
+
+.login1-form-label, .login1-form-input, .login1-error-message {
+  font-family: 'Roboto', sans-serif; /* Consistent font for labels, inputs, and error messages */
+}
+
+/* Register.css */
+.register1-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url("/src/components/public/background.jpg"); /* Set the background image */
+  background-size: cover; /* Make the background cover the entire page */
+  background-position: center; /* Center the background image */
+  flex-direction: column; /* Stack elements vertically */
+}
+
+.parktrack-title {
+  font-size: 4rem; /* Large font size for the title */
+  color: #ffffff; /* Use the primary color for consistency */
+  font-family: 'Roboto', sans-serif; /* Apply a user-friendly font */
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6); /* Shadow for better visibility */
+  margin-bottom: 20px; /* Space between title and container */
+}
+
+.register1-container {
+  background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background for better visibility */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 400px; /* Fixed width for the register box */
+  position: relative; /* Required for positioning the header */
+}
+
+.register1-header {
+  color: #060E57; /* Header color matches the primary color */
+  font-family: 'Roboto', sans-serif; /* Font for the header */
+  margin: 0; /* Reset margin for proper alignment */
+}
+
+.register1-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px; /* Add space between header and form */
+}
+
+.register1-form-group {
+  margin-bottom: 15px;
+  text-align: left; /* Align labels and inputs */
+}
+
+.register1-form-label {
+  font-weight: bold;
+  color: #060E57; /* Label color */
+}
+
+.register1-form-input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.register1-error-message {
+  color: red;
+  font-size: 12px;
+}
+
+.register1-button-group {
+  display: flex;
+  justify-content: space-between; /* Align buttons on either side */
+}
+
+.register1-submit-button {
+  background-color: #060E57; /* Primary button color */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.register1-register-button {
+  background-color: #ccc; /* Secondary button color */
+  color: #060E57; /* Text color */
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.register1-submit-button:hover,
+.register1-register-button:hover {
+  opacity: 0.9; /* Slightly darker on hover */
+}
+
+/*Users.js*/
+.users-container {
+  position: relative; /* Set position relative to the container */
+  padding: 20px;
+  background-color: #f8f9fa; /* Light background for contrast */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+}
+
+.back-button {
+  position: absolute; /* Position it absolutely */
+  top: 20px; /* Adjust top position */
+  right: 20px; /* Adjust right position */
+  padding: 10px 20px;
+  background-color: #060E57; /* Button color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.back-button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse; /* Ensure borders collapse */
+  z-index: 1;
+}
+
+.users-table th,
+.users-table td {
+  border: 1px solid #060E57; /* Border color */
+  padding: 10px; /* Padding inside cells */
+  text-align: left; /* Align text to the left */
+}
+
+.users-table th {
+  background-color: #060E57; /* Header background color */
+  color: white; /* Header text color */
+}
+
+.users-table tbody tr:hover {
+  background-color: #f0f0f0; /* Highlight row on hover */
+}
+
+.users-table tbody {
+  background-color: #ffffff; /* Highlight row on hover */
+}
+
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/*profile logout*/
+.logout-button2 {
+  position: absolute; /* Position it absolutely within the header */
+  top: 20px; /* Adjusts the top position */
+  right: 20px; /* Adjusts the right position */
+  padding: 10px 20px; /* Padding for the button */
+  background-color: #060E57; /* Button background color */
+  color: white; /* Button text color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Change cursor on hover */
+  font-size: 16px; /* Font size */
+  z-index: 10; /* Ensure it appears above other elements */
+}
+
+.logout-button2:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+/*dashboard.js*/
+.parktrack-title {
+  font-size: 36px; /* Large font size for the title */
+  color: #060E57; /* Title color */
+  margin-bottom: 20px; /* Space below the title */
+}
+/*dashboard logo for parktrack*/
+.favicon-icon {
+  width: 50px; /* Adjust size as needed */
+  height: 50px; /* Adjust size as needed */
+  margin-right: 8px; /* Space between icon and title */
+  vertical-align: middle; /* Align icon with text */
+}
+
+/* Container for the entire page */
+.login-container {
+  background-color: #f0f4ff; /* Light background for contrast */
+  padding: 20px;
+  border-radius: 10px; /* Rounded corners for the container */
+  max-width: 800px; /* Limit the maximum width */
+  margin: 0 auto; /* Center the container */
+}
+
+/* Style for the parktrack title */
+.parktrack-title {
+  color: #060E57; /* Dark blue for the title */
+  text-align: center;
+  margin-bottom: 20px; /* Space below the title */
+}
+
+/* Style for the header */
+.login-header {
+  color: #060E57; /* Dark blue for the header */
+  margin-bottom: 10px; /* Space below the header */
+}
+
+/* Style for user info section */
+.user-info p {
+  color: #333; /* Dark gray for text */
+  margin: 5px 0; /* Space between each user info line */
+}
+
+/* Button group styling */
+.button-group {
+  display: flex; /* Use flexbox for button alignment */
+  justify-content: space-between; /* Space between buttons */
+  margin-top: 20px; /* Space above button group */
+}
+
+/* Common styles for buttons */
+.submit-button {
+  background-color: #060E57; /* Button background color */
+  color: white; /* Button text color */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Round button corners */
+  padding: 10px 15px; /* Button padding */
+  cursor: pointer; /* Change cursor on hover */
+  transition: background-color 0.3s; /* Smooth background transition */
+}
+
+/* Button hover effect */
+.submit-button:hover {
+  background-color: #0a1d81; /* Lighter shade on hover */
+}
+
+/* Style for the complaints list */
+.complaints-list {
+  margin-top: 20px; /* Space above the complaints list */
+}
+
+/* Style for complaints container */
+.complaints-container {
+  display: flex; /* Use flexbox for horizontal layout */
+  flex-wrap: wrap; /* Allow items to wrap */
+  gap: 20px; /* Space between complaint items */
+}
+
+/* Style for each complaint item */
+.complaint-item {
+  border: 1px solid #ccc; /* Light border for each item */
+  border-radius: 5px; /* Round corners */
+  padding: 10px; /* Padding inside each item */
+  width: 200px; /* Fixed width for uniformity */
+  background-color: #e9ecef; /* Light background for complaints */
+  color: #060E57; /* Dark text color for complaints */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Style for logout button */
+.logout-button2 {
+  background-color: #ff4d4d; /* Red for logout button */
+  color: white; /* White text for visibility */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Round corners */
+  padding: 10px 15px; /* Padding */
+  cursor: pointer; /* Change cursor on hover */
+  transition: background-color 0.3s; /* Smooth transition */
+}
+
+/* Logout button hover effect */
+.logout-button2:hover {
+  background-color: #ff1a1a; /* Darker red on hover */
+}
+
+/* General Styles */
+body {
+  font-family: Proxima nova, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4; /* Light background for contrast */
+  position: relative; /* Position relative for absolute positioning of the background */
+  overflow: hidden;
+}
+
+/* Background Image Styles */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("/src/components/public/background.jpg"); /* Update this path if necessary */
+  background-size: cover;
+  background-position: center;
+  opacity: 0.8; /* Adjust the opacity as desired */
+  filter: blur(2px); /* Adjust the blur level */
+  z-index: -1; /* Ensure the background is behind all other content */
+}
+
+/* General Styles for profile */
+.profile-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Prevent overflowing by adding space between items */
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  background-color: white;
+  min-height: 100vh;
+}
+
+.profile-sidebar {
+  background-color: #060E57;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+  height: 100vh; /* Full height */
+  flex-shrink: 0;
+  overflow-y: auto; /* Allow vertical scrolling inside the sidebar if content overflows */
+  font-size: 25px;
+  gap: 15px;
+  width: 250px;
+  position: relative;
+}
+
+.profile-sidebar-logo{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color:#000b22;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  position: relative;
+  margin-top: 10px;
+}
+
+.profile-sidebar-logo-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    box-shadow: 0px 20px 40px 0px rgba( 255, 118, 142, 0.3);
+    position: relative;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.profile-sidebar-logo-inner img {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* Sidebar Button Styles */
+.profile-sidebar-button {
+  display: flex;
+  background-color: #060E57; /* Dark blue for buttons */
+  color: white; /* White text color */
+  border: none; /* No border */
+  padding: 10px; /* Padding */
+  margin: 5px 0; /* Margin between buttons */
+  cursor: pointer; /* Pointer cursor */
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s; /* Smooth background transition */
+  width: 90%;
+  align-items: start;
+  justify-content: start;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.profile-sidebar-button:hover {
+  background-color: #004080; /* Lighter blue on hover */
+}
+
+.profile-footer {
+  background-color: #060E57; /* Matches your color scheme */
+  color: white;
+  text-align: center;
+  width: 100%;
+  position: fixed; /* Ensure the footer stays at the bottom */
+  bottom: 0;
+  left: 0;
+}
+
+.profile-footer p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Content Area Styles */
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px;
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  overflow-y: auto; /* Allow vertical scrolling inside content */
+  position: relative;
+}
+
+.profile-boxcontainer {
+  display: flex;
+  flex-direction: row;
+  gap: 2vh;
+}
+
+.profile-information {
+  width: 55%;
+  height: auto;
+  padding: 15px;
+  margin: 20px 20px 20px 0px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+}
+
+.profile-reportstatus {
+  min-width: 30%;
+  position: relative;
+  height: auto;
+  padding: 20px 10px 20px 10px;
+  margin: 20px 20px 20px 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.cooldown-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding: 20px;
+  color:#000b22;
+  border-radius: 50%;
+  width: 110px;
+  height: 110px;
+  margin: 15px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.cooldown-container::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  border-radius: 50%;
+  background-image: linear-gradient(to right, blue, rgb(0, 234, 255));;
+}
+
+.cooldown-inner{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.cooldown-text {
+  color: #2a2833;
+  font-size: clamp(40px, 5vw, 30px);
+  margin: 0px 15px 0px 15px;
+  font-weight: 700;
+  line-height: 1em;
+}
+
+.cooldown-label {
+  color: #2a2833;
+  font-size: clamp(10px, 5vw, 15px);
+  margin: 0px 15px 0px 15px;
+  font-weight: 700;
+  line-height: 1em;
+}
+
+.cooldown-time {
+  color: #2a2833;
+  font-size: clamp(10px, 5vw, 15px);
+  margin: 0px 15px 0px 15px;
+  font-weight: 700;
+  line-height: 1em;
+}
+
+.cooldown-inner h3{
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 7px;
+  font-weight: bold;
+  color: #74727a;
+  line-height: 1em;
+  margin-top: 10px;
+}
+
+.cooldown-inner p {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* No Edge Box Styles */
+.profile-no-edge-box {
+  background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white background */
+  border-radius: 10px; /* Rounded corners */
+  padding: 20px; /* Padding inside the box */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+}
+
+/* Title Styles */
+.profile-parktrack-title {
+  font-size: 2em; /* Increase font size for the title */
+  color: #060E57; /* Dark blue */
+}
+
+/* Student Info Styles */
+.profile-user-info {
+  margin: 20px 0; /* Margin above and below */
+}
+
+/* Complaints Table Styles */
+.profile-complaints-table table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto; /* Allow horizontal scrolling if necessary */
+  table-layout: fixed; /* Fix table layout to prevent overflow */
+}
+
+table {
+  width: 100%; /* Full width */
+  border-collapse: collapse; /* Collapse borders */
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  word-wrap: break-word; /* Prevent long text from overflowing */
+}
+
+th {
+  background-color: #060E57; /* Dark blue background for headers */
+  color: white; /* White text color for headers */
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2; /* Light gray for even rows */
+}
+
+/* Logout Button Styles */
+.profile-logout-button {
+  background-color: #e74c3c; /* Red background for logout */
+  color: white; /* White text color */
+  border: none; /* No border */
+  padding: 15px; /* Padding */
+  margin-top: auto; /* Margin on top */
+  cursor: pointer; /* Pointer cursor */
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s; /* Smooth background transition */
+  margin-bottom: 40px;
+  width: 90%;
+}
+
+.profile-logout-button:hover {
+  background-color: #c0392b; /* Darker red on hover */
+}
+
+.profile-view-proof-button,
+.profile-view-remarks-button {
+  background-color: #007bff; /* Blue background */
+  color: white; /* White text color */
+  border-radius: 5px; /* Rounded corners */
+  padding: 8px 12px; /* Internal padding */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 0.9em; /* Slightly smaller font size */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background and scaling */
+}
+
+.profile-view-proof-button:hover,
+.profile-view-remarks-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Incident Report Styles */
+.no-edge-box {
+  position: relative;
+  padding: 20px;
+}
+
+.parktrack-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #060E57;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  z-index: 1;
+}
+
+.back-button:hover {
+  background-color: #0a1d81;
+}
+
+.incident-report-container {
+  background-color: white; /* White background */
+  padding: 20px;
+  border-radius: 8px; /* Rounded corners */
+  border: 2px solid #ccc; /* Outline effect */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow for depth */
+  max-width: 500px; /* Set a max width for the container */
+  margin: 40px auto; /* Center the container */
+}
+
+.section-header {
+  text-align: center; /* Center the section header */
+  margin-bottom: 20px;
+}
+
+.incident-form {
+  display: flex;
+  flex-direction: column; /* Stack the inputs vertically */
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center; /* Center the submit button */
+}
+
+.submit-button {
+  padding: 10px 20px;
+  background-color: #060E57;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #0a1d81;
+}
+
+.message {
+  color: red; /* Display error messages in red */
+  text-align: center; /* Center error messages */
+  margin-top: 15px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+
+  .profile-container {
+    flex-direction: column; /* Stack sidebar and content */
+  }
+
+  .profile-sidebar {
+    width: 100%; /* Full width for sidebar on smaller screens */
+    height: auto; /* Adjust height for sidebar */
+    padding: 15px;
+  }
+
+  .profile-sidebar-button {
+    padding: 12px; /* Larger padding for easier tapping on small screens */
+    font-size: 2em; /* Slightly larger font size */
+  }
+
+  .profile-content {
+    padding: 15px;
+  }
+
+  .profile-parktrack-title {
+    font-size: 1.5em; /* Adjust title size */
+  }
+
+  .profile-no-edge-box {
+    padding: 15px; /* Adjust padding for smaller screens */
+  }
+
+  .profile-complaints-table table {
+    font-size: 0.9em; /* Adjust font size for smaller screens */
+  }
+
+  .incident-report-container {
+    width: 90%; /* Adjust width to 90% on smaller screens */
+  }
+}
+
+/* Extra Small Screens (Mobile) */
+@media (max-width: 480px) {
+
+  .profile-boxcontainer{
+    flex-direction: column;
+  }
+
+  .profile-information {
+    width: 88%;
+  }
+
+  .profile-reportstatus {
+    width: 88%;
+  }
+
+  .profile-tips{
+    width: 88%;
+  }
+
+  .profile-contactus{
+    width: 88%;
+  }
+
+  .profile-sidebar {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+  }
+
+  .profile-sidebar-button {
+    font-size: 0.9em; /* Smaller font size */
+    padding: 8px;
+  }
+
+  .profile-parktrack-title {
+    font-size: 1.2em; /* Smaller title size */
+  }
+
+  .profile-content {
+    padding: 10px;
+  }
+
+  .profile-no-edge-box {
+    padding: 10px;
+  }
+}
+
+/*remark css*/
+
+
+/*modal css*/
+
+/* Overlay style to cover the entire screen */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal content box style */
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Title style */
+.modal-content h3 {
+  margin-top: 0;
+  font-size: 1.5em;
+  color: #333;
+}
+
+/* List of remarks styling */
+.modal-content ul {
+  list-style: none;
+  padding: 0;
+  max-height: 200px; /* Optional: set a max height to keep it scrollable if too long */
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+/* Each remark item styling */
+.modal-content ul li {
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Close button styling */
+.modal-content button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Make sure the modal appears above other content */
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 400px; /* Set a width for your modal */
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-content button {
+  margin-top: 10px;
+  margin-right: 10px;
+}
+.proof-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.admin1-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: white;
+}
+
+.admin1-content {
+  flex: 1; /* Makes sure the content takes up the remaining space */
+  padding: 20px; /* Optional: Adds space around the content */
+  overflow-y: auto; /* Allows scrolling if content exceeds the viewport height */
+}
+/* Sidebar Styles */
+/* General Sidebar Styling */
+.admin1-sidebar {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #060E57;
+  width: 250px;
+  height: 100vh; /* Full viewport height */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-sizing: border-box; /* Ensures padding doesn't expand width */
+  position: fixed; /* Keeps sidebar in place if content scrolls */
+  top: 0;
+  left: 0;
+}
+
+.admin1-content {
+  margin-left: 250px; /* Offset content to account for sidebar width */
+  padding: 20px;
+  overflow-y: auto; /* Allows vertical scrolling */
+}
+
+.admin1-sidebar-button {
+  display: flex;
+  align-items: center;
+  font-size: 18px; /* Larger font size */
+  font-weight: 400; /* Semi-bold for emphasis */
+  color: #ffffff; /* White color for buttons */
+  background-color: transparent; /* Transparent background */
+  padding: 12px 20px; /* Padding inside button */
+  border: none; /* Remove border */
+  border-radius: 8px; /* Rounded corners */
+  text-align: left; /* Align text to the left */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, color 0.3s; /* Smooth hover effect */
+}
+
+.admin1-icon {
+  margin-right: 8px; /* Adjust spacing between icon and text */
+}
+
+.admin1-sidebar-button:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+  color: #f1f1f1; /* Slightly lighter text on hover */
+}
+
+.admin1-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between profile image and text */
+  font-size: 20px; /* Slightly larger font for profile name */
+  font-weight: bold; /* Bold for emphasis */
+  color: #f1f1f1; /* Off-white color */
+}
+.admin1-profile img {
+  width: 200px; /* Larger profile image */
+  height: 200px; /* Match height to width */
+}
+
+.admin1-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full viewport height */
+  overflow-y: auto; /* Enables scrolling if content exceeds the height */
+  padding: 10px; /* Optional: Adds some padding for better spacing */
+  box-sizing: border-box;
+}
+.admin1-dashboard-title {
+  display: flex;
+  align-items: center;
+  font-size: 18px; /* Adjust font size for the title */
+  color: #060E57; /* Set text color to your theme */
+  padding: 10px; /* Adjust padding for spacing */
+}
+
+.admin1-header-icon {
+  font-size: 20px; /* Adjust icon size */
+  color: #060E57; /* Set icon color to match theme */
+  margin-right: 8px; /* Space between icon and text */
+}
+
+.admin1-header-text {
+  font-weight: bold; /* Make text bold */
+}
+.admin1-sidebar-button {
+  background-color: #060E57;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  margin-top: 30px;
+}
+
+.admin1-sidebar-button:hover {
+  background-color: #ffffff;
+}
+
+.admin1-logout-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin-top: auto;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.admin1-logout-button:hover {
+  background-color: #c0392b;
+}
+
+/* Content Area Styles */
+.admin1-content {
+  flex: 1;
+  padding: 20px;
+  z-index: 1;
+  text-align: center;
+}
+
+/* Dashboard Title */
+.admin1-parktrack-title {
+  font-size: 3em;  /* Increased font size for better visibility */
+  color: #060E57;  /* Keeping the original color */
+  margin-bottom: 20px;  /* Space below the title */
+  font-weight: bold;  /* Make the font bold */
+  text-align: center;  /* Center the text */
+  padding: 10px;  /* Add some padding around the title */
+  text-transform: uppercase;  /* Uppercase for added emphasis */
+}
+.admin1-reports-title {
+  font-size: 1em;  /* Increased font size for better visibility */
+  color: #060E57;  /* Keeping the original color */
+  margin-bottom: 20px;  /* Space below the title */
+  font-weight: bold;  /* Make the font bold */
+  text-align: center;  /* Center the text */
+  padding: 10px;  /* Add some padding around the title */
+  text-transform: uppercase;  /* Uppercase for added emphasis */
+}
+
+.admin1-complaints {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px; /* Space above the complaint buttons */
+  margin-left: 10px; /* Indent the buttons for visual separation */
+}
+
+.admin1-complaints button {
+  background: transparent;
+  border: none;
+  color: #ebebeb; /* Match your theme color */
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  margin-bottom: 10px; /* Space between buttons */
+}
+
+.admin1-complaints button:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Light hover effect */
+}
+/* Container for bottom section */
+.bottom-section {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 50px;
+  border-radius: 10px;
+  min-height: 250px; /* Ensure a minimum height for the whole section */
+  margin-top: 10px; /* Push this section to the bottom */
+}
+/* Date Section */
+.date-container {
+  background-color: #333;
+  color: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 1.5rem;
+  text-align: center;
+  width: 48%;
+}
+
+.date-container h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.date-container p {
+  font-size: 5rem;
+  font-weight: bold;
+}
+
+/* Container for the Digital Clock */
+.digital-clock-container {
+  width: 50%; /* Adjust width as needed */
+  background-color: #333;
+  border-radius: 10px;
+  padding: 15px;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  min-height: 300px; /* Ensure the clock container has enough height */
+}
+
+/* Styling for the clock box */
+.clock-box {
+  border-radius: 10px;
+  padding: 20px;
+  font-size: 1.5rem;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;}
+
+.clock-box p {
+  margin: 0;
+  font-size: 8rem;
+  color: #fff;
+}
+
+
+/* Slot Container */
+.slots-container {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.slots-text {
+  color: #333;
+  font-weight: bold;
+}
+
+.slots-number {
+  font-size: 2em;
+  color: #060E57;
+}
+
+/* Progress Container */
+.admin1-progress-container {
+  display: flex;
+  justify-content: space-around; /* Distribute the boxes evenly */
+  align-items: center;
+  width: 100%; /* Full width of the container */
+  height: 200px; /* Adjust height as needed */
+  margin-top: 10px; /* Push the container towards the middle of the page */
+}
+
+.admin1-pending,
+.admin1-onprogress,
+.admin1-solved {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%; /* Adjust the width as needed */
+  height: 100%;
+  background-color: #f0f0f0; /* Add background color if needed */
+  border-radius: 10px; /* Optional: Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Shadow for the boxes */
+}
+
+.count {
+  font-size: 3em; /* Adjust size relative to the container */
+  font-weight: bold;
+  color: #060E57;
+}
+
+.label {
+  font-size: 1.5em; /* Set a reasonable size for the label */
+  color: #060E57;
+}
+
+.admin1-pending:hover,
+.admin1-onprogress:hover,
+.admin1-solved:hover {
+
+  transform: scale(.9);
+}
+
+.pending-icon, .onprogress-icon, .solved-icon {
+    font-size: 1.5em;
+    color: #060E57;
+    margin: 0; /* Ensure no unwanted margin */
+    padding: 0; /* Ensure no unwanted padding */
+}
+
+.count {
+  font-size: 1.5em;
+  color: #333;
+  margin-top: 10px;
+}
+
+.label {
+  color: #555;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.admin1-table-title {
+  color: #060E57;
+  font-size: x-large;
+}
+
+/* Solved button style */
+.admin1-solve-button {
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 8px; /* Add space between buttons */
+  transition: background-color 0.3s ease;
+}
+
+.admin1-solve-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+/* Unsolved button style */
+.admin1-unsolve-button {
+  background-color: #ff4d4d; /* Red background */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.admin1-unsolve-button:hover {
+  background-color: #e60000; /* Darker red on hover */
+}
+
+/* Responsive Styles */
+
+/* For screens smaller than 768px (tablet and mobile devices) */
+@media (max-width: 768px) {
+  .admin1-sidebar {
+    width: 200px;
+    padding: 15px;
+  }
+
+  .admin1-content {
+    margin-left: 200px;
+    padding: 15px;
+  }
+
+  .admin1-sidebar-button {
+    font-size: 16px;
+    padding: 10px 15px;
+  }
+
+  .admin1-profile img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .admin1-parktrack-title {
+    font-size: 3em; /* Increased font size */
+    font-weight: bold; /* Makes the text bold */
+    font-family: 'Arial', sans-serif; /* You can change the font-family to your preferred one */
+  }
+  
+
+  .admin1-pending, .admin1-onprogress, .admin1-solved {
+    width: 45%;
+  }
+
+  .slots-number {
+    font-size: 1.5em;
+  }
+  
+  .admin1-sidebar {
+    position: relative;
+    height: auto; /* Adjust sidebar height on small screens */
+  }
+  body {
+    overflow-y: scroll;
+    overflow-x: scroll;
+  }
+}
+
+/* For screens smaller than 480px (small mobile devices) */
+@media (max-width: 480px) {
+  .admin1-sidebar {
+    width: 150px;
+    padding: 10px;
+  }
+
+  .admin1-content {
+    margin-left: 150px;
+    padding: 10px;
+  }
+
+  .admin1-sidebar-button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .admin1-profile img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .admin1-parktrack-title {
+    font-size: 1.2em;
+  }
+
+  .admin1-pending, .admin1-onprogress, .admin1-solved {
+    width: 100%;
+  }
+
+  .slots-number {
+    font-size: 1.2em;
+  }
+
+  .admin1-sidebar {
+    position: absolute;
+    height: auto; /* Adjust sidebar height */
+    top: 0;
+    left: 0;
+  }
+
+  /* Allow scrolling in smaller screens */
+  body {
+    overflow-y: scroll;
+    overflow-x: scroll;
+  }
+}
+
+/*INCIDENT REPORT STYLES*/
+.report1-page {
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url("/src/components/public/background.jpg"); /* Set the same background image */
+  background-size: cover; /* Make the background cover the entire page */
+  background-position: center; /* Center the background image */
+}
+
+.report1-container {
+  padding: 20px; /* Padding inside the container */
+  background-color: #ffffff; /* White background for the container */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  width: 100%; /* Full width or set a max-width if needed */
+  max-width: 600px; /* Set a max width for the container */
+  margin-top: 20px; /* Space between the title and container */
+}
+
+.parktrack-title1 {
+  font-size: 4rem; /* Large font size for the title */
+  color: #FFFFFF; /* White color for the title */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Shadow for better visibility */
+  text-align: center; /* Center align the title */
+  margin: 0; /* Remove default margin */
+  padding: 20px 0; /* Optional padding around the title */
+}
+.report1-button-group {
+  display: flex; /* Use flexbox for layout */
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 411px; /* Optional: Space between the buttons */
+  margin-top: 10px; /* Space above the button group */
+}
+
+.report1-back-button {
+  background-color: #060E57; /* Primary button color */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.cooldown-timer {
+  color: red; /* Change to a noticeable color */
+  font-weight: bold;
+}
+
+.report1-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px; /* Space between header and form */
+}
+
+.report1-form-group {
+  margin-bottom: 15px;
+  text-align: left; /* Align labels and inputs */
+}
+
+.report1-form-label {
+  font-weight: bold;
+  color: #060E57; /* Label color */
+}
+
+.report1-form-input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.report1-submit-button {
+  background-color: #060E57; /* Button color */
+  color: white; /* Text color */
+  padding: 10px 15px; /* Spacing */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  font-size: 16px; /* Font size */
+}
+
+.report1-submit-button:disabled {
+  background-color: rgb(255, 0, 0); /* Color when disabled */
+  cursor: not-allowed; /* Not allowed cursor */
+}
+
+.report1-submit-button:hover {
+  opacity: 0.9; /* Slightly darker on hover */
+}
+
+.report1-message {
+  color: red; /* Style for error messages */
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+/*notification modal*/
+
+.notification-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f0f8ff; /* Light background color */
+  border: 1px solid #007bff; /* Border color */
+  border-radius: 8px; /* Rounded corners */
+  padding: 20px; /* Padding inside the box */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  z-index: 1000; /* Ensure it appears above other content */
+  animation: fadeIn 0.5s, fadeOut 0.5s 1.5s; /* Animation effect */
+}
+
+.notification-icon {
+  font-size: 24px; /* Icon size */
+  animation: bounce 0.5s infinite; /* Animation effect */
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px); /* Bounce up */
+  }
+  60% {
+    transform: translateY(-5px); /* Bounce down */
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.notification-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+.notification-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out; /* Optional fade-in effect */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/*users1 style*/
+
+.users1-container {
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background for the container */
+  min-height: 100vh;
+}
+
+.user1-table {
+  width: 100%; /* Full width */
+  border-collapse: collapse; /* Merge borders */
+  margin-top: 20px; /* Space above the table */
+}
+
+.user1-table th,
+.user1-table td {
+  border: 1px solid #ccc; /* Light gray border */
+  padding: 12px; /* Space inside cells */
+  text-align: left; /* Align text to the left */
+}
+
+.user1-table th {
+  background-color: #060E57; /* Header background color */
+  color: white; /* Header text color */
+}
+
+.user1-table tr:nth-child(even) {
+  background-color: #f2f2f2; /* Zebra striping for even rows */
+}
+
+.user1-table tr:hover {
+  background-color: #e0e0e0; /* Highlight row on hover */
+}
+
+.back-button {
+  margin-bottom: 20px; /* Space below the button */
+  padding: 10px 15px; /* Button padding */
+  background-color: #060E57; /* Button background color */
+  color: white; /* Button text color */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.back-button:hover {
+  background-color: #0a1e7e; /* Darker shade on hover */
+}
+
+/*pending1 style */
+/* Notification styles for Pending component */
+.pending1-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white; /* White background */
+  color: #333; /* Dark text */
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards, fadeOut 3.5s forwards;
+  width: 80%;
+  max-width: 400px;
+}
+
+/* Animation for fade in and fade out */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Success notification (can be customized if needed) */
+.pending1-notification.success {
+  border-left: 5px solid #4CAF50; /* Green border for success */
+}
+
+/* Error notification (optional) */
+.pending1-notification.error {
+  border-left: 5px solid #F44336; /* Red border */
+}
+
+/* Info notification (optional) */
+.pending1-notification.info {
+  border-left: 5px solid #2196F3; /* Blue border */
+}
+
+/* Optional: adjust text styles */
+.pending1-notification p {
+  margin: 0;
+  font-weight: bold;
+  text-align: center;
+}
+.sidebar-logo {
+  width: 100%; /* Makes the logo take up the full width of its container */
+  height: auto; /* Maintains the aspect ratio */
+  max-width: 120px; /* Optional: You can set a maximum width if you want to control the maximum size */
+  display: block; /* Ensures no extra space below the image */
+  margin: 0 auto; /* Centers the logo horizontally */
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/*adminlogin1*/
+/* Admin Login Styles */
+.adminlogin1-container {
+  background-image: url('/src/components/public/background.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+}
+
+/* Admin Login Styles */
+.adminlogin1-container {
+  background-image: url('/src/components/public/background.jpg');
+  background-size: cover; /* Ensure background covers the entire container */
+  padding: 20px;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Allow column layout for header and form */
+}
+
+.adminlogin1-header {
+  text-align: center;
+  margin-bottom: 20px; /* Reduced margin for better spacing */
+  width: 100%;
+}
+
+.adminlogin1-header h1 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #000b22;
+  margin: 0;
+}
+
+.adminlogin1-form-container {
+  background-color: rgba(0, 0, 0, 0.7); /* Slightly transparent black background */
+  padding: 40px; /* More padding for the form container */
+  border-radius: 10px;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align form items */
+}
+
+.adminlogin1-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Ensure the form spans full width of the container */
+}
+
+.adminlogin1-input-container {
+  margin-bottom: 20px;
+  width: 100%; /* Ensure input container takes up full width */
+}
+
+.adminlogin1-label {
+  font-size: 16px;
+  color: #f3f4f6;
+  margin-bottom: 8px;
+}
+
+.adminlogin1-input {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #1e2a78;
+  color: white;
+  width: 100%; /* Make sure input fields take up full width */
+}
+
+.adminlogin1-button {
+  background-color: #1529e0;
+  color: white;
+  font-size: 18px;
+  padding: 15px 30px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+  width: 106%; /* Make the button span the full width of the form */
+}
+
+.adminlogin1-button:hover {
+  background-color: #0e1d8f;
+}
+
+.adminlogin1-error {
+  color: #ff6666;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .adminlogin1-form-container {
+    padding: 20px;
+    width: 90%;
+  }
+
+  .adminlogin1-header h1 {
+    font-size: 28px;
+  }
+
+  .adminlogin1-input {
+    padding: 10px;
+  }
+}
+
+/*admin1 header stlyes*/
+.admin1-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #060E57;
+}
+
+.admin1-header-icon {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.admin1-footer {
+  background-color: #060E57; /* Matches your color scheme */
+  color: white;
+
+  text-align: center;
+  width: 100%;
+  position: fixed; /* Ensure the footer stays at the bottom */
+  bottom: 0;
+  left: 0;
+}
+
+.admin1-footer p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.admin1-profile {
+  display: flex;
+  align-items: center;
+}
+
+.admin1-profile-name {
+  text-align: left;
+  margin-right: 10px; /* Adds space between the name and the icon */
+  color: black;
+}
+
+.admin1-profile-name span {
+  font-size: 14px; /* Adjust font size */
+}
+
+.admin1-profile-icon {
+  font-size: 40px; /* Adjust icon size */
+  color: #060E57; /* Set icon color to match your theme */
+}
+
+.admin1-header-text {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/*tips*/
+.profile-tips {
+  padding: 15px;
+  background-color: #f0f4ff; /* Light blue background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  border-radius: 8px;
+  width: 55%;
+  margin: 20px 20px 0px 0px;
+  
+}
+
+.profile-tips h4 {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #060E57; /* Primary color for the title */
+  margin-bottom: 10px;
+}
+
+.profile-tips ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.profile-tips ul li {
+  margin-bottom: 8px;
+  color: #333; /* Darker text color for readability */
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+.profile-tips ul li:before {
+  content: "💡 "; /* Light bulb emoji for each tip */
+  color: #ffce00; /* Yellow color for the emoji */
+  font-size: 1.1em;
+  margin-right: 5px;
+}
+
+/*profile modal */
+
+/* profile Modal Styles */
+/* profile Modal Styles */
+.profile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.profile-modal-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative; /* Needed for absolute positioning of the close button */
+}
+
+.profile-modal-header {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Positioning the close button at the top right of the modal box */
+.profile-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #060e57;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.profile-modal-close:hover {
+  background-color: #3e4c80;
+}
+
+.profile-modal-body {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.profile-modal-footer {
+  text-align: center;
+}
+
+.profile-view-proof-button,
+.profile-view-remarks-button {
+  background-color: #060e57;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.profile-view-proof-button:hover,
+.profile-view-remarks-button:hover {
+  background-color: #3e4c80;
+}
+
+.profile-modal-image {
+  max-width: 90%; /* Adjusts to a maximum of 90% of the modal's width */
+  max-height: 80vh; /* Limits height to 80% of the viewport height */
+  object-fit: contain; /* Ensures the image maintains its aspect ratio */
+}
