@@ -3,44 +3,74 @@ import { supabase } from './utils/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 
 const IncidentReport = () => {
-  const [studentId, setStudentId] = useState('');
   const [description, setDescription] = useState('');
   const [photo, setPhoto] = useState(null);
   const [message, setMessage] = useState('');
   const [isCooldown, setIsCooldown] = useState(false);
-  const [showNotification, setShowNotification] = useState(false); // State for notification
+  const [showNotification, setShowNotification] = useState(false);
+  const [studentId, setStudentId] = useState('');
+  const [incidentDate, setIncidentDate] = useState(''); // State for incident date
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchStudentId = async () => {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        console.error('Error fetching user:', userError.message);
+        return;
+      }
+
+      if (user) {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('student_id')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) {
+          console.error('Error fetching profile:', profileError.message);
+          return;
+        }
+
+        setStudentId(profile?.student_id || '');
+      }
+    };
+
+    fetchStudentId();
+  }, []);
+
+  useEffect(() => {
     const checkCooldown = async () => {
-      const { data: existingReports, error: fetchError } = await supabase
+      if (!studentId) return;
+
+      const { data: existingReports, error } = await supabase
         .from('incident_report')
         .select('submitted_at')
         .eq('student_id', studentId)
         .order('submitted_at', { ascending: false })
-        .limit(2); // Get the most recent report
+        .limit(1);
 
-      if (fetchError) {
-        console.error('Error fetching existing reports:', fetchError.message);
-        alert('An error occurred while checking your report limit. Please try again.');
+      if (error) {
+        console.error('Error fetching existing reports:', error.message);
         return;
       }
 
       if (existingReports.length > 0) {
-        const lastSubmittedAt = new Date(existingReports[1].submitted_at);
+        const lastSubmittedAt = new Date(existingReports[0].submitted_at);
         const currentTime = new Date();
-        const timeDiff = currentTime - lastSubmittedAt; // Difference in milliseconds
+        const timeDiff = currentTime - lastSubmittedAt;
 
-        // Check if the difference is less than 24 hours (86400000 milliseconds)
         if (timeDiff < 86400000) {
           setIsCooldown(true);
         }
       }
     };
 
-    if (studentId) {
-      checkCooldown();
-    }
+    checkCooldown();
   }, [studentId]);
 
   const handleSubmit = async (e) => {
@@ -57,14 +87,12 @@ const IncidentReport = () => {
     }
 
     const filePath = `private/${studentId}/${photo.name}`;
-    const { data: uploadData, error: uploadError } = await supabase
-      .storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
       .from('incident-report')
       .upload(filePath, photo);
 
     if (uploadError) {
       alert(`Failed to upload image: ${uploadError.message}`);
-      console.error('Upload error:', uploadError);
       return;
     }
 
@@ -74,6 +102,7 @@ const IncidentReport = () => {
       student_id: studentId,
       description,
       proof_of_incident: publicUrl,
+      incident_date: incidentDate, // Include the selected date
       submitted_at: new Date().toISOString(),
     };
 
@@ -86,17 +115,15 @@ const IncidentReport = () => {
       return;
     }
 
-    setShowNotification(true); // Show the notification box
-    // Clear form fields
-    setStudentId('');
+    setShowNotification(true);
     setDescription('');
     setPhoto(null);
+    setIncidentDate(''); // Clear the date
     setMessage('');
 
-    // Automatically navigate back to profile after a short delay
     setTimeout(() => {
       navigate('/profile');
-    }, 3000); // Adjust delay as needed
+    }, 3000);
   };
 
   return (
@@ -106,30 +133,24 @@ const IncidentReport = () => {
         <h2 className="section-header">Incident Report</h2>
         <form onSubmit={handleSubmit} className="report1-form">
           <div className="report1-form-group">
-            <label className="report1-form-label">Student ID</label>
-            <input
-              type="text"
-              value={studentId}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (/^\d*$/.test(value) && value.length <= 10) setStudentId(value);
-              }}
-              maxLength="10"
-              required
-              className="report1-form-input"
-              placeholder="Enter up to 10 digits only"
-            />
-          </div>
-          <div className="report1-form-group">
             <label className="report1-form-label">Description</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
               className="report1-form-input"
-              placeholder='Please provide a clear description of what happened.'
+              placeholder="Please provide a clear description of what happened."
             />
-            <p className="report1-description-message">You can only submit a report twice a day.</p>
+          </div>
+          <div className="report1-form-group">
+            <label className="report1-form-label">Incident Date</label>
+            <input
+              type="date"
+              value={incidentDate}
+              onChange={(e) => setIncidentDate(e.target.value)}
+              required
+              className="report1-form-input"
+            />
           </div>
           <div className="report1-form-group">
             <label className="report1-form-label">Upload Photo</label>
@@ -141,14 +162,20 @@ const IncidentReport = () => {
             />
           </div>
           <div className="report1-button-group">
-            <button 
-              type="submit" 
-              className="report1-submit-button" 
+            <button
+              type="submit"
+              className="report1-submit-button"
               disabled={isCooldown}
             >
               Submit
             </button>
-            <button className="report1-back-button" onClick={() => navigate('/profile')}>Back to Profile</button>
+            <button
+              type="button"
+              className="report1-back-button"
+              onClick={() => navigate('/profile')}
+            >
+              Back to Profile
+            </button>
           </div>
         </form>
         {message && <p className="report1-message">{message}</p>}

@@ -60,7 +60,7 @@ const Login = () => {
       <h1 className="login1-title">PARKTRACK</h1>
       <div className="login1-container">
         <button className="login1-back-button" onClick={() => navigate('/')}>
-          Back to Dashboard
+          Dashboard
         </button>
         <h2 className="login1-header">Login</h2>
         <Formik
@@ -81,11 +81,11 @@ const Login = () => {
                 <ErrorMessage name="password" component="div" className="login1-error-message" />
               </div>
               <div className="login1-button-group">
+              <button type="button" className="login1-register-button" onClick={() => navigate('/register')}>
+                  Register
+                </button>
                 <button type="submit" className="login1-submit-button" disabled={isSubmitting}>
                   Login
-                </button>
-                <button type="button" className="login1-register-button" onClick={() => navigate('/register')}>
-                  Register
                 </button>
               </div>
             </Form>
