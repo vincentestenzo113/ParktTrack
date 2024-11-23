@@ -78,7 +78,7 @@ const Profile = () => {
       .select('submitted_at')
       .eq('student_id', student_id)
       .order('submitted_at', { ascending: false })
-      .limit(2);
+      .limit(1);
 
     if (error) {
       console.error('Error fetching cooldown status:', error.message);
@@ -172,7 +172,7 @@ const Profile = () => {
                                 <br />
                                 <span className="cooldown-time">{formatCooldownTime(cooldownTime)}</span>
                             </>
-                            : <span className="cooldown-text">2</span>}
+                            : <span className="cooldown-text">1</span>}
                         </p>
                         <h3>Report Available</h3> 
                     </div>

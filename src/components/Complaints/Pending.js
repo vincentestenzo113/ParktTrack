@@ -21,15 +21,17 @@ const Pending = () => {
   const fetchReports = async () => {
     const { data, error } = await supabase
       .from('incident_report')
-      .select('id, student_id, description, proof_of_incident, remarks, submitted_at')
+      .select('id, student_id, description, proof_of_incident, remarks, submitted_at, incident_date')
       .eq('progress', 0)
       .is('remarks', null);
 
-    if (error) {
-      console.error('Error fetching reports:', error.message);
-    } else {
-      setReports(data);
-    }
+      if (error) {
+        console.error('Error fetching reports:', error.message);
+      } else {
+        // Sort reports by submitted_at in descending order (latest first)
+        const sortedReports = data.sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at));
+        setReports(sortedReports);
+      }
     setLoading(false);
   };
 
@@ -160,7 +162,8 @@ const Pending = () => {
                 <tr>
                   <th>Ticket #</th>
                   <th>Student ID</th>
-                  <th>Date and Time Submitted</th> 
+                  <th>Date and Time Submitted</th>
+                  <th>Incident Date</th> 
                   <th>Description</th>
                   <th>Proof</th>
                   <th>Remarks</th>
@@ -173,6 +176,14 @@ const Pending = () => {
       <td>{report.id}</td> {/* Changed to show the actual report ID */}
       <td>{report.student_id}</td>
       <td>{new Date(report.submitted_at).toLocaleString()}</td>
+      <td>{report.incident_date
+           ? new Date(report.incident_date).toLocaleDateString('en-US', {
+           year: 'numeric',
+           month: '2-digit',
+           day: '2-digit',
+           })
+           : 'N/A'}
+      </td>
       <td>{report.description}</td>
       <td className='admin1-send-button'>
         <button onClick={() => viewProof(report.proof_of_incident)} className="admin1-view-proof-button">
