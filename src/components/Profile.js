@@ -137,8 +137,8 @@ const Profile = () => {
       <div className='bottom-nav-container'>
       <div className='bottom-nav'>
         <button className='active'><FontAwesomeIcon icon={faUser}/></button>
-        <button><FontAwesomeIcon icon={faComments}/></button>
-        <button><FontAwesomeIcon icon={faFileAlt}/></button>
+        <button onClick={() => navigate('/view-complaints')}><FontAwesomeIcon icon={faComments}/></button>
+        <button onClick={() => navigate('/incident-report')}><FontAwesomeIcon icon={faFileAlt}/></button>
       </div>
       </div>
        <div className='header-container'>
