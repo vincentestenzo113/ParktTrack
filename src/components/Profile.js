@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from './utils/supabaseClient';
-import { toast } from 'react-toastify';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComments, faFileAlt, faSignOutAlt, faUser, faBell } from '@fortawesome/free-solid-svg-icons';
-import favicon from './public/profile-icon.png';
-import logo from './public/parktracklogo.png';
-import logo2 from './public/logosaparktrack.png';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "./utils/supabaseClient";
+import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faComments,
+  faFileAlt,
+  faSignOutAlt,
+  faUser,
+  faBell,
+} from "@fortawesome/free-solid-svg-icons";
+import favicon from "./public/profile-icon.png";
+import logo from "./public/parktracklogo.png";
+import logo2 from "./public/logosaparktrack.png";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -26,14 +32,14 @@ const Profile = () => {
   // Function to fetch the current slots left from the Flask API
   const fetchSlotsLeft = async () => {
     try {
-      const response = await fetch('http://192.168.1.12:5000/get_slots'); // Update with the Flask server URL
+      const response = await fetch("http://192.168.1.12:5000/get_slots"); // Update with the Flask server URL
       if (!response.ok) {
-        throw new Error('Failed to fetch slots');
+        throw new Error("Failed to fetch slots");
       }
       const data = await response.json();
       setSlotsLeft(data.slots_left); // Update the state with the fetched slots
     } catch (error) {
-      console.error('Error fetching slots:', error);
+      console.error("Error fetching slots:", error);
     }
   };
 
@@ -46,28 +52,31 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
       if (userError) {
-        console.error('Error getting user:', userError.message);
-        toast.error('Failed to get user data. Please log in again.');
-        navigate('/login');
+        console.error("Error getting user:", userError.message);
+        toast.error("Failed to get user data. Please log in again.");
+        navigate("/login");
         return;
       }
       if (user) {
         const { data, error } = await supabase
-          .from('profiles')
-          .select('student_id, name, email')
-          .eq('id', user.id)
+          .from("profiles")
+          .select("student_id, name, email")
+          .eq("id", user.id)
           .single();
         if (error) {
-          console.error('Error fetching user data:', error.message);
-          toast.error('Error fetching user profile data.');
+          console.error("Error fetching user data:", error.message);
+          toast.error("Error fetching user profile data.");
           return;
         }
         setUserInfo(data);
         checkReportCooldown(data.student_id);
       } else {
-        navigate('/login');
+        navigate("/login");
       }
     };
 
@@ -76,15 +85,15 @@ const Profile = () => {
 
   const checkReportCooldown = async (student_id) => {
     const { data: reports, error } = await supabase
-      .from('incident_report')
-      .select('submitted_at')
-      .eq('student_id', student_id)
-      .order('submitted_at', { ascending: false })
+      .from("incident_report")
+      .select("submitted_at")
+      .eq("student_id", student_id)
+      .order("submitted_at", { ascending: false })
       .limit(1);
 
     if (error) {
-      console.error('Error fetching cooldown status:', error.message);
-      toast.error('Failed to fetch cooldown status.');
+      console.error("Error fetching cooldown status:", error.message);
+      toast.error("Failed to fetch cooldown status.");
       return;
     }
 
@@ -120,12 +129,12 @@ const Profile = () => {
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      console.error('Error signing out:', error.message);
-      toast.error('Error signing out. Please try again.');
+      console.error("Error signing out:", error.message);
+      toast.error("Error signing out. Please try again.");
       return;
     }
-    localStorage.removeItem('isAuthenticated');
-    navigate('/login');
+    localStorage.removeItem("isAuthenticated");
+    navigate("/login");
   };
 
   if (!userInfo) {
@@ -134,35 +143,50 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <div className='bottom-nav-container'>
-      <div className='bottom-nav'>
-        <button className='active'><FontAwesomeIcon icon={faUser}/></button>
-        <button onClick={() => navigate('/view-complaints')}><FontAwesomeIcon icon={faComments}/></button>
-        <button onClick={() => navigate('/incident-report')}><FontAwesomeIcon icon={faFileAlt}/></button>
+      <div className="bottom-nav-container">
+        <div className="bottom-nav">
+          <button className="active">
+            <FontAwesomeIcon icon={faUser} />
+          </button>
+          <button onClick={() => navigate("/view-complaints")}>
+            <FontAwesomeIcon icon={faComments} />
+          </button>
+          <button onClick={() => navigate("/incident-report")}>
+            <FontAwesomeIcon icon={faFileAlt} />
+          </button>
+        </div>
       </div>
+      <div className="header-container">
+        <div className="header-left">
+          <img src={logo} className="logo1" alt="logo1" />
+          <img src={logo2} className="logo2" alt="logo2" />
+          <div className="logo-title">PARK <br /> TRACK</div>
+        </div>
+        <div className="header-right">
+          <div>
+            <FontAwesomeIcon icon={faBell} />
+          </div>
+          <div>{userInfo.name}</div>
+        </div>
       </div>
-       <div className='header-container'>
-          <div className='header-left'>
-            <img src={logo} className='logo1' alt='logo1'/>
-            <img  src={logo2} className='logo2' alt='logo2'/>
-            <div>PARKTRACK</div>
-          </div>
-          <div className='header-right'>
-            <div><FontAwesomeIcon icon={faBell} /></div>
-            <div>{userInfo.name}</div>
-          </div>
-       </div>
       <div className="profile-sidebar">
-        <div className='space-sidebar-name'></div>
-        <button className="profile-sidebar-button-active" >
-        <FontAwesomeIcon icon={faUser} /> Profile
+     
+      <div className="profile-icon-inner">
+              <img src={favicon}></img>
+       </div>
+       <p>{userInfo.name}</p>
+        <button className="profile-sidebar-button-active">
+          <FontAwesomeIcon icon={faUser} /> Profile
         </button>
-        <button className="profile-sidebar-button" onClick={() => navigate('/view-complaints')}>
+        <button
+          className="profile-sidebar-button"
+          onClick={() => navigate("/view-complaints")}
+        >
           <FontAwesomeIcon icon={faComments} /> View Complaints
         </button>
         <button
           className="profile-sidebar-button"
-          onClick={() => navigate('/incident-report')}
+          onClick={() => navigate("/incident-report")}
         >
           <FontAwesomeIcon icon={faFileAlt} /> Report Incident
         </button>
@@ -171,58 +195,62 @@ const Profile = () => {
         </button>
       </div>
       <div className="profile-content">
-        <div className='profile-welcome'>
-          <h1>Welcome, {userInfo.name}</h1>
+        <div className="profile-welcome">
+          <h1>Welcome to PARKTRACK, {userInfo.name}</h1>
         </div>
-        <div className='profile-boxcontainer'>
-            <div className='profile-information'>
+        <div className="profile-boxcontainer">
+          <div className="profile-information">
             <h3>Profile</h3>
-              <div className='profile-icon-inner'>
-              <img src={favicon}></img>
+            <p>
+              <strong>Email:</strong> {userInfo.email}
+            </p>
+            <p>
+              <strong>Student ID:</strong> {userInfo.student_id}
+            </p>
+          </div>
+          <div className="profile-reportstatus">
+            <div className="cooldown-container">
+              <div className="cooldown-inner">
+                <p>
+                  {hasCooldown ? (
+                    <>
+                      <span className="cooldown-label">Cooldown</span>
+                      <br />
+                      <span className="cooldown-time">
+                        {formatCooldownTime(cooldownTime)}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="cooldown-text">1</span>
+                  )}
+                </p>
+                <h3>Report Available</h3>
               </div>
-              <p> {userInfo.name}</p>
-            <p><strong>Email:</strong> {userInfo.email}</p>
-            <p><strong>Student ID:</strong> {userInfo.student_id}</p>
-
             </div>
-            <div className='profile-reportstatus'>
-                <div className='cooldown-container'>
-                    <div className='cooldown-inner'>
-                    <p>
-                    {hasCooldown
-                            ? <>
-                                <span className="cooldown-label">Cooldown</span>
-                                <br />
-                                <span className="cooldown-time">{formatCooldownTime(cooldownTime)}</span>
-                            </>
-                            : <span className="cooldown-text">1</span>}
-                        </p>
-                        <h3>Report Available</h3> 
-                    </div>
-                </div>  
-                <div className='cooldown-container'>
-                    <div className='cooldown-inner'>
-                    <p>
-                            <span className="cooldown-text">{slotsLeft}</span>
-                        </p>
-                        <h3>Slot Left</h3> 
-                    </div>
-                </div>   
+            <div className="cooldown-container">
+              <div className="cooldown-inner">
+                <p>
+                  <span className="cooldown-text">{slotsLeft}</span>
+                </p>
+                <h3>Slot Left</h3>
+              </div>
             </div>
+          </div>
         </div>
-        <div className='profile-boxcontainer'>
-            <div className='profile-tips'>
-                <h3>Helpful Tips:</h3>
-                <ul>
-                    {tips.map((tip, index) => <li key={index}>{tip}</li>)}
-                </ul>
-            </div>
-            <div className='profile-contactus'>
-                <h1>PARKTRACK</h1>
-                <h2>Contact Us:</h2>
-                <p>support@parktrack.com</p>
-                <p>2024 PARKTRACK INC Tel: +639355380789</p>
-            </div>
+        <div className="profile-boxcontainer">
+          <div className="profile-tips">
+            <h3>Helpful Tips:</h3>
+            <ul>
+              {tips.map((tip, index) => (
+                <li key={index}>{tip}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="profile-contactus">
+            <h2>Contact Us:</h2>
+            <p>support@parktrack.com</p>
+            <p>2024 PARKTRACK INC Tel: +639355380789</p>
+          </div>
         </div>
       </div>
     </div>
