@@ -42,6 +42,42 @@
   cursor: pointer;
 }
 
+.header-container {
+  position: sticky;
+  top: 0; /* Stick to the top of the viewport */
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  z-index: 10; /* Optional: To ensure it stays above other elements */
+}
+
+.header-right {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 0px 30px 0px 0px;
+}
+
+.header-left {
+  color: white;
+  background-color: #060e57;
+  width: 250px;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  padding: 30px 20px 20px 0px;
+}
+
+.header-left img{
+  padding-left: 30px;
+  color: white;
+  height: 35px;
+  width: 40px;
+}
+
 .side-bar {
   flex-grow: 1;
   display: flex;
@@ -321,7 +357,6 @@
 
 /* Styling for header container */
 .header-container {
-  background-color: #3b5159;
   display: flex;
   height: 40px;
   z-index: 1;
@@ -1080,7 +1115,7 @@ body::before {
   background-position: center;
   opacity: 0.8; /* Adjust the opacity as desired */
   filter: blur(2px); /* Adjust the blur level */
-  z-index: -1; /* Ensure the background is behind all other content */
+  z-index: -1; /* Ensure the background is behind all other content */ 
 }
 
 /* General Styles for profile */
@@ -1089,8 +1124,35 @@ body::before {
   flex-wrap: wrap;
   justify-content: space-between; /* Prevent overflowing by adding space between items */
   overflow-x: hidden; /* Prevent horizontal overflow */
+  overflow-y: hidden; /* Prevent vertical overflow */
   background-color: white;
-  min-height: 100vh;
+  width: 100%; /* Ensure full width */
+  height: 100vh; /* Ensure full height */
+}
+
+.profile-welcome {
+  display: flex;
+  margin: -60px 20px 0px 20px;
+  position: absolute;
+  z-index: 2;
+}
+
+.profile-icon-inner {
+  display: flex;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  margin: 0px 20px 0px 20px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-icon-inner img{
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  position: absolute;
 }
 
 .profile-sidebar {
@@ -1100,14 +1162,18 @@ body::before {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 10px;
+  padding: 20px 10px 10px 10px;
   height: 100vh; /* Full height */
   flex-shrink: 0;
   overflow-y: auto; /* Allow vertical scrolling inside the sidebar if content overflows */
   font-size: 25px;
   gap: 15px;
   width: 250px;
-  position: relative;
+  position: sticky;
+}
+
+.space-sidebar-name {
+  margin: 50px 0px 50px 0px
 }
 
 .profile-sidebar-logo{
@@ -1122,6 +1188,14 @@ body::before {
   height: 150px;
   position: relative;
   margin-top: 10px;
+}
+
+.logo2 {
+  display: none;
+}
+
+.logo1 {
+  display: block;
 }
 
 .profile-sidebar-logo-inner {
@@ -1162,6 +1236,23 @@ body::before {
   font-size: 15px;
 }
 
+.profile-sidebar-button-active {
+  display: flex;
+  background-color: #004080; /* Dark blue for buttons */
+  color: white; /* White text color */
+  border: none; /* No border */
+  padding: 10px; /* Padding */
+  margin: 5px 0; /* Margin between buttons */
+  cursor: pointer; /* Pointer cursor */
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s; /* Smooth background transition */
+  width: 90%;
+  align-items: start;
+  justify-content: start;
+  gap: 10px;
+  font-size: 15px;
+}
+
 .profile-sidebar-button:hover {
   background-color: #004080; /* Lighter blue on hover */
 }
@@ -1186,32 +1277,38 @@ body::before {
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 20px;
+  padding: 100px 20px 20px 20px;
   overflow-x: hidden; /* Prevent horizontal overflow */
   overflow-y: auto; /* Allow vertical scrolling inside content */
   position: relative;
+  height: calc(100vh - 200px); /* Adjust based on your header/footer height */
 }
 
 .profile-boxcontainer {
   display: flex;
   flex-direction: row;
   gap: 2vh;
+  flex-wrap: wrap;
+  position: relative;
+  justify-content: center;
+  align-items: center;
 }
 
 .profile-information {
-  width: 55%;
+  flex-grow: 8;
   height: auto;
-  padding: 15px;
-  margin: 20px 20px 20px 0px;
+  padding: 15px 30px 15px 30px;
+  margin: 20px 0px 20px 0px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
 }
 
 .profile-reportstatus {
-  min-width: 30%;
+  flex-grow: 4;
+  width: 40%;
   position: relative;
   height: auto;
   padding: 20px 10px 20px 10px;
-  margin: 20px 20px 20px 10px;
+  margin: 20px 0px 20px 0px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -1357,7 +1454,7 @@ tr:nth-child(even) {
   cursor: pointer; /* Pointer cursor */
   border-radius: 5px; /* Rounded corners */
   transition: background-color 0.3s; /* Smooth background transition */
-  margin-bottom: 40px;
+  margin-bottom: 80px;
   width: 90%;
 }
 
@@ -1473,6 +1570,59 @@ tr:nth-child(even) {
   margin-top: 15px;
 }
 
+.bottom-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  padding: 10px;
+  z-index: 10; /* Ensure it stays above other content */
+  gap: 5vh;
+  margin-bottom: 10px;
+}
+
+.bottom-nav button{
+  display: flex;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(6, 14, 87);
+  color: white;
+  border: 1px solid rgb(6, 14, 87);;
+  box-shadow: 2px 2px 20px 2px rgba(0, 0, 0, 0.3);
+}
+
+.bottom-nav button.active {
+  display: flex;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 64, 128);
+  color: white;
+  border: 1px solid rgb(6, 14, 87);;
+  box-shadow: 2px 2px 20px 2px rgba(0, 0, 0, 0.3);
+}
+
+.bottom-nav button:active {
+  transform: scale(0.9); /* Scale down the button when clicked */
+  background-color: rgb(0, 64, 128);
+  box-shadow: 0 0 15px 2px rgba(0, 0, 0, 0.2); /* Change shadow when clicked */
+}
+
+.bottom-nav-container {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0px 10px 0px 10px;
+  min-width: 90%;
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
 
@@ -1480,19 +1630,36 @@ tr:nth-child(even) {
     flex-direction: column; /* Stack sidebar and content */
   }
 
-  .profile-sidebar {
-    width: 100%; /* Full width for sidebar on smaller screens */
-    height: auto; /* Adjust height for sidebar */
-    padding: 15px;
+  .bottom-nav-container {
+    display: block;
   }
 
-  .profile-sidebar-button {
-    padding: 12px; /* Larger padding for easier tapping on small screens */
-    font-size: 2em; /* Slightly larger font size */
+  .profile-sidebar {
+    display: none;
+  }
+
+  .bottom-nav {
+    position: sticky;
+    bottom: 0;
+  }
+
+  .header-left {
+    display: flex;
+    z-index: 1;
+    color: #060e57;
+    background-color: white;
+  }
+
+  .logo2 {
+    display: block;
+  }
+
+  .logo1 {
+    display: none;
   }
 
   .profile-content {
-    padding: 15px;
+    padding: 100px 15px 15px 15px;
   }
 
   .profile-parktrack-title {
@@ -1517,22 +1684,19 @@ tr:nth-child(even) {
 
   .profile-boxcontainer{
     flex-direction: column;
+    width: 100%;
   }
 
   .profile-information {
-    width: 88%;
+    width: 85%;
   }
 
   .profile-reportstatus {
-    width: 88%;
-  }
-
-  .profile-tips{
-    width: 88%;
+    width: 85%;
   }
 
   .profile-contactus{
-    width: 88%;
+    width: 85%;
   }
 
   .profile-sidebar {
@@ -1551,7 +1715,7 @@ tr:nth-child(even) {
   }
 
   .profile-content {
-    padding: 10px;
+    padding: 100px 15px 15px 15px;
   }
 
   .profile-no-edge-box {
@@ -2423,10 +2587,10 @@ tr:nth-child(even) {
   margin: 0 auto; /* Centers the logo horizontally */
 }
 
-html, body {
-  height: 100%;
+body, html {
   margin: 0;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  padding: 0;
+  height: 100%;
 }
 
 /*adminlogin1*/
@@ -2612,9 +2776,9 @@ html, body {
   background-color: #f0f4ff; /* Light blue background */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
   border-radius: 8px;
-  width: 55%;
+  width: 100%;
   margin: 20px 20px 0px 0px;
-  
+  flex-grow: 12;
 }
 
 .profile-tips h4 {
@@ -2642,6 +2806,10 @@ html, body {
   color: #ffce00; /* Yellow color for the emoji */
   font-size: 1.1em;
   margin-right: 5px;
+}
+
+.profile-contactus {
+  flex-grow: 12;
 }
 
 /*profile modal */

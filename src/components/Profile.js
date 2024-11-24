@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from './utils/supabaseClient';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComments, faFileAlt, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faComments, faFileAlt, faSignOutAlt, faUser, faBell } from '@fortawesome/free-solid-svg-icons';
 import favicon from './public/profile-icon.png';
+import logo from './public/parktracklogo.png';
+import logo2 from './public/logosaparktrack.png';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -132,14 +134,27 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
+      <div className='bottom-nav-container'>
+      <div className='bottom-nav'>
+        <button className='active'><FontAwesomeIcon icon={faUser}/></button>
+        <button><FontAwesomeIcon icon={faComments}/></button>
+        <button><FontAwesomeIcon icon={faFileAlt}/></button>
+      </div>
+      </div>
+       <div className='header-container'>
+          <div className='header-left'>
+            <img src={logo} className='logo1' alt='logo1'/>
+            <img  src={logo2} className='logo2' alt='logo2'/>
+            <div>PARKTRACK</div>
+          </div>
+          <div className='header-right'>
+            <div><FontAwesomeIcon icon={faBell} /></div>
+            <div>{userInfo.name}</div>
+          </div>
+       </div>
       <div className="profile-sidebar">
-        <div className='profile-sidebar-logo'>
-            <div className='profile-sidebar-logo-inner'>  
-                <img src={favicon} alt="Logo" /> 
-            </div>
-        </div>
-        <div className='profile-sidebar-name'>{userInfo.name}</div>
-        <button className="profile-sidebar-button">
+        <div className='space-sidebar-name'></div>
+        <button className="profile-sidebar-button-active" >
         <FontAwesomeIcon icon={faUser} /> Profile
         </button>
         <button className="profile-sidebar-button" onClick={() => navigate('/view-complaints')}>
@@ -156,11 +171,19 @@ const Profile = () => {
         </button>
       </div>
       <div className="profile-content">
+        <div className='profile-welcome'>
+          <h1>Welcome, {userInfo.name}</h1>
+        </div>
         <div className='profile-boxcontainer'>
             <div className='profile-information'>
-            <h1>Welcome, {userInfo.name}</h1>
+            <h3>Profile</h3>
+              <div className='profile-icon-inner'>
+              <img src={favicon}></img>
+              </div>
+              <p> {userInfo.name}</p>
             <p><strong>Email:</strong> {userInfo.email}</p>
             <p><strong>Student ID:</strong> {userInfo.student_id}</p>
+
             </div>
             <div className='profile-reportstatus'>
                 <div className='cooldown-container'>
@@ -172,7 +195,7 @@ const Profile = () => {
                                 <br />
                                 <span className="cooldown-time">{formatCooldownTime(cooldownTime)}</span>
                             </>
-                            : <span className="cooldown-text">2</span>}
+                            : <span className="cooldown-text">1</span>}
                         </p>
                         <h3>Report Available</h3> 
                     </div>
