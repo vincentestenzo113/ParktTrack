@@ -11,16 +11,19 @@ const Users = () => {
     const fetchUsers = async () => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('student_id, created_at');
+        .select('student_id, created_at, plate_number');
       if (error) {
         console.error('Error fetching users:', error.message);
       } else if (data) {
-        setUsers(data);
+        const filteredUsers = data.filter(user => String(user.student_id) !== '123456789');
+        console.log('Filtered users:', filteredUsers);
+        setUsers(filteredUsers);  // Set the filtered data
       }
       setLoading(false);
     };
     fetchUsers();
   }, []);
+  
 
   return (
     <div className="users1-container">
@@ -36,19 +39,23 @@ const Users = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th>Student ID</th> 
+              <th>Student ID</th>
+              <th>Plate Number</th>
               <th>Date Created</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
-              <tr key={user.student_id}>
-                <td>{index + 1}</td>
-                <td>{user.student_id}</td> 
-                <td>{new Date(user.created_at).toLocaleDateString()}</td>
-              </tr>
-            ))}
-          </tbody>
+  {users.map((user, index) => (
+    user.student_id !== '123456789' && (
+      <tr key={user.student_id}>
+        <td>{index + 1}</td>
+        <td>{user.student_id}</td>
+        <td>{user.plate_number}</td>  
+        <td>{new Date(user.created_at).toLocaleDateString()}</td>
+      </tr>
+    )
+  ))}
+</tbody>
         </table>
       ) : (
         <p>No registered users found.</p>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from './utils/supabaseClient'; // Ensure the correct supabase client is initialized
+import { supabase } from './utils/supabaseClient';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faClipboardList, faUsers, faSignOutAlt, faExclamationCircle, faSpinner, faCheckCircle, faUser } from '@fortawesome/free-solid-svg-icons';
 import adminlogo from './public/parktracklogo.png';
@@ -12,7 +12,10 @@ const Admin = () => {
   const [solvedCount, setSolvedCount] = useState(0);
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
-  const [session, setSession] = useState(null); // State for storing session
+  const [session, setSession] = useState(null);
+  const [studentId, setStudentId] = useState('');
+  const [rfidTag, setRfidTag] = useState('');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const checkSession = async () => {
@@ -20,34 +23,28 @@ const Admin = () => {
       setSession(sessionData);
     };
 
-    // Check session on component mount
     checkSession();
-
-    // Fetch report counts
     const fetchReportCounts = async () => {
       try {
-        const { data: pendingReports, error: pendingError } = await supabase
+        const { data: pendingReports } = await supabase
           .from('incident_report')
           .select('*')
           .eq('progress', 0)
           .is('remarks', null);
-        if (pendingError) throw pendingError;
         setPendingCount(pendingReports.length);
 
-        const { data: onProgressReports, error: onProgressError } = await supabase
+        const { data: onProgressReports } = await supabase
           .from('incident_report')
           .select('*')
           .eq('progress', 1)
           .not('remarks', 'is', null);
-        if (onProgressError) throw onProgressError;
         setOnProgressCount(onProgressReports.length);
 
-        const { data: solvedReports, error: solvedError } = await supabase
+        const { data: solvedReports } = await supabase
           .from('incident_report')
           .select('*')
           .eq('progress', 2)
           .not('remarks', 'is', null);
-        if (solvedError) throw solvedError;
         setSolvedCount(solvedReports.length);
       } catch (error) {
         console.error('Error fetching report counts:', error);
@@ -56,39 +53,84 @@ const Admin = () => {
 
     fetchReportCounts();
 
-    // Set the current date and time
     const today = new Date();
-    setCurrentDate(today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
+    setCurrentDate(
+      today.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    );
     const timer = setInterval(() => {
-      const now = new Date();
-      setCurrentTime(now.toLocaleTimeString());
+      setCurrentTime(new Date().toLocaleTimeString());
     }, 1000);
 
-    return () => clearInterval(timer); // Clean up timer
+    return () => clearInterval(timer);
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut(); // Log out from Supabase
-    localStorage.removeItem('isAuthenticated'); // Clear authentication state
-    navigate('/admin-login'); // Redirect to login page
+    await supabase.auth.signOut();
+    localStorage.removeItem('isAuthenticated');
+    navigate('/admin-login');
   };
 
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    // Trim inputs to prevent leading/trailing spaces
+    const trimmedStudentId = studentId.trim();
+    const trimmedRfidTag = rfidTag.trim();
+
+    // Check if inputs are valid
+    if (!trimmedStudentId || !trimmedRfidTag) {
+        setMessage('Please provide both Student ID and RFID Tag.');
+        return;
+    }
+
+    console.log('Submitting with:', { studentId: trimmedStudentId, rfidTag: trimmedRfidTag });
+
+    try {
+        // Update rfid_tag for the matching student_id
+        const { data, error } = await supabase
+            .from('profiles')
+            .update({ rfid_tag: trimmedRfidTag })
+            .eq('student_id', trimmedStudentId)
+            .select(); // Select the updated data to check
+
+        if (error) {
+            console.error('Supabase Update Error:', error.message);
+            setMessage('Failed to assign RFID tag. Please try again.');
+        } else {
+            console.log('Supabase Update Response:', data);
+            if (data && data.length > 0) {
+                setMessage('RFID tag assigned successfully!');
+            } else {
+                setMessage('No matching student found for the provided Student ID.');
+            }
+        }
+    } catch (error) {
+        console.error('Error during form submission:', error);
+        setMessage('An error occurred. Please try again.');
+    }
+
+    // Reset form fields
+    setStudentId('');
+    setRfidTag('');
+};
+
   if (!session) {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className='admin1-container'>
-      <div className='admin1-sidebar'>
+    <div className="admin1-container">
+      <div className="admin1-sidebar">
         <div className="admin1-logo">
           <img src={adminlogo} className="admin1-logo-image" alt="admin logo" />
           <span className="admin1-logo-text">PARK <br /> TRACK</span>
         </div>
-        <div className='admin1-dashboard'>
+        <div className="admin1-dashboard">
           <button className="admin1-sidebar-button" onClick={() => navigate('/Admin')}>
             <FontAwesomeIcon icon={faHome} className="admin1-icon" />
             Dashboard
@@ -101,6 +143,29 @@ const Admin = () => {
             <FontAwesomeIcon icon={faUsers} className="admin1-icon" />
             Registered Users
           </button>
+          <div className="rfid-form">
+          <h3 className='form-title'>Assign RFID to Student</h3>
+          <form onSubmit={handleFormSubmit} className="admin1-rfid-form">
+            <label className="admin1-form-label">Student ID:</label>
+            <input
+              type="text"
+              value={studentId}
+              onChange={(e) => setStudentId(e.target.value)}
+              className="admin1-form-input"
+              placeholder="Enter Student ID"
+            />
+            <label className="admin1-form-label">RFID Tag:</label>
+            <input
+              type="text"
+              value={rfidTag}
+              onChange={(e) => setRfidTag(e.target.value)}
+              className="admin1-form-input"
+              placeholder="Enter RFID Tag"
+            />
+            <button type="submit" className="admin1-submit-button">Assign</button>
+          </form>
+          {message && <p className="admin1-message">{message}</p>}
+        </div>
           <button className="admin1-logout-button" onClick={handleLogout}>
             <FontAwesomeIcon icon={faSignOutAlt} className="admin1-icon" />
             Logout
@@ -125,11 +190,8 @@ const Admin = () => {
         </div>
         <div className="admin1-no-edge-box">
           <div className="admin1-parktrack-title">PARKTRACK</div>
-          <div className='admin1-reports-title'>COMPLAINTS PROGRESS</div>
-          <div className="dashboard-content">
-            {/* Add any additional content here if needed */}
-          </div>
-
+          <div className="admin1-reports-title">COMPLAINTS PROGRESS</div>
+          <div className="dashboard-content"></div>
           <div className="admin1-progress-container">
             <div className="admin1-pending" onClick={() => navigate('/Pending')}>
               <section className="admin1-icon pending-icon">
@@ -154,23 +216,17 @@ const Admin = () => {
             </div>
           </div>
         </div>
-
         <div className="bottom-section">
-          {/* Date Section */}
           <div className="date-container">
             <h3>Today's Date</h3>
             <p>{currentDate}</p>
           </div>
-
-          {/* Clock Section */}
           <div className="digital-clock-container">
             <h3>Current Time</h3>
             <div className="clock-box">
               <p>{currentTime}</p>
             </div>
           </div>
-
-          {/* Footer */}
           <footer className="admin1-footer">
             <p>&copy; 2024 PARKTRACK INC Tel: +639355380789 | Got bugs or errors? Contact us here: support@parktrack.com</p>
           </footer>

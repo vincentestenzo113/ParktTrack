@@ -1,4 +1,3 @@
-// Register.js
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -16,6 +15,7 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    plateNumber: '',  // New field for plate number
   };
 
   const validationSchema = Yup.object({
@@ -26,11 +26,14 @@ const Register = () => {
     email: Yup.string()
       .email('Invalid email format')
       .required('Required')
-      .notOneOf(['admin@gmail.com'], 'This email is not allowed'), // Custom validation to prevent 'admin@gmail.com'
+      .notOneOf(['admin@gmail.com'], 'This email is not allowed'),
     password: Yup.string().min(6, 'Password must be at least 6 characters long').required('Password is required'),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .required('Confirm password is required'),
+    plateNumber: Yup.string()
+      .matches(/^[A-Za-z0-9]{1,15}$/, 'Plate number must be alphanumeric and up to 15 characters')
+      .required('Plate number is required'),  // Validation for plate number
   });
 
   const onSubmit = async (values) => {
@@ -43,6 +46,7 @@ const Register = () => {
           data: {
             studentId: values.studentId,
             name: values.name,
+            plateNumber: values.plateNumber,  // Include plate number in the user metadata
           },
         },
       });
@@ -55,25 +59,26 @@ const Register = () => {
 
       // Insert the user's profile into the profiles table
       const { error: profileError } = await supabase
-      .from('profiles')
-      .insert([
-        {
-          id: data.user.id,             // Using the auth.uid() (data.user.id)
-          student_id: values.studentId,  // student ID from the registration form
-          name: values.name,             // user name from the registration form
-          email: values.email,           // email from the registration form
-          password: values.password,
-        },
-      ]);
-    
-    if (profileError) {
-      console.error('Error inserting profile data:', profileError.message);
-      toast.error(`Error saving profile data: ${profileError.message}`);
-      return;
-    }
-    
-    toast.success('Registration successful! Please check your email to confirm your account.');
-    navigate('/'); // Redirect to the home page after successful registration    
+        .from('profiles')
+        .insert([
+          {
+            id: data.user.id,             // Using the auth.uid() (data.user.id)
+            student_id: values.studentId,  // student ID from the registration form
+            name: values.name,             // user name from the registration form
+            email: values.email,           // email from the registration form
+            password: values.password,
+            plate_number: values.plateNumber, // Save plate number to the table
+          },
+        ]);
+
+      if (profileError) {
+        console.error('Error inserting profile data:', profileError.message);
+        toast.error(`Error saving profile data: ${profileError.message}`);
+        return;
+      }
+
+      toast.success('Registration successful! Please check your email to confirm your account.');
+      navigate('/'); // Redirect to the home page after successful registration    
     } catch (error) {
       console.error('Error during sign up:', error.message);
       toast.error(`Error: ${error.message}`);
@@ -121,6 +126,11 @@ const Register = () => {
               <label className="register1-form-label">Confirm Password</label>
               <Field type="password" name="confirmPassword" className="register1-form-input" />
               <ErrorMessage name="confirmPassword" component="div" className="register1-error-message" />
+            </div>
+            <div className="register1-form-group">
+              <label className="register1-form-label">Plate Number</label>
+              <Field name="plateNumber" className="register1-form-input" />
+              <ErrorMessage name="plateNumber" component="div" className="register1-error-message" />
             </div>
             <div className="register1-button-group">
               <button type="submit" className="register1-submit-button">Register</button>
