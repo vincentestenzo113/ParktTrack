@@ -731,12 +731,13 @@ textarea {
 }
 
 .login1-back-button {
-  background-color: transparent;
-  color: #060E57; /* Text color matches the primary color */
+  background-color: #060E57; /* Primary button color */
+  color: white;
   border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
-  margin-left: 65%;
+  margin-left: 310px;
 }
 
 .login1-header {
@@ -778,7 +779,7 @@ textarea {
   justify-content: space-between; /* Align buttons on either side */
 }
 
-.login1-submit-button {
+.login1-register-button {
   background-color: #060E57; /* Primary button color */
   color: white;
   border: none;
@@ -787,9 +788,9 @@ textarea {
   cursor: pointer;
 }
 
-.login1-register-button {
-  background-color: #ccc; /* Secondary button color */
-  color: #060E57; /* Text color */
+.login1-submit-button {
+  background-color: #060E57; /* Primary button color */
+  color: white;
   border: none;
   padding: 10px 15px;
   border-radius: 4px;

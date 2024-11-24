@@ -80,7 +80,7 @@ const Profile = () => {
       .select('submitted_at')
       .eq('student_id', student_id)
       .order('submitted_at', { ascending: false })
-      .limit(2);
+      .limit(1);
 
     if (error) {
       console.error('Error fetching cooldown status:', error.message);
