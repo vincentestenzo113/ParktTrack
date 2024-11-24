@@ -65,7 +65,7 @@ const Profile = () => {
       if (user) {
         const { data, error } = await supabase
           .from("profiles")
-          .select("student_id, name, email")
+          .select("student_id, name, email, plate_number")
           .eq("id", user.id)
           .single();
         if (error) {
@@ -200,12 +200,15 @@ const Profile = () => {
         </div>
         <div className="profile-boxcontainer">
           <div className="profile-information">
-            <h3>Profile</h3>
+            <h3>User Information</h3>
             <p>
               <strong>Email:</strong> {userInfo.email}
             </p>
             <p>
               <strong>Student ID:</strong> {userInfo.student_id}
+            </p>
+            <p>
+              <strong>Plate Number:</strong> {userInfo.plate_number}
             </p>
           </div>
           <div className="profile-reportstatus">
