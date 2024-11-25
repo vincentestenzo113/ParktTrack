@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from './supabaseClient'; // Make sure this path is correct
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "./supabaseClient";
 
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
@@ -10,20 +10,17 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        // Get the user object
         const { data, error } = await supabase.auth.getUser();
-        
-        if (error) {
-          console.error("Error fetching user:", error);
-          setUser(null); // No user found
+        if (error || !data.user) {
+          setUser(null); // No user logged in
         } else {
-          setUser(data.user); // Set the authenticated user
+          setUser(data.user); // User logged in
         }
       } catch (error) {
         console.error("Error during user check:", error);
-        setUser(null); // No user found
+        setUser(null);
       } finally {
-        setLoading(false); // Set loading state to false once the check is complete
+        setLoading(false);
       }
     };
 
@@ -31,17 +28,31 @@ const ProtectedRoute = ({ children }) => {
   }, []);
 
   if (loading) {
-    // Optionally, show a loading spinner or similar while checking the user
     return <div>Loading...</div>;
   }
 
+  // If there is no user, and they try to access protected pages, redirect to /login
   if (!user) {
-    // If no user is found, redirect to the login page
-    navigate('/login');
+    navigate("/login");
     return null;
   }
 
-  return <>{children}</>; // Render protected content if the user is authenticated
+  // If the user is logged in and tries to access /admin, check if the email is admin@gmail.com
+  if (user && window.location.pathname === "/admin") {
+    if (user.email !== "admin@gmail.com") {
+      // If the user is not admin, redirect them to /profile or another page
+      navigate("/profile");
+      return null;
+    }
+  }
+
+  // If the user is logged in and tries to access /admin-login or /login, redirect them to /profile
+  if (user && (window.location.pathname === "/admin-login" || window.location.pathname === "/login")) {
+    navigate("/profile");
+    return null;
+  }
+
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
