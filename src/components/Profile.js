@@ -63,6 +63,11 @@ const Profile = () => {
         return;
       }
       if (user) {
+        if (user.email === "admin@gmail.com") {
+          await handleLogout();
+          return;
+        }
+
         const { data, error } = await supabase
           .from("profiles")
           .select("student_id, name, email, plate_number")
