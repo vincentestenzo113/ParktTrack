@@ -49,7 +49,7 @@
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
-  z-index: 10; /* Optional: To ensure it stays above other elements */
+  z-index: 4; /* Optional: To ensure it stays above other elements */
 }
 
 .header-right {
@@ -69,8 +69,9 @@
   justify-content: center;
   align-items: center;
   padding: 50px 20px 20px 0px;
-  margin-top: 50px;
+  margin-top: 10px;
   gap: 5px;
+  z-index: 4;
 }
 
 .header-left div {
@@ -78,7 +79,6 @@
 }
 
 .header-left img {
-  padding-left: 30px;
   color: white;
   height: 55px;
   width: 60px;
@@ -294,6 +294,7 @@
   .slots-container {
     flex-direction: column;
   }
+  
 }
 
 .Profile {
@@ -361,8 +362,10 @@
 /* Styling for header container */
 .header-container {
   display: flex;
-  height: 40px;
-  z-index: 1;
+  height: 50px;
+  z-index: 3;
+  color: #060E57;
+  background-color: white;
 }
 
 /* Progress container layout */
@@ -1135,12 +1138,14 @@ body::before {
 
 .profile-welcome {
   display: flex;
-  margin: -90px 20px 0px 20px;
-  position: absolute;
-  z-index: 2;
-  width: 90%;
+  width: 100%;
   justify-content: start;
-  flex-wrap: wrap;
+  align-items: center;
+  margin: 0px 0px 20px 10px;
+  font-size: 18px; /* Adjust font size for the title */
+  color: #060e57; /* Set text color to your theme */
+  padding: 10px; /* Adjust padding for spacing */
+  border-top: 1px solid #060e57;
 }
 
 .profile-welcome h1{
@@ -1152,7 +1157,7 @@ body::before {
   height: 100px;
   width: 100px;
   border-radius: 50%;
-  margin: 80px 20px 0px 20px;
+  margin: 80px 20px 20px 20px;
   position: relative;
   align-items: center;
   justify-content: center;
@@ -1179,9 +1184,10 @@ body::before {
   flex-shrink: 0;
   overflow-y: auto; /* Allow vertical scrolling inside the sidebar if content overflows */
   font-size: 25px;
-  gap: 15px;
+  gap: 1px;
   width: 250px;
   position: sticky;
+  z-index: 2;
 }
 
 .profile-sidebar p {
@@ -1289,12 +1295,12 @@ body::before {
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 100px 20px 20px 20px;
+  padding: 10px 20px 20px 20px;
   overflow-x: hidden; /* Prevent horizontal overflow */
   overflow-y: auto; /* Allow vertical scrolling inside content */
   position: relative;
   width: 100%;
-  height: calc(100vh - 200px); /* Adjust based on your header/footer height */
+  height: calc(120vh - 200px); /* Adjust based on your header/footer height */
   justify-content: start;
   align-items: center;
 }
@@ -1485,7 +1491,10 @@ tr:nth-child(even) {
 }
 
 .description-column {
-  max-width: 400px;
+  min-width: 400px; /* Minimum width */
+  max-width: 600px; /* Maximum width */
+  width: auto; /* Allow the width to adjust based on content */
+  word-wrap: break-word; /* Ensure long words break to fit within the column */
 }
 
 /* Logout Button Styles */
@@ -1826,7 +1835,7 @@ tr:nth-child(even) {
 
 @media (min-width: 624px) {
   html {
-      font-size: 11px;
+      font-size: 16px;
   }
 }
 
@@ -1983,8 +1992,8 @@ tr:nth-child(even) {
 .admin1-sidebar-button {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 18px; /* Larger font size */
+  gap: 5px;
+  font-size: 16px; /* Larger font size */
   font-weight: 400; /* Semi-bold for emphasis */
   color: #ffffff; /* White color for buttons */
   background-color: transparent; /* Transparent background */
@@ -2001,7 +2010,7 @@ tr:nth-child(even) {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 18px; /* Larger font size */
+  font-size: 16px; /* Larger font size */
   font-weight: 400; /* Semi-bold for emphasis */
   color: #ffffff; /* White color for buttons */
   background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
@@ -2021,7 +2030,7 @@ tr:nth-child(even) {
 
 .admin1-sidebar-button:hover {
   background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
-  color: #f1f1f1; /* Slightly lighter text on hover */
+  color: #060e57; /* Slightly lighter text on hover */
 }
 
 .admin1-profile {
@@ -2053,18 +2062,6 @@ tr:nth-child(even) {
   height: auto;
 }
 
-.admin1-dashboard-title {
-  display: flex;
-  width: 100%;
-  justify-content: start;
-  align-items: center;
-  margin: -90px 0px 20px 10px;
-  font-size: 18px; /* Adjust font size for the title */
-  color: #060e57; /* Set text color to your theme */
-  padding: 10px; /* Adjust padding for spacing */
-  border-top: 1px solid gray;
-}
-
 .admin1-header-icon {
   font-size: 20px; /* Adjust icon size */
   color: #060e57; /* Set icon color to match theme */
@@ -2074,6 +2071,15 @@ tr:nth-child(even) {
 .admin1-header-text {
   font-weight: bold; /* Make text bold */
 }
+
+.admin1-header {
+  width: clamp(220px, 5vw, 150px);
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+
 .admin1-sidebar-button {
   background-color: #060e57;
   color: white;
@@ -2936,6 +2942,8 @@ html {
   margin-bottom: 15px;
 }
 
+
+
 /* Responsive adjustments */
 @media (max-width: 480px) {
   .adminlogin1-form-container {
@@ -2950,15 +2958,6 @@ html {
   .adminlogin1-input {
     padding: 10px;
   }
-}
-
-/*admin1 header stlyes*/
-.admin1-header {
-  margin-top: 10px;
-  width: clamp(220px, 5vw, 150px);
-  display: flex;
-  justify-content: end;
-  align-items: center;
 }
 
 .admin1-header-icon {
@@ -3236,7 +3235,7 @@ html {
 
 .parking-data-container {
   background-color: white;
-  min-height: 100vh; /* Ensures the container covers the full viewport height */
+  height: 100vh; /* Ensures the container covers the full viewport height */
   padding: 20px;
   box-sizing: border-box; /* Includes padding in the element's total width and height */
   overflow-x: hidden; /* Prevents horizontal overflow */

@@ -23,12 +23,13 @@ const AdminLogin = () => {
   const onSubmit = async (values, { setSubmitting }) => {
     const adminEmail = 'admin@gmail.com';
     if (values.email !== adminEmail) {
-      toast.error('only admin can login here.');
+      toast.error('Only admin can login here.');
       setSubmitting(false);
       return;
     }
 
     try {
+      console.log('Attempting to sign in with:', values.email);
       const { error } = await supabase.auth.signInWithPassword({
         email: values.email,
         password: values.password,

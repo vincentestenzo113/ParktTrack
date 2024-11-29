@@ -202,7 +202,7 @@ const Profile = () => {
       </div>
       <div className="profile-content">
         <div className="profile-welcome">
-          <h1>Welcome to PARKTRACK, {userInfo.name}</h1>
+          <span className="admin1-header-text">Welcome to PARKTRACK, {userInfo.name}</span>
         </div>
         <div className="profile-boxcontainer">
           <div className="profile-information">

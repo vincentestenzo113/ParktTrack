@@ -39,7 +39,7 @@ const Admin = () => {
       const { data: sessionData } = await supabase.auth.getSession();
       setSession(sessionData);
 
-      if (sessionData?.user?.email !== "admin@gmail.com") {
+      if (sessionData?.session?.user?.email !== "admin@gmail.com") {
         navigate("/profile");
       }
     };
@@ -157,12 +157,15 @@ const Admin = () => {
           <button className="active">
             <FontAwesomeIcon icon={faHome} />
           </button>
-          <button onClick={() => navigate("/view-complaints")}>
+          <button onClick={() => navigate("/Pending")}>
             <FontAwesomeIcon icon={faClipboardList} />
           </button>
-          <button onClick={() => navigate("/incident-report")}>
+          <button onClick={() => navigate("/users")}>
             <FontAwesomeIcon icon={faUsers} />
           </button>
+          <button onClick={() => navigate("/parking-data")}>
+            <FontAwesomeIcon icon={faUsers} />
+          </button> 
         </div>
       </div>
       <div className="header-container">
@@ -239,7 +242,7 @@ const Admin = () => {
       </div>
 
       <div className="profile-content">
-        <div className="admin1-dashboard-title">
+        <div className="profile-welcome">
           <FontAwesomeIcon icon={faHome} className="admin1-header-icon" />
           <span className="admin1-header-text">DASHBOARD</span>
         </div>
