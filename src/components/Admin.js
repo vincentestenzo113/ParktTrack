@@ -36,8 +36,12 @@ const Admin = () => {
 
   useEffect(() => {
     const checkSession = async () => {
-      const { data: sessionData } = await supabase.auth.getSession(); // Fetch current session
+      const { data: sessionData } = await supabase.auth.getSession();
       setSession(sessionData);
+
+      if (sessionData?.user?.email !== "admin@gmail.com") {
+        navigate("/profile");
+      }
     };
 
     checkSession();
