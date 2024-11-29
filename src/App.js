@@ -20,6 +20,7 @@ import Solved from "./components/Complaints/Solved";
 import AdminLogin from "./components/AdminLogin";
 import ProtectedRoute from "./components/utils/ProtectedRoutes";
 import { supabase } from "./components/utils/supabaseClient";
+import ParkingData from "./components/ParkingData";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(null);
@@ -195,6 +196,14 @@ function App() {
             ) : (
               <Navigate to="/login" replace />
             )
+          }
+        />
+        <Route
+          path="/parking-data"
+          element={
+            <ProtectedRoute>
+              <ParkingData />
+            </ProtectedRoute>
           }
         />
       </Routes>

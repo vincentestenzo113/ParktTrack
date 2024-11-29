@@ -6,6 +6,7 @@ const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [loginPath, setLoginPath] = useState(null);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -15,6 +16,7 @@ const ProtectedRoute = ({ children }) => {
           setUser(null); // No user logged in
         } else {
           setUser(data.user); // User logged in
+          setLoginPath(window.location.pathname);
         }
       } catch (error) {
         console.error("Error during user check:", error);
@@ -31,25 +33,20 @@ const ProtectedRoute = ({ children }) => {
     return <div>Loading...</div>;
   }
 
-  // If there is no user, and they try to access protected pages, redirect to /login
   if (!user) {
     navigate("/login");
     return null;
   }
 
-  // If the user is logged in and tries to access /admin, check if the email is admin@gmail.com
-  if (user && window.location.pathname === "/admin") {
-    if (user.email !== "admin@gmail.com") {
-      // If the user is not admin, redirect them to /profile or another page
+  if (user) {
+    if (loginPath === "/admin-login" && window.location.pathname === "/profile") {
+      navigate("/admin");
+      return null;
+    }
+    if (loginPath === "/login" && window.location.pathname === "/admin") {
       navigate("/profile");
       return null;
     }
-  }
-
-  // If the user is logged in and tries to access /admin-login or /login, redirect them to /profile
-  if (user && (window.location.pathname === "/admin-login" || window.location.pathname === "/login")) {
-    navigate("/profile");
-    return null;
   }
 
   return <>{children}</>;

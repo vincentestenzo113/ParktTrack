@@ -202,6 +202,12 @@ const Admin = () => {
         >
           <FontAwesomeIcon icon={faUsers} /> Registered Users
         </button>
+        <button
+          className="admin1-sidebar-button"
+          onClick={() => navigate("/parking-data")}
+        >
+          <FontAwesomeIcon icon={faClipboardList} /> Parking Data
+        </button>
         <div className="rfid-form">
           <h3 className="form-title">Assign RFID to Student</h3>
           <form onSubmit={handleFormSubmit} className="admin1-rfid-form">
