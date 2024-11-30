@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./utils/supabaseClient";
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ import {
   faSignOutAlt,
   faUser,
   faBell,
+  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import favicon from "./public/profile-icon.png";
 import logo from "./public/parktracklogo.png";
@@ -19,7 +20,15 @@ const Profile = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [hasCooldown, setHasCooldown] = useState(false);
   const [cooldownTime, setCooldownTime] = useState(0);
-
+  const [showChat, setShowChat] = useState(
+    JSON.parse(localStorage.getItem("showChat")) || false
+  );
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+  const [slotsLeft, setSlotsLeft] = useState(150); // Initial state
   const tips = [
     "Remember to submit proof for all complaints to increase processing speed.",
     "Check your cooldown status before submitting another report.",
@@ -27,7 +36,15 @@ const Profile = () => {
     "Click on 'View Complaints' to check your complaint's status.",
   ];
 
-  const [slotsLeft, setSlotsLeft] = useState(150); // Initial state
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   // Function to fetch the current slots left from the Flask API
   const fetchSlotsLeft = async () => {
@@ -43,10 +60,10 @@ const Profile = () => {
     }
   };
 
-  // Use `useEffect` to fetch slots when the component loads and every 5 seconds
+  // Use `useEffect` to fetch slots when the component loads and every 2 seconds
   useEffect(() => {
     fetchSlotsLeft(); // Initial fetch
-    const interval = setInterval(fetchSlotsLeft, 2000); // Fetch every 5 seconds
+    const interval = setInterval(fetchSlotsLeft, 2000); // Fetch every 2 seconds
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
 
@@ -70,7 +87,9 @@ const Profile = () => {
 
         const { data, error } = await supabase
           .from("profiles")
-          .select("student_id, name, email, motorcycle_model, motorcycle_colorway, contact_number")
+          .select(
+            "student_id, name, email, motorcycle_model, motorcycle_colorway, contact_number"
+          )
           .eq("id", user.id)
           .single();
         if (error) {
@@ -87,6 +106,143 @@ const Profile = () => {
 
     fetchUserData();
   }, [navigate]);
+
+  useEffect(() => {
+    let subscription;
+
+    const fetchMessages = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Get admin ID
+      const { data: adminUser } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("email", "admin@gmail.com")
+        .single();
+
+      const { data, error } = await supabase
+        .from("chats")
+        .select("*")
+        .or(
+          `and(sender_id.eq.${user.id},receiver_id.eq.${adminUser.id}),and(sender_id.eq.${adminUser.id},receiver_id.eq.${user.id})`
+        )
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching messages:", error);
+        return;
+      }
+      setMessages(data || []);
+    };
+
+    if (showChat) {
+      fetchMessages();
+
+      subscription = supabase
+        .channel("chat-channel")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "chats",
+          },
+          async (payload) => {
+            const {
+              data: { user },
+            } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const { data: adminUser } = await supabase
+              .from("profiles")
+              .select("id")
+              .eq("email", "admin@gmail.com")
+              .single();
+
+            if (
+              payload.new &&
+              ((payload.new.sender_id === user.id &&
+                payload.new.receiver_id === adminUser.id) ||
+                (payload.new.sender_id === adminUser.id &&
+                  payload.new.receiver_id === user.id))
+            ) {
+              setMessages((current) => [...current, payload.new]);
+            }
+          }
+        )
+        .subscribe();
+    }
+
+    return () => {
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+    };
+  }, [showChat]);
+
+  useEffect(() => {
+    const subscribeToReportUpdates = () => {
+      if (!userInfo) return;
+
+      const subscription = supabase
+        .channel("report-updates")
+        .on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "incident_report",
+            filter: `student_id=eq.${userInfo.student_id}`,
+          },
+          (payload) => {
+            console.log("Received payload:", payload); // Add logging to verify payload
+            const { new: updatedReport } = payload;
+            let notificationMessage = "";
+
+            if (updatedReport.progress === 1 && updatedReport.remarks) {
+              notificationMessage = `Your report #${updatedReport.id} has been updated`;
+            } else if (updatedReport.progress === 2) {
+              notificationMessage = `Your report #${updatedReport.id} has been solved`;
+            } else if (updatedReport.progress === 0) {
+              notificationMessage = `Your report #${updatedReport.id} is not solved`;
+            }
+
+            if (notificationMessage) {
+              setNotifications((prev) => [
+                ...prev,
+                { id: updatedReport.id, message: notificationMessage },
+              ]);
+              setHasUnreadNotifications(true);
+
+              // Mark the report as read
+              supabase
+                .from("incident_report")
+                .update({ is_read: true })
+                .eq("id", updatedReport.id)
+                .then(({ error }) => {
+                  if (error) {
+                    console.error("Error marking report as read:", error);
+                  }
+                });
+            }
+          }
+        )
+        .subscribe();
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    };
+
+    const unsubscribe = subscribeToReportUpdates();
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [userInfo]);
 
   const checkReportCooldown = async (student_id) => {
     const { data: reports, error } = await supabase
@@ -142,6 +298,47 @@ const Profile = () => {
     navigate("/login");
   };
 
+  const handleSendMessage = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user || !message.trim()) return;
+
+    const { data: adminUser } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("email", "admin@gmail.com")
+      .single();
+
+    const { error } = await supabase
+      .from("chats")
+      .insert([
+        {
+          sender_id: user.id,
+          receiver_id: adminUser.id,
+          message: message.trim(),
+          is_admin: false,
+        },
+      ]);
+
+    if (error) {
+      console.error("Error sending message:", error);
+      return;
+    }
+
+    setMessage(""); // Clear the input field after sending
+  };
+
+  const toggleChat = () => {
+    const newShowChat = !showChat;
+    setShowChat(newShowChat);
+    localStorage.setItem("showChat", JSON.stringify(newShowChat));
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications((prev) => !prev);
+  };
+
   if (!userInfo) {
     return <div>Loading...</div>;
   }
@@ -162,6 +359,10 @@ const Profile = () => {
             <FontAwesomeIcon icon={faFileAlt} />
             <span>Report</span>
           </button>
+          <button onClick={toggleChat}>
+            <FontAwesomeIcon icon={faComments} />
+            <span>Chat</span>
+          </button>
         </div>
       </div>
       <div className="header-container">
@@ -173,8 +374,9 @@ const Profile = () => {
           </div>
         </div>
         <div className="header-right">
-          <div>
+          <div onClick={toggleNotifications} style={{ position: "relative", cursor: "pointer" }}>
             <FontAwesomeIcon icon={faBell} />
+            {hasUnreadNotifications && <span className="notification-badge">!</span>}
           </div>
           <div>{userInfo.name}</div>
         </div>
@@ -199,13 +401,21 @@ const Profile = () => {
         >
           <FontAwesomeIcon icon={faFileAlt} /> Report Incident
         </button>
+        <button
+          className="profile-sidebar-button"
+          onClick={toggleChat}
+        >
+          <FontAwesomeIcon icon={faComments} /> Chat with Admin
+        </button>
         <button className="profile-logout-button" onClick={handleLogout}>
           <FontAwesomeIcon icon={faSignOutAlt} /> Logout
         </button>
       </div>
       <div className="profile-content">
         <div className="profile-welcome">
-          <span className="admin1-header-text">Welcome to PARKTRACK, {userInfo.name}</span>
+          <span className="admin1-header-text">
+            Welcome to PARKTRACK, {userInfo.name}
+          </span>
         </div>
         <div className="profile-boxcontainer">
           <div className="profile-information">
@@ -217,13 +427,14 @@ const Profile = () => {
               <strong>Student ID:</strong> {userInfo.student_id}
             </p>
             <p>
-              <strong>Motorcycle Details:</strong> 
-              {userInfo.motorcycle_model && userInfo.motorcycle_colorway 
-                ? `${userInfo.motorcycle_model} - ${userInfo.motorcycle_colorway}` 
+              <strong>Motorcycle Details:</strong>
+              {userInfo.motorcycle_model && userInfo.motorcycle_colorway
+                ? `${userInfo.motorcycle_model} - ${userInfo.motorcycle_colorway}`
                 : "No motorcycle inputted"}
             </p>
             <p>
-              <strong>Contact Number:</strong> {userInfo.contact_number || "No contact number"}
+              <strong>Contact Number:</strong>{" "}
+              {userInfo.contact_number || "No contact number"}
             </p>
           </div>
           <div className="profile-reportstatus">
@@ -270,6 +481,54 @@ const Profile = () => {
             <p>2024 PARKTRACK INC Tel: +639355380789</p>
           </div>
         </div>
+        {showChat && (
+          <div className="chat-overlay">
+            <div className="chat-container">
+              <div className="chat-header">
+                <h3>Chat with Admin</h3>
+                <button onClick={toggleChat}>×</button>
+              </div>
+              <div className="chat-messages">
+                {messages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`message ${msg.is_admin ? "admin" : "user"}`}
+                  >
+                    <p>
+                      <strong>{msg.is_admin ? "Admin" : "You"}:</strong> {msg.message}
+                    </p>
+                    <small>
+                      {new Date(msg.created_at).toLocaleTimeString()}
+                    </small>
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+              <form onSubmit={handleSendMessage} className="chat-input">
+                <input
+                  type="text"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Type your message..."
+                />
+                <button type="submit">
+                  <FontAwesomeIcon icon={faPaperPlane} />
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+        {showNotifications && (
+          <div className="notification-bubble">
+            {notifications.length > 0 ? (
+              notifications.map((notification) => (
+                <p key={notification.id}>{notification.message}</p>
+              ))
+            ) : (
+              <p>No notifications today</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

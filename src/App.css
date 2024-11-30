@@ -1515,7 +1515,7 @@ tr:nth-child(even) {
   cursor: pointer; /* Pointer cursor */
   border-radius: 5px; /* Rounded corners */
   transition: background-color 0.3s; /* Smooth background transition */
-  margin-bottom: 90px;
+  margin-bottom: 110px;
   width: 90%;
 }
 
@@ -2787,27 +2787,6 @@ tr:nth-child(even) {
   }
 }
 
-/* Success notification (can be customized if needed) */
-.pending1-notification.success {
-  border-left: 5px solid #4caf50; /* Green border for success */
-}
-
-/* Error notification (optional) */
-.pending1-notification.error {
-  border-left: 5px solid #f44336; /* Red border */
-}
-
-/* Info notification (optional) */
-.pending1-notification.info {
-  border-left: 5px solid #2196f3; /* Blue border */
-}
-
-/* Optional: adjust text styles */
-.pending1-notification p {
-  margin: 0;
-  font-weight: bold;
-  text-align: center;
-}
 .sidebar-logo {
   width: 100%; /* Makes the logo take up the full width of its container */
   height: auto; /* Maintains the aspect ratio */
@@ -3339,4 +3318,380 @@ html {
 .search-bar:focus {
   border-color: #007bff;
   outline: none;
+}
+
+.chat-overlay {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  height: 400px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-header {
+  padding: 10px;
+  background: #1a73e8;
+  color: white;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.chat-messages {
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 10px;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  max-width: 70%;
+  margin-bottom: 15px;
+  padding: 12px 16px;
+  border-radius: 15px;
+  position: relative;
+  word-break: break-word;
+}
+
+.message.user {
+  background: #e3f2fd;
+  align-self: flex-start;
+  color: #212529;
+}
+
+.message.admin {
+  background: #060e57;
+  align-self: flex-end;
+  color: white;
+}
+
+.message small {
+  font-size: 0.7em;
+  opacity: 0.7;
+  display: block;
+  margin-top: 4px;
+}
+
+.chat-input {
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid #eee;
+}
+
+.chat-input input {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+}
+
+.chat-input button {
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-input button:hover {
+  background: #1557b0;
+}
+
+.conversations-list {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.conversation-item {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.conversation-item:hover {
+  background-color: #f5f5f5;
+}
+
+.conversation-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.student-id {
+  color: #333;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.last-message {
+  color: #666;
+  font-size: 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unread-badge {
+  background-color: #1a73e8;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 8px;
+  font-size: 0.8em;
+  margin-left: 5px;
+}
+
+.chat-body {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 50px);
+}
+
+.inbox-badge {
+  background-color: #ff4444;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 8px;
+  font-size: 0.8em;
+  margin-left: 10px;
+}
+
+/* Improve the chat overlay positioning for admin */
+.chat-overlay.admin-chat {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 800px;
+  height: 80vh;
+  max-height: 600px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+/* Adjust the conversations list styling */
+.conversations-list {
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 10px;
+  height: calc(100% - 20px);
+}
+
+.conversation-item {
+  background-color: white;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Improve the chat messages container */
+.chat-messages {
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 10px;
+}
+
+/* Style the chat header better */
+.chat-header {
+  background-color: #060e57;
+  padding: 15px 20px;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header h3 {
+  color: white;
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.chat-header button {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.8em;
+}
+
+.notification-bubble {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 1000;
+}
+
+.circle-button {
+  display: none; /* Hide by default */
+}
+
+@media (max-width: 768px) {
+  .circle-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #060e57;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .circle-button:hover {
+    transform: scale(1.1);
+  }
+}
+
+/* Add this to your CSS file */
+.chat-overlay {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  max-width: 400px;
+  height: 50%;
+  background-color: white;
+  border: 1px solid #060e57;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #060e57;
+  border-bottom: 1px solid #ccc;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.message {
+  margin-bottom: 10px;
+  max-width: 70%;
+}
+
+.message.user {
+  text-align: right;
+  margin-left: auto;
+  background-color: #e0f7fa; /* Optional: Different background for user messages */
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.message.admin {
+  text-align: left;
+  margin-right: auto; /* Aligns admin messages to the left */
+  background-color: #060e57; /* Optional: Different background for admin messages */
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.chat-input button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .chat-overlay {
+    height: 50%; /* Increase the height to make the chatbox longer */
+  }
 }
