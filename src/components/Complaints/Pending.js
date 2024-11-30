@@ -180,11 +180,11 @@ const Pending = () => {
             <table className="profile-users-table">
               <thead>
                 <tr>
-                  <th>Ticket #</th>
+                  <th className='ticket-column'>Ticket #</th>
                   <th>Student ID</th>
                   <th>Date and Time Submitted</th>
                   <th>Incident Date</th> 
-                  <th>Description</th>
+                  <th className='description-column'>Description</th>
                   <th>Proof</th>
                   <th>Remarks</th>
                   <th>Take Action</th>
