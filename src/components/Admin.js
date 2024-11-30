@@ -15,8 +15,8 @@ import {
   faSpinner,
   faCheckCircle,
   faUser,
-  faComments,
-  faFileAlt,
+  faSquareParking,
+  faTicket,
   faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import logo from "./public/parktracklogo.png";
@@ -33,6 +33,7 @@ const Admin = () => {
   const [studentId, setStudentId] = useState("");
   const [rfidTag, setRfidTag] = useState("");
   const [message, setMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -146,6 +147,10 @@ const Admin = () => {
     setRfidTag("");
   };
 
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
   if (!session) {
     return <div>Loading...</div>;
   }
@@ -156,16 +161,24 @@ const Admin = () => {
         <div className="bottom-nav">
           <button className="active">
             <FontAwesomeIcon icon={faHome} />
+            <span>Home</span>
           </button>
           <button onClick={() => navigate("/Pending")}>
             <FontAwesomeIcon icon={faClipboardList} />
+            <span>Complaints</span>
           </button>
           <button onClick={() => navigate("/users")}>
             <FontAwesomeIcon icon={faUsers} />
+            <span>Users</span>
           </button>
           <button onClick={() => navigate("/parking-data")}>
-            <FontAwesomeIcon icon={faUsers} />
-          </button> 
+            <FontAwesomeIcon icon={faSquareParking} />
+            <span>Park Data</span>
+          </button>
+          <button onClick={toggleModal}>
+            <FontAwesomeIcon icon={faTicket} />
+            <span>Assign RFID</span>
+          </button>
         </div>
       </div>
       <div className="header-container">
@@ -240,6 +253,42 @@ const Admin = () => {
           <FontAwesomeIcon icon={faSignOutAlt} /> Logout
         </button>
       </div>
+
+      {/* Modal for RFID Form */}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="rfid-form">
+              <h3 className="form-title">Assign RFID to Student</h3>
+              <form onSubmit={handleFormSubmit} className="admin1-rfid-form">
+                <label className="admin1-form-label">Student ID:</label>
+                <input
+                  type="text"
+                  value={studentId}
+                  onChange={(e) => setStudentId(e.target.value)}
+                  className="admin1-form-input"
+                  placeholder="Enter Student ID"
+                />
+                <label className="admin1-form-label">RFID Tag:</label>
+                <input
+                  type="text"
+                  value={rfidTag}
+                  onChange={(e) => setRfidTag(e.target.value)}
+                  className="admin1-form-input"
+                  placeholder="Enter RFID Tag"
+                />
+                <button type="submit" className="admin1-submit-button">
+                  Assign
+                </button>
+              </form>
+              {message && <p className="admin1-message">{message}</p>}
+              <button onClick={toggleModal} className="close-modal-button">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="profile-content">
         <div className="profile-welcome">

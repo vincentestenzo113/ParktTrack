@@ -152,12 +152,15 @@ const Profile = () => {
         <div className="bottom-nav">
           <button className="active">
             <FontAwesomeIcon icon={faUser} />
+            <span>Profile</span>
           </button>
           <button onClick={() => navigate("/view-complaints")}>
             <FontAwesomeIcon icon={faComments} />
+            <span>Complaints</span>
           </button>
           <button onClick={() => navigate("/incident-report")}>
             <FontAwesomeIcon icon={faFileAlt} />
+            <span>Report</span>
           </button>
         </div>
       </div>

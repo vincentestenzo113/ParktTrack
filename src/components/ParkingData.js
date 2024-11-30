@@ -89,12 +89,14 @@ const ParkingData = () => {
 
   return (
     <div className="parking-data-container">
+      <div className="back-button-container">
       <button
         onClick={() => navigate("/admin")}
         className="back-button"
       >
         Back
       </button>
+      </div>
       <h2>Parking Data</h2>
       <div className="search-inputs">
         <input

@@ -417,8 +417,8 @@
 }
 
 .admin1-onprogress {
-  background-color: #ffeeba; /* Orange */
-  border: 1px solid #ffeeba; /* Darker orange border */
+  background-color: #ffbf00; /* Orange */
+  border: 1px solid #ffbf00; /* Darker orange border */
   border-radius: 10px; /* Rounded corners */
   padding: 10px; /* Internal padding */
   text-align: center; /* Centers content */
@@ -431,8 +431,8 @@
 }
 
 .admin1-solved {
-  background-color: #d4edda; /* Light green */
-  border: 1px solid #c3e6cb; /* Darker green border */
+  background-color: #c2ffd0; /* Light green */
+  border: 1px solid #3dff6a; /* Darker green border */
   border-radius: 10px; /* Rounded corners */
   padding: 10px; /* Internal padding */
   text-align: center; /* Centers content */
@@ -635,6 +635,11 @@ textarea {
 
 /* Media queries for responsive design */
 @media (max-width: 768px) {
+
+  .admin1-footer {
+    display: none;
+  }
+
   .progress-container {
     flex-direction: column;
   }
@@ -925,16 +930,19 @@ h2 {
 }
 
 .back-button {
-  position: absolute; /* Position it absolutely */
-  top: 20px; /* Adjust top position */
-  right: 20px; /* Adjust right position */
-  padding: 10px 20px;
   background-color: #060e57; /* Button color */
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: clamp(8px, 3vw, 16px);
+}
+
+.back-button-container {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  width: 100%;
 }
 
 .back-button:hover {
@@ -1295,7 +1303,7 @@ body::before {
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 10px 20px 20px 20px;
+  padding: 10px 20px 80px 20px;
   overflow-x: hidden; /* Prevent horizontal overflow */
   overflow-y: auto; /* Allow vertical scrolling inside content */
   position: relative;
@@ -1507,7 +1515,7 @@ tr:nth-child(even) {
   cursor: pointer; /* Pointer cursor */
   border-radius: 5px; /* Rounded corners */
   transition: background-color 0.3s; /* Smooth background transition */
-  margin-bottom: 80px;
+  margin-bottom: 90px;
   width: 90%;
 }
 
@@ -1543,20 +1551,6 @@ tr:nth-child(even) {
   margin-bottom: 20px;
 }
 
-.back-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 10px 20px;
-  background-color: #060e57;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
-  z-index: 1;
-}
 
 .back-button:hover {
   background-color: #0a1d81;
@@ -1630,13 +1624,20 @@ tr:nth-child(even) {
   position: sticky;
   padding: 10px;
   z-index: 10; /* Ensure it stays above other content */
-  gap: 5vh;
-  margin-bottom: 10px;
+  gap: clamp(5px, 6vw, 80px);
   flex-shrink: 0;
+  background-color: white;
+  border-top: 1px solid #060e57;
+}
+
+.bottom-nav span{
+  margin-top: 2px;
+  font-size: 8px;
 }
 
 .bottom-nav button {
   display: flex;
+  flex-direction: column;
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -1646,6 +1647,11 @@ tr:nth-child(even) {
   color: white;
   border: 1px solid rgb(6, 14, 87);
   box-shadow: 2px 2px 20px 2px rgba(0, 0, 0, 0.3);
+}
+
+.bottom-nav button:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+    color: #060e57; /* Slightly lighter text on hover */
 }
 
 .bottom-nav button.active {
@@ -1673,12 +1679,14 @@ tr:nth-child(even) {
   bottom: 0;
   left: 0;
   right: 0;
-  margin: 0px 10px 0px 10px;
-  min-width: 90%;
+  margin: 0px 0px 0px 0px;
+  min-width: 100%;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
+
+
 
 
   .view-button {
@@ -1739,7 +1747,7 @@ tr:nth-child(even) {
   }
 
   .profile-content {
-    padding: 100px 0px 15px 0px;
+    padding: 10px 0px 80px 0px;
   }
 
   .profile-parktrack-title {
@@ -1805,7 +1813,7 @@ tr:nth-child(even) {
   }
 
   .profile-content {
-    padding: 100px 0px 0px 0px;
+    padding: 10px 0px 80px 0px;
     justify-content: start;
     align-items: start;
   }
@@ -1856,25 +1864,22 @@ tr:nth-child(even) {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark overlay */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
 
 /* Modal content box style */
 .modal-content {
-  background-color: #fff;
+  display: flex;
+  background-color: white;
   padding: 20px;
-  width: 90%;
-  max-width: 500px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  position: relative;
-  height: auto;
-  object-fit: contain;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  align-items: center;
 }
 
 /* Title style */
@@ -1905,7 +1910,7 @@ tr:nth-child(even) {
 /* Close button styling */
 .modal-content button {
   padding: 8px 16px;
-  background-color: #007bff;
+  background-color: #060e57;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -2066,10 +2071,6 @@ tr:nth-child(even) {
   font-size: 20px; /* Adjust icon size */
   color: #060e57; /* Set icon color to match theme */
   margin-right: 8px; /* Space between icon and text */
-}
-
-.admin1-header-text {
-  font-weight: bold; /* Make text bold */
 }
 
 .admin1-header {
@@ -2739,15 +2740,6 @@ tr:nth-child(even) {
   background-color: #e0e0e0; /* Highlight row on hover */
 }
 
-.back-button {
-  margin-bottom: 20px; /* Space below the button */
-  padding: 10px 15px; /* Button padding */
-  background-color: #060e57; /* Button background color */
-  color: white; /* Button text color */
-  border: none; /* No border */
-  border-radius: 5px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-}
 
 .back-button:hover {
   background-color: #0a1e7e; /* Darker shade on hover */
@@ -2968,7 +2960,6 @@ html {
 .admin1-footer {
   background-color: #060e57; /* Matches your color scheme */
   color: white;
-
   text-align: center;
   width: 100%;
   position: fixed; /* Ensure the footer stays at the bottom */
@@ -3004,6 +2995,7 @@ html {
 .admin1-header-text {
   font-size: 20px;
   font-weight: bold;
+  margin-left: 10px;
 }
 
 /*tips*/
@@ -3242,10 +3234,11 @@ html {
   overflow-y: auto; /* Allows vertical scrolling if needed */
 }
 
+.parking-data-container h2 {
+  margin-top: 0;
+}
+
 .back-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
   background-color: #060e57;
   color: white;
   border: none;
@@ -3263,6 +3256,7 @@ html {
   margin-bottom: 20px;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .search-input-container {
@@ -3307,4 +3301,24 @@ html {
 
 .clear-button:hover {
   background-color: #d32f2f;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
