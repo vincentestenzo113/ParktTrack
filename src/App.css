@@ -522,6 +522,7 @@
   cursor: pointer; /* Pointer cursor on hover */
   font-size: 0.9em; /* Slightly smaller font size */
   transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background and scaling */
+  width: 100%;
 }
 
 .admin1-send-remarks-button {
@@ -562,6 +563,12 @@
   max-width: 400px; /* Max width for larger screens */
   display: flex; /* Use flexbox for layout */
   flex-direction: column; /* Arrange children vertically */
+  justify-content: center;
+  align-items: center;
+}
+
+.admin1-close-button {
+  margin-top: 10px;
 }
 
 .admin1-modal-content h2 {
@@ -593,7 +600,13 @@ textarea {
 }
 
 .admin1-send-button {
-  background-color: #4caf50; /* Green background for send button */
+  border: 1px solid #ddd;/* Green background for send button */
+  background-color: #218838;
+}
+
+.admin1-send-button-column {
+  align-items: center;
+  justify-content: center;
 }
 
 .admin1-cancel-button {
@@ -635,6 +648,13 @@ textarea {
 
 /* Media queries for responsive design */
 @media (max-width: 768px) {
+
+  .admin1-view-proof-button {
+    padding: 6px;
+  }
+  .admin1-view-remarks-button {
+    padding: 6px;
+  }
 
   .admin1-footer {
     display: none;
@@ -1141,7 +1161,7 @@ body::before {
   background-color: white;
   width: 100%; /* Ensure full width */
   height: 100vh; /* Ensure full height */
-  align-items: center;
+  align-items: start;
 }
 
 .profile-welcome {
@@ -1184,7 +1204,7 @@ body::before {
   background-color: #060e57;
   color: white;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   flex-direction: column;
   padding: 20px 10px 10px 10px;
@@ -1466,7 +1486,7 @@ table {
 th,
 td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: clamp(5px, 1vw, 10px);
   text-align: left;
   word-wrap: break-word; /* Prevent long text from overflowing */
 }
@@ -1482,7 +1502,7 @@ tr:nth-child(even) {
 }
 
 .profile-complaints-table button {
-  max-width: 80%;
+  max-width: 100%;
   max-height: 50px;
   display: flex;
   justify-content: center;
@@ -1501,8 +1521,12 @@ tr:nth-child(even) {
 .description-column {
   min-width: 400px; /* Minimum width */
   max-width: 600px; /* Maximum width */
-  width: auto; /* Allow the width to adjust based on content */
+  width: 20%; /* Allow the width to adjust based on content */
   word-wrap: break-word; /* Ensure long words break to fit within the column */
+}
+
+.ticket-column {
+  width: 5%; /* Allow the width to adjust based on content */
 }
 
 /* Logout Button Styles */
@@ -1512,10 +1536,10 @@ tr:nth-child(even) {
   border: none; /* No border */
   padding: 15px; /* Padding */
   margin-top: auto; /* Margin on top */
+  margin-bottom: 120px;
   cursor: pointer; /* Pointer cursor */
   border-radius: 5px; /* Rounded corners */
   transition: background-color 0.3s; /* Smooth background transition */
-  margin-bottom: 90px;
   width: 90%;
 }
 
@@ -2709,13 +2733,18 @@ tr:nth-child(even) {
 /*users1 style*/
 
 .users1-container {
-  padding: 20px;
+  padding: 30px 20px 0px 20px;
   background-color: #f9f9f9; /* Light background for the container */
   min-height: 100vh;
+  min-width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
 }
 
 .user1-table {
-  width: 100%; /* Full width */
+  width: 80%; /* Full width */
   border-collapse: collapse; /* Merge borders */
   margin-top: 20px; /* Space above the table */
 }
@@ -3131,6 +3160,7 @@ html {
   text-align: center;
   width: 80%;
   height: auto;
+  margin-bottom: 10px;
 }
 
 .rfid-form h3{
@@ -3324,7 +3354,7 @@ html {
 }
 
 .search-bar {
-  width: 100%;
+  width: 80%;
   max-width: 310px;
   padding: 10px;
   margin: 20px 0;

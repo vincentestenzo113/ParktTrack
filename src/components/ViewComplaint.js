@@ -44,7 +44,7 @@ const ViewComplaint = () => {
       if (user) {
         const { data, error } = await supabase
           .from("profiles")
-          .select("student_id, name, email, plate_number")
+          .select("student_id, name, email")
           .eq("id", user.id)
           .single();
         if (error) {
@@ -239,7 +239,7 @@ const ViewComplaint = () => {
             <table>
               <thead>
                 <tr>
-                  <th>Ticket #</th>
+                  <th className="ticket-column">Ticket #</th>
                   <th>Student ID</th>
                   <th>Date Submitted</th>
                   <th>Date Solved</th>
@@ -252,24 +252,26 @@ const ViewComplaint = () => {
               <tbody>
                 {complaints.map((complaint) => (
                   <tr key={complaint.id}>
-                    <td>{complaint.id}</td>
+                    <td className="ticket-column">{complaint.id}</td>
                     <td>{complaint.student_id}</td>
                     <td>{complaint.submission_date}</td>
                     <td>{complaint.completed_at}</td>
                     <td className="description-column" >{complaint.description}</td>
-                    <td>
+                    <td className="admin1-send-button-column">
                       <button
                         onClick={() =>
                           handleShowProof(complaint.proof_of_incident)
                         }
+                        className="admin1-view-proof-button"
                       >
                         <span className="view-button2"><FontAwesomeIcon icon={faCaretDown}/></span>
                         <p className="view-button">View Proof</p>
                       </button>
                     </td>
-                    <td>
+                    <td className="admin1-send-button-column">
                       <button
                         onClick={() => handleShowRemarks(complaint.remarks)}
+                        className="admin1-view-remarks-button"
                       >
                         <span className="view-button2"><FontAwesomeIcon icon={faCaretDown}/></span>
                         <p className="view-button">View Remarks</p>
@@ -289,24 +291,20 @@ const ViewComplaint = () => {
 
         {isProofModalOpen && (
           <div className="profile-modal">
-            <div className="profile-modal-content">
-              <span className="profile-modal-close" onClick={closeProofModal}>
-                &times;
-              </span>
+            <div className="admin1-modal-content">
               <img
                 src={proofUrl}
                 alt="Proof of Incident"
                 className="profile-modal-image"
               />
+                   <button class="admin1-close-button" onClick={closeProofModal}>Close</button>
             </div>
+       
           </div>
         )}
         {isModalOpen && (
           <div className="profile-modal">
             <div className="profile-modal-content">
-              <span className="profile-modal-close" onClick={closeModal}>
-                &times;
-              </span>
               <h3>Remarks:</h3>
               <ul>
                 {selectedRemarks.length > 0 ? (
@@ -317,6 +315,7 @@ const ViewComplaint = () => {
                   <li>No remarks available.</li>
                 )}
               </ul>
+              <button class="admin1-close-button" onClick={closeModal}>Close</button>
             </div>
           </div>
         )}

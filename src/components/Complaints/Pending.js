@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supabaseClient';
 import adminlogo from '../public/parktracklogo.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTachometerAlt, faClipboard, faClipboardCheck, faClipboardList, faUsers, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTachometerAlt, faClipboard, faClipboardCheck, faClipboardList, faUsers, faSignOutAlt, faSquareParking, faTicket, faHome} from '@fortawesome/free-solid-svg-icons';
 
 const Pending = () => {
   const [reports, setReports] = useState([]);
@@ -112,8 +112,28 @@ const Pending = () => {
   };
 
   return (
-    <div className='admin1-container'>
-      <div className='admin1-sidebar'>
+    <div className='profile-container'>
+       <div className="bottom-nav-container">
+        <div className="bottom-nav">
+          <button className="active">
+            <FontAwesomeIcon icon={faHome} />
+            <span>Home</span>
+          </button>
+          <button onClick={() => navigate("/Pending")}>
+            <FontAwesomeIcon icon={faClipboardList} />
+            <span>Complaints</span>
+          </button>
+          <button onClick={() => navigate("/users")}>
+            <FontAwesomeIcon icon={faUsers} />
+            <span>Users</span>
+          </button>
+          <button onClick={() => navigate("/parking-data")}>
+            <FontAwesomeIcon icon={faSquareParking} />
+            <span>Park Data</span>
+          </button>
+        </div>
+      </div>
+      <div className='profile-sidebar'>
       <div className="admin1-logo">
     <img src={adminlogo} className="admin1-logo-image" alt="admin logo" />
     <span className="admin1-logo-text">PARK <br /> TRACK</span>
@@ -151,13 +171,13 @@ const Pending = () => {
           </button>
         </div>
       </div>
-      <div className="admin1-content">
-        <div className="admin1-report-container">
+      <div className="profile-content">
+        <div className="profile-complaints-table">
           <div className='admin1-table-title'>Pending Complaints</div>
           {loading ? (
             <p>Loading reports...</p>
           ) : reports.length > 0 ? (
-            <table className="admin1-users-table">
+            <table className="profile-users-table">
               <thead>
                 <tr>
                   <th>Ticket #</th>
@@ -185,7 +205,7 @@ const Pending = () => {
            : 'N/A'}
       </td>
       <td>{report.description}</td>
-      <td className='admin1-send-button'>
+      <td className='admin1-send-button-column'>
         <button onClick={() => viewProof(report.proof_of_incident)} className="admin1-view-proof-button">
           View Proof
         </button>
@@ -243,7 +263,7 @@ const Pending = () => {
         <div className="admin1-modal">
           <div className="admin1-modal-content">
             <h2>Proof</h2>
-            <img src={proofUrl} alt="Proof" className="admin1-proof-img" />
+            <img src={proofUrl} alt="Proof" className="profile-modal-image" />
             <button onClick={closeProofModal} className="admin1-close-button">Close</button>
           </div>
         </div>

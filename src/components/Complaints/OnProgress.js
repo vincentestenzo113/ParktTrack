@@ -245,7 +245,7 @@ const OnProgress = () => {
           View Proof
         </button>
       </td>
-      <td>
+      <td className="admin1-send-button-column">
         <button onClick={() => handleSolve(report.id)} className="admin1-solve-button">Solve</button>
         <button onClick={() => handleUnsolve(report.id)} className="admin1-unsolve-button">Unsolve</button>
       </td>
@@ -269,7 +269,7 @@ const OnProgress = () => {
         {/* Send Remarks Modal */}
         {showSendModal && (
           <div className="modal">
-            <div className="modal-content">
+            <div className="admin1-modal-content">
               <h2>Send Remarks</h2>
               <textarea
                 value={remarksInput}
@@ -285,10 +285,10 @@ const OnProgress = () => {
         {/* View Remarks Modal */}
         {showViewModal && (
           <div className="modal">
-            <div className="modal-content">
+            <div className="admin1-modal-content">
               <h2>View Remarks</h2>
               <p>{viewRemarks}</p>
-              <button onClick={closeViewModal}>Close</button>
+              <button onClick={closeViewModal} className="admin1-close-button">Close</button>
             </div>
           </div>
         )}
@@ -296,10 +296,10 @@ const OnProgress = () => {
         {/* View Proof Modal */}
         {showProofModal && (
           <div className="modal">
-            <div className="modal-content">
+            <div className="admin1-modal-content">
               <h2>Proof of Incident</h2>
               <img src={proofUrl} alt="Proof" style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }} />
-              <button onClick={closeProofModal}>Close</button>
+              <button onClick={closeProofModal} className="admin1-close-button">Close</button>
             </div>
           </div>
         )}
