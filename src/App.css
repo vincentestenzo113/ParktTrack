@@ -3209,7 +3209,7 @@ html {
   height: 100vh; /* Ensures the container covers the full viewport height */
   padding: 20px;
   box-sizing: border-box; /* Includes padding in the element's total width and height */
-  overflow-x: hidden; /* Prevents horizontal overflow */
+  overflow-x: auto; /* Prevents horizontal overflow */
   overflow-y: auto; /* Allows vertical scrolling if needed */
 }
 
