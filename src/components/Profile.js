@@ -70,7 +70,7 @@ const Profile = () => {
 
         const { data, error } = await supabase
           .from("profiles")
-          .select("student_id, name, email, plate_number")
+          .select("student_id, name, email, motorcycle_model, motorcycle_colorway, contact_number")
           .eq("id", user.id)
           .single();
         if (error) {
@@ -217,7 +217,13 @@ const Profile = () => {
               <strong>Student ID:</strong> {userInfo.student_id}
             </p>
             <p>
-              <strong>Plate Number:</strong> {userInfo.plate_number}
+              <strong>Motorcycle Details:</strong> 
+              {userInfo.motorcycle_model && userInfo.motorcycle_colorway 
+                ? `${userInfo.motorcycle_model} - ${userInfo.motorcycle_colorway}` 
+                : "No motorcycle inputted"}
+            </p>
+            <p>
+              <strong>Contact Number:</strong> {userInfo.contact_number || "No contact number"}
             </p>
           </div>
           <div className="profile-reportstatus">

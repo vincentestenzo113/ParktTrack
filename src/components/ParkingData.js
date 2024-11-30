@@ -17,7 +17,18 @@ const ParkingData = () => {
       try {
         const { data, error } = await supabase
           .from("parking")
-          .select("student_id, entry_time, exit_time, entry_date, exit_date");
+          .select(`
+            student_id,
+            entry_time,
+            exit_time,
+            entry_date,
+            exit_date,
+            profiles (
+              contact_number,
+              motorcycle_model,
+              motorcycle_colorway
+            )
+          `);
 
         if (error) {
           console.error("Error fetching parking data:", error);
@@ -133,6 +144,8 @@ const ParkingData = () => {
         <thead>
           <tr>
             <th>Student ID</th>
+            <th>Contact Number</th>
+            <th>Motorcycle Details</th>
             <th>Entry Time</th>
             <th>Exit Time</th>
             <th>Entry Date</th>
@@ -143,6 +156,12 @@ const ParkingData = () => {
           {currentItems.map((entry, index) => (
             <tr key={index}>
               <td>{entry.student_id}</td>
+              <td>{entry.profiles?.contact_number || "No contact number"}</td>
+              <td>
+                {entry.profiles?.motorcycle_model && entry.profiles?.motorcycle_colorway
+                  ? `${entry.profiles.motorcycle_model} - ${entry.profiles.motorcycle_colorway}`
+                  : "No motorcycle inputted"}
+              </td>
               <td>{formatTime(entry.entry_time, entry.entry_date)}</td>
               <td>{formatTime(entry.exit_time, entry.exit_date)}</td>
               <td>{formatDate(entry.entry_date)}</td>

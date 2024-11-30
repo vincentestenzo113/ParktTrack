@@ -15,7 +15,9 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    plateNumber: '',  // New field for plate number
+    motorcycleModel: '',  // Changed from plateNumber to motorcycleModel
+    motorcycleColorway: '',  // New field for motorcycle colorway
+    contactNumber: '',  // New field for contact number
   };
 
   const validationSchema = Yup.object({
@@ -31,9 +33,15 @@ const Register = () => {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .required('Confirm password is required'),
-    plateNumber: Yup.string()
-      .matches(/^[A-Za-z0-9]{1,15}$/, 'Plate number must be alphanumeric and up to 15 characters')
-      .required('Plate number is required'),  // Validation for plate number
+    motorcycleModel: Yup.string()
+      .matches(/^[A-Za-z0-9\s]{1,30}$/, 'Motorcycle model must be alphanumeric and up to 30 characters')
+      .required('Motorcycle model is required'),  // Validation for motorcycle model
+    motorcycleColorway: Yup.string()
+      .matches(/^[A-Za-z\s]{1,30}$/, 'Motorcycle colorway must be alphabetic and up to 30 characters')
+      .required('Motorcycle colorway is required'),  // Validation for motorcycle colorway
+    contactNumber: Yup.string()
+      .matches(/^[0-9]{10,11}$/, 'Contact number must be 10 or 11 digits')
+      .required('Contact number is required'),  // Updated validation for contact number
   });
 
   const onSubmit = async (values) => {
@@ -46,7 +54,9 @@ const Register = () => {
           data: {
             studentId: values.studentId,
             name: values.name,
-            plateNumber: values.plateNumber,  // Include plate number in the user metadata
+            motorcycleModel: values.motorcycleModel,  // Include motorcycle model in the user metadata
+            motorcycleColorway: values.motorcycleColorway,  // Include motorcycle colorway in the user metadata
+            contactNumber: values.contactNumber,  // Include contact number in the user metadata
           },
         },
       });
@@ -67,7 +77,9 @@ const Register = () => {
             name: values.name,             // user name from the registration form
             email: values.email,           // email from the registration form
             password: values.password,
-            plate_number: values.plateNumber, // Save plate number to the table
+            motorcycle_model: values.motorcycleModel,  // Save motorcycle model to the table
+            motorcycle_colorway: values.motorcycleColorway,  // Save motorcycle colorway to the table
+            contact_number: values.contactNumber,  // Save contact number to the table
           },
         ]);
 
@@ -128,9 +140,28 @@ const Register = () => {
               <ErrorMessage name="confirmPassword" component="div" className="register1-error-message" />
             </div>
             <div className="register1-form-group">
-              <label className="register1-form-label">Plate Number</label>
-              <Field name="plateNumber" className="register1-form-input" />
-              <ErrorMessage name="plateNumber" component="div" className="register1-error-message" />
+              <label className="register1-form-label">Motorcycle Model</label>
+              <Field name="motorcycleModel" className="register1-form-input" />
+              <ErrorMessage name="motorcycleModel" component="div" className="register1-error-message" />
+            </div>
+            <div className="register1-form-group">
+              <label className="register1-form-label">Motorcycle Colorway</label>
+              <Field name="motorcycleColorway" className="register1-form-input" />
+              <ErrorMessage name="motorcycleColorway" component="div" className="register1-error-message" />
+            </div>
+            <div className="register1-form-group">
+              <label className="register1-form-label">Contact Number</label>
+              <Field 
+                name="contactNumber" 
+                className="register1-form-input" 
+                maxLength="11"  // Limit input to 11 characters
+                onKeyPress={(event) => {
+                  if (!/[0-9]/.test(event.key) && event.key !== 'Backspace') {
+                    event.preventDefault();
+                  }
+                }} 
+              />
+              <ErrorMessage name="contactNumber" component="div" className="register1-error-message" />
             </div>
             <div className="register1-button-group">
               <button type="submit" className="register1-submit-button">Register</button>
