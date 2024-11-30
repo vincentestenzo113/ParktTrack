@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./utils/supabaseClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,6 +18,9 @@ import {
   faSquareParking,
   faTicket,
   faBell,
+  faPaperPlane,
+  faInbox,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import logo from "./public/parktracklogo.png";
 import logo2 from "./public/logosaparktrack.png";
@@ -33,7 +36,14 @@ const Admin = () => {
   const [studentId, setStudentId] = useState("");
   const [rfidTag, setRfidTag] = useState("");
   const [message, setMessage] = useState("");
+  const [chatMessage, setChatMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [conversations, setConversations] = useState([]);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -81,6 +91,138 @@ const Admin = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    let subscription;
+
+    const fetchMessages = async () => {
+      if (!selectedStudent) return;
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('chats')
+        .select('*')
+        .or(`and(sender_id.eq.${selectedStudent.id},receiver_id.eq.${user.id}),and(sender_id.eq.${user.id},receiver_id.eq.${selectedStudent.id})`)
+        .order('created_at', { ascending: true });
+      
+      if (error) {
+        console.error('Error fetching messages:', error);
+        return;
+      }
+      setMessages(data || []);
+    };
+
+    if (showChat && selectedStudent) {
+      fetchMessages();
+
+      subscription = supabase
+        .channel('chat-channel')
+        .on(
+          'postgres_changes',
+          { 
+            event: '*', 
+            schema: 'public', 
+            table: 'chats'
+          },
+          async (payload) => {
+            if (!selectedStudent) return;
+            
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            if (payload.new && 
+                ((payload.new.sender_id === selectedStudent.id && payload.new.receiver_id === user.id) ||
+                 (payload.new.sender_id === user.id && payload.new.receiver_id === selectedStudent.id))) {
+              setMessages(current => [...current, payload.new]);
+            }
+          }
+        )
+        .subscribe();
+    }
+
+    return () => {
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+    };
+  }, [selectedStudent, showChat]);
+
+  useEffect(() => {
+    const fetchConversations = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: profiles, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, student_id, name')
+        .not('student_id', 'is', null);
+
+      if (profilesError) {
+        console.error('Error fetching profiles:', profilesError);
+        return;
+      }
+
+      // Get the latest message and unread count for each student
+      const conversationsWithLastMessage = await Promise.all(
+        profiles.map(async (profile) => {
+          const { data: messages, error: messagesError } = await supabase
+            .from('chats')
+            .select('*')
+            .or(`and(sender_id.eq.${profile.id},receiver_id.eq.${user.id}),and(sender_id.eq.${user.id},receiver_id.eq.${profile.id})`)
+            .order('created_at', { ascending: false })
+            .limit(1);
+
+          const { count: unreadCount } = await supabase
+            .from('chats')
+            .select('*', { count: 'exact' })
+            .eq('receiver_id', user.id)
+            .eq('sender_id', profile.id)
+            .eq('is_read', false);
+
+          return {
+            ...profile,
+            lastMessage: messages?.[0],
+            unreadCount: unreadCount || 0
+          };
+        })
+      );
+
+      // Sort conversations by the timestamp of the last message
+      conversationsWithLastMessage.sort((a, b) => {
+        const dateA = a.lastMessage ? new Date(a.lastMessage.created_at) : new Date(0);
+        const dateB = b.lastMessage ? new Date(b.lastMessage.created_at) : new Date(0);
+        return dateB - dateA;
+      });
+
+      setConversations(conversationsWithLastMessage);
+    };
+
+    if (session?.session) {
+      fetchConversations();
+      
+      // Subscribe to new messages
+      const subscription = supabase
+        .channel('chats')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'chats' }, () => {
+          fetchConversations();
+        })
+        .subscribe();
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [session?.session]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -151,6 +293,98 @@ const Admin = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!chatMessage.trim() || !selectedStudent) return;
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    // Insert the new message from the admin
+    const { error: insertError } = await supabase
+      .from('chats')
+      .insert([
+        {
+          sender_id: user.id,
+          receiver_id: selectedStudent.id,
+          message: chatMessage.trim(),
+          is_admin: true,
+          student_id: selectedStudent.student_id
+        }
+      ]);
+
+    if (insertError) {
+      console.error('Error sending message:', insertError);
+      return;
+    }
+
+    // Log the IDs being used for the update
+    console.log('Updating messages from sender_id:', selectedStudent.id, 'to receiver_id:', user.id);
+
+    // Mark all messages from the student as read
+    const { error: updateError } = await supabase
+      .from('chats')
+      .update({ is_read: true })
+      .eq('sender_id', selectedStudent.id)
+      .eq('receiver_id', user.id);
+
+    if (updateError) {
+      console.error('Error updating message read status:', updateError);
+    } else {
+      console.log('All messages from the student marked as read successfully.');
+    }
+
+    setChatMessage('');
+  };
+
+  const handleSelectConversation = async (student) => {
+    setSelectedStudent(student);
+    setShowChat(true);
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    // Fetch messages for the selected student
+    const { data: messages, error } = await supabase
+      .from('chats')
+      .select('*')
+      .or(`and(sender_id.eq.${student.id},receiver_id.eq.${user.id}),and(sender_id.eq.${user.id},receiver_id.eq.${student.id})`)
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching messages:', error);
+      return;
+    }
+
+    setMessages(messages);
+
+    // Mark messages as read
+    const { error: updateError } = await supabase
+      .from('chats')
+      .update({ is_read: true })
+      .eq('sender_id', student.id)
+      .eq('receiver_id', user.id)
+      .eq('is_read', false);
+
+    if (updateError) {
+      console.error('Error updating message read status:', updateError);
+    }
+
+    // Clear unread notifications
+    setConversations((prevConversations) =>
+      prevConversations.map((conv) =>
+        conv.student_id === student.student_id
+          ? { ...conv, unreadCount: 0 }
+          : conv
+      )
+    );
+  };
+
+  const toggleChat = () => {
+    const newShowChat = !showChat;
+    setShowChat(newShowChat);
+  };
+
   if (!session) {
     return <div>Loading...</div>;
   }
@@ -178,6 +412,20 @@ const Admin = () => {
           <button onClick={toggleModal}>
             <FontAwesomeIcon icon={faTicket} />
             <span>Assign RFID</span>
+          </button>
+          <button
+            className="active"
+            onClick={() => {
+              setShowChat(true);
+              setSelectedStudent(null);
+            }}
+          >
+            <FontAwesomeIcon icon={faInbox} /> Inbox
+            {conversations.reduce((total, conv) => total + (conv.unreadCount || 0), 0) > 0 && (
+              <span className="inbox-badge">
+                {conversations.reduce((total, conv) => total + (conv.unreadCount || 0), 0)}
+              </span>
+            )}
           </button>
         </div>
       </div>
@@ -223,6 +471,20 @@ const Admin = () => {
           onClick={() => navigate("/parking-data")}
         >
           <FontAwesomeIcon icon={faClipboardList} /> Parking Data
+        </button>
+        <button
+          className="admin1-sidebar-button"
+          onClick={() => {
+            setShowChat(true);
+            setSelectedStudent(null);
+          }}
+        >
+          <FontAwesomeIcon icon={faInbox} /> Inbox
+          {conversations.reduce((total, conv) => total + (conv.unreadCount || 0), 0) > 0 && (
+            <span className="inbox-badge">
+              {conversations.reduce((total, conv) => total + (conv.unreadCount || 0), 0)}
+            </span>
+          )}
         </button>
         <div className="rfid-form">
           <h3 className="form-title">Assign RFID to Student</h3>
@@ -329,15 +591,15 @@ const Admin = () => {
             </div>
 
             <div className="date-container">
-            <div className="date-content">
-              <DatePicker
-                inline
-                selected={selectedDate}
-                onChange={handleDateChange}
-                dateFormat="MM/dd/yyyy"
-              />
+              <div className="date-content">
+                <DatePicker
+                  inline
+                  selected={selectedDate}
+                  onChange={handleDateChange}
+                  dateFormat="MM/dd/yyyy"
+                />
+              </div>
             </div>
-          </div>
           </div>
         </div>
         <div className="bottom-section">
@@ -349,6 +611,97 @@ const Admin = () => {
           </footer>
         </div>
       </div>
+
+      {showChat && (
+        <div className="chat-overlay admin-chat">
+          <div className="chat-container">
+            <div className="chat-header">
+              <h3>
+                {selectedStudent
+                  ? `Chat with ${selectedStudent.student_id}`
+                  : "Select a conversation"}
+              </h3>
+              {selectedStudent && (
+                <button
+                  onClick={() => {
+                    setSelectedStudent(null);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faArrowLeft} />
+                </button>
+              )}
+              <button
+                onClick={() => {
+                  setShowChat(false);
+                  setSelectedStudent(null);
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="chat-body">
+              {!selectedStudent ? (
+                <div className="conversations-list">
+                  {conversations.map((conv) => (
+                    <div
+                      key={conv.id}
+                      className="conversation-item"
+                      onClick={() => handleSelectConversation(conv)}
+                    >
+                      <div className="conversation-info">
+                        <span className="student-id">{conv.student_id}</span>
+                        {conv.unreadCount > 0 && (
+                          <span className="unread-badge">
+                            {conv.unreadCount}
+                          </span>
+                        )}
+                      </div>
+                      {conv.lastMessage && (
+                        <div className="last-message">
+                          {conv.lastMessage.message.substring(0, 30)}...
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <div className="chat-messages">
+                    {messages.map((msg) => (
+                      <div
+                        key={msg.id}
+                        className={`message ${
+                          msg.sender_id === selectedStudent.id
+                            ? "user"
+                            : "admin"
+                        }`}
+                      >
+                        <p>{msg.message}</p>
+                        <small>
+                          {new Date(msg.created_at).toLocaleTimeString()}
+                        </small>
+                      </div>
+                    ))}
+                    <div ref={messagesEndRef} />
+                  </div>
+                  <form onSubmit={handleSendMessage} className="chat-input">
+                    <input
+                      type="text"
+                      value={chatMessage}
+                      onChange={(e) => setChatMessage(e.target.value)}
+                      placeholder="Type your message..."
+                    />
+                    <button type="submit">
+                      <FontAwesomeIcon icon={faPaperPlane} />
+                    </button>
+                  </form>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

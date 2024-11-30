@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { supabase } from "./utils/supabaseClient";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import {
   faUser,
   faBell,
   faCaretDown,
+  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import favicon from "./public/profile-icon.png";
 import logo from "./public/parktracklogo.png";
@@ -27,6 +28,19 @@ const ViewComplaint = () => {
   });
   const [proofUrl, setProofUrl] = useState("");
   const [selectedRemarks, setSelectedRemarks] = useState([]);
+  const [showChat, setShowChat] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const messagesEndRef = useRef(null);
+
+  // Scroll to the bottom of the chat messages
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   // Fetch logged-in user data and complaints
   useEffect(() => {
@@ -44,7 +58,7 @@ const ViewComplaint = () => {
       if (user) {
         const { data, error } = await supabase
           .from("profiles")
-          .select("student_id, name, email")
+          .select("student_id, name, email, motorcycle_model, motorcycle_colorway, contact_number")
           .eq("id", user.id)
           .single();
         if (error) {
@@ -69,6 +83,115 @@ const ViewComplaint = () => {
       checkReportCooldown(userInfo.student_id);
     }
   }, [userInfo]);
+
+  // Fetch chat messages
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: adminUser } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("email", "admin@gmail.com")
+        .single();
+
+      const { data, error } = await supabase
+        .from("chats")
+        .select("*")
+        .or(
+          `and(sender_id.eq.${user.id},receiver_id.eq.${adminUser.id}),and(sender_id.eq.${adminUser.id},receiver_id.eq.${user.id})`
+        )
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching messages:", error);
+        return;
+      }
+      setMessages(data || []);
+    };
+
+    if (showChat) {
+      fetchMessages();
+
+      const subscription = supabase
+        .channel("chat-channel")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "chats",
+          },
+          async (payload) => {
+            const {
+              data: { user },
+            } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const { data: adminUser } = await supabase
+              .from("profiles")
+              .select("id")
+              .eq("email", "admin@gmail.com")
+              .single();
+
+            if (
+              payload.new &&
+              ((payload.new.sender_id === user.id &&
+                payload.new.receiver_id === adminUser.id) ||
+                (payload.new.sender_id === adminUser.id &&
+                  payload.new.receiver_id === user.id))
+            ) {
+              setMessages((current) => [...current, payload.new]);
+            }
+          }
+        )
+        .subscribe();
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [showChat]);
+
+  // Send a message
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user || !message.trim()) return;
+
+    const { data: adminUser } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("email", "admin@gmail.com")
+      .single();
+
+    const { error } = await supabase
+      .from("chats")
+      .insert([
+        {
+          sender_id: user.id,
+          receiver_id: adminUser.id,
+          message: message.trim(),
+          is_admin: false,
+        },
+      ]);
+
+    if (error) {
+      console.error("Error sending message:", error);
+      return;
+    }
+
+    setMessage(""); // Clear the input field after sending
+  };
+
+  // Toggle chat visibility
+  const toggleChat = () => {
+    setShowChat((prev) => !prev);
+  };
 
   // Get status for each complaint
   const getStatus = (complaint) => {
@@ -180,7 +303,7 @@ const ViewComplaint = () => {
 
   return (
     <div className="profile-container">
-        <div className="bottom-nav-container">
+      <div className="bottom-nav-container">
         <div className="bottom-nav">
           <button onClick={() => navigate("/profile")}>
             <FontAwesomeIcon icon={faUser} />
@@ -227,6 +350,9 @@ const ViewComplaint = () => {
           onClick={() => navigate("/incident-report")}
         >
           <FontAwesomeIcon icon={faFileAlt} /> Report Incident
+        </button>
+        <button className="profile-sidebar-button" onClick={toggleChat}>
+          <FontAwesomeIcon icon={faComments} /> Chat with Admin
         </button>
         <button className="profile-logout-button" onClick={handleLogout}>
           <FontAwesomeIcon icon={faSignOutAlt} /> Logout
@@ -320,6 +446,42 @@ const ViewComplaint = () => {
           </div>
         )}
       </div>
+
+      {showChat && (
+        <div className="chat-overlay">
+          <div className="chat-container">
+            <div className="chat-header">
+              <h3>Chat with Admin</h3>
+              <button onClick={toggleChat}>×</button>
+            </div>
+            <div className="chat-messages">
+              {messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`message ${msg.is_admin ? "user" : "admin"}`}
+                >
+                  <p>{msg.message}</p>
+                  <small>
+                    {new Date(msg.created_at).toLocaleTimeString()}
+                  </small>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+            <form onSubmit={handleSendMessage} className="chat-input">
+              <input
+                type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Type your message..."
+              />
+              <button type="submit">
+                <FontAwesomeIcon icon={faPaperPlane} />
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

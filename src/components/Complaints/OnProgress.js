@@ -268,8 +268,8 @@ const OnProgress = () => {
 
         {/* Send Remarks Modal */}
         {showSendModal && (
-          <div className="modal">
-            <div className="admin1-modal-content">
+          <div className="modal-overlay">
+            <div className="modal-content">
               <h2>Send Remarks</h2>
               <textarea
                 value={remarksInput}
@@ -284,8 +284,8 @@ const OnProgress = () => {
 
         {/* View Remarks Modal */}
         {showViewModal && (
-          <div className="modal">
-            <div className="admin1-modal-content">
+          <div className="modal-overlay">
+            <div className="modal-content">
               <h2>View Remarks</h2>
               <p>{viewRemarks}</p>
               <button onClick={closeViewModal} className="admin1-close-button">Close</button>
@@ -295,8 +295,8 @@ const OnProgress = () => {
 
         {/* View Proof Modal */}
         {showProofModal && (
-          <div className="modal">
-            <div className="admin1-modal-content">
+          <div className="modal-overlay">
+            <div className="modal-content">
               <h2>Proof of Incident</h2>
               <img src={proofUrl} alt="Proof" style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }} />
               <button onClick={closeProofModal} className="admin1-close-button">Close</button>
