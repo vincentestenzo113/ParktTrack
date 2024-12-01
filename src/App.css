@@ -71,7 +71,6 @@
   padding: 50px 20px 20px 0px;
   margin-top: 10px;
   gap: 5px;
-  z-index: 4;
 }
 
 .header-left div {
@@ -82,6 +81,28 @@
   color: white;
   height: 55px;
   width: 60px;
+}
+
+.logo-container {
+  color: white;
+  background-color: #060e57;
+  width: 250px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 20px 20px 0px;
+  margin-top: 10px;
+  gap: 5px;
+}
+
+ .logo-container img{
+  height: 55px;
+  width: 60px;
+}
+
+.logo-container div{
+  font-size: 25px;
 }
 
 .side-bar {
@@ -1195,7 +1216,7 @@ body::before {
   height: 100px;
   width: 100px;
   border-radius: 50%;
-  margin: 80px 20px 20px 20px;
+  margin: 30px 20px 20px 20px;
   position: relative;
   align-items: center;
   justify-content: center;
@@ -1221,11 +1242,14 @@ body::before {
   height: 100vh; /* Full height */
   flex-shrink: 0;
   overflow-y: auto; /* Allow vertical scrolling inside the sidebar if content overflows */
+  overflow-x: hidden;
   font-size: 25px;
   gap: 1px;
   width: 250px;
   position: sticky;
-  z-index: 2;
+  z-index: 5;
+  top: 0;
+  margin-top: -50px;
 }
 
 .profile-sidebar p {
@@ -1555,7 +1579,7 @@ tr:nth-child(even) {
   cursor: pointer; /* Pointer cursor */
   border-radius: 5px; /* Rounded corners */
   transition: background-color 0.3s; /* Smooth background transition */
-  margin-bottom: 110px;
+  margin-bottom: 50px;
   width: 90%;
 }
 
@@ -1811,7 +1835,6 @@ tr:nth-child(even) {
     height: 30px;
     width: 30px;
   }
-
 
   .logo2 {
     display: block;
@@ -2106,7 +2129,7 @@ tr:nth-child(even) {
   text-align: left; /* Align text to the left */
   cursor: pointer; /* Pointer cursor on hover */
   transition: background-color 0.3s, color 0.3s; /* Smooth hover effect */
-  margin-top: 60px;
+  margin-top: 30px;
   width: 80%;
 }
 
@@ -2809,6 +2832,7 @@ tr:nth-child(even) {
   width: 80%; /* Full width */
   border-collapse: collapse; /* Merge borders */
   margin-top: 20px; /* Space above the table */
+  margin-bottom: 70px;
 }
 
 .user1-table th,

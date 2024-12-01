@@ -382,6 +382,10 @@ const Profile = () => {
         </div>
       </div>
       <div className="profile-sidebar">
+      <div className="logo-container">
+          <img src={logo} className="logo1" alt="logo1" />
+          <div className="logo-title">PARK <br /> TRACK</div>
+        </div>
         <div className="profile-icon-inner">
           <img src={favicon}></img>
         </div>

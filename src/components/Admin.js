@@ -450,6 +450,10 @@ const Admin = () => {
         </div>
       </div>
       <div className="profile-sidebar">
+        <div className="logo-container">
+          <img src={logo} className="logo1" alt="logo1" />
+          <div className="logo-title">PARK <br /> TRACK</div>
+        </div>
         <button className="admin1-sidebar-button-active">
           <FontAwesomeIcon icon={faHome} /> Dashboard
         </button>
