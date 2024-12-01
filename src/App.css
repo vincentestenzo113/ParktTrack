@@ -1537,6 +1537,7 @@ tr:nth-child(even) {
 
 .ticket-column {
   width: 5%; /* Allow the width to adjust based on content */
+  text-align: center;
 }
 
 /* Logout Button Styles */

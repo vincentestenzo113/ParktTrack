@@ -210,7 +210,7 @@ const Solved = () => {
               <tbody>
                 {reports.map((report) => (
                   <tr key={report.id}>
-                    <td>{report.id}</td>
+                    <td className="ticket-column">{report.id}</td>
                     <td>{report.student_id}</td>
                     <td>{new Date(report.submitted_at).toLocaleString()}</td>
                     <td>

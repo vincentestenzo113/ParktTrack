@@ -265,7 +265,7 @@ const Pending = () => {
               <tbody>
                 {reports.map((report) => (
                   <tr key={report.id}>
-                    <td>{report.id}</td>{" "}
+                    <td className="ticket-column">{report.id}</td>{" "}
                     {/* Changed to show the actual report ID */}
                     <td>{report.student_id}</td>
                     <td>{new Date(report.submitted_at).toLocaleString()}</td>

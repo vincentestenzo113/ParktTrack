@@ -312,7 +312,7 @@ const OnProgress = () => {
                   <tr key={report.id}>
                     {" "}
                     {/* Ensure that the 'id' field is being used here */}
-                    <td>{report.id}</td>{" "}
+                    <td className="ticket-column">{report.id}</td>{" "}
                     {/* Display the 'id' as the Ticket # */}
                     <td>{report.student_id}</td>
                     <td>{new Date(report.submitted_at).toLocaleString()}</td>
