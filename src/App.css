@@ -1712,7 +1712,7 @@ tr:nth-child(even) {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.bottom-complaints .active.pending {
+.bottom-complaints .pending {
   background-color: #e04f4f;
 }
 

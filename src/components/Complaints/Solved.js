@@ -102,7 +102,7 @@ const Solved = () => {
           <div className="bottom-complaints">
             <button
               onClick={() => navigate("/Pending")}
-              className="active pending"
+              className="pending"
             >
               <FontAwesomeIcon icon={faExclamationCircle} size="1x" />
             </button>
