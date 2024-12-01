@@ -414,7 +414,6 @@ const Admin = () => {
             <span>Assign RFID</span>
           </button>
           <button
-            className="active"
             onClick={() => {
               setShowChat(true);
               setSelectedStudent(null);
@@ -671,7 +670,7 @@ const Admin = () => {
                     {messages.map((msg) => (
                       <div
                         key={msg.id}
-                        className={`message ${
+                        className={`messageadmin ${
                           msg.sender_id === selectedStudent.id
                             ? "user"
                             : "admin"

@@ -1652,6 +1652,12 @@ tr:nth-child(even) {
   margin-top: 15px;
 }
 
+.messageadmin {
+  color: red; /* Display error messages in red */
+  text-align: center; /* Center error messages */
+  margin-top: 15px;
+}
+
 .bottom-nav {
   display: flex;
   justify-content: center;
@@ -1659,10 +1665,34 @@ tr:nth-child(even) {
   position: sticky;
   padding: 10px;
   z-index: 10; /* Ensure it stays above other content */
-  gap: clamp(5px, 6vw, 80px);
+  gap: clamp(15px, 3vw, 60px);
   flex-shrink: 0;
   background-color: white;
   border-top: 1px solid #060e57;
+}
+
+.bottom-complaints {
+  display: flex;
+  gap: clamp(15px, 3vw, 60px);
+  position: absolute;
+  margin-bottom: clamp(110px, 30vw, 150px);
+  font-size: clamp(10px, 3vw, 15px);
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.bottom-complaints .active.pending {
+  background-color: #e04f4f;
+}
+
+.bottom-complaints .on-progress {
+  background-color: #e2bf49;
+}
+
+.bottom-complaints .solved {
+  background-color: #60ec60;
 }
 
 .bottom-nav span{
@@ -1674,10 +1704,12 @@ tr:nth-child(even) {
   display: flex;
   flex-direction: column;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: clamp(20px, 10vw, 50px);
+  height: clamp(20px, 10vw, 50px);
+  font-size: clamp(10px, 3vw, 15px);
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
   background-color: rgb(6, 14, 87);
   color: white;
   border: 1px solid rgb(6, 14, 87);
@@ -1692,8 +1724,9 @@ tr:nth-child(even) {
 .bottom-nav button.active {
   display: flex;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: clamp(20px, 10vw, 50px);
+  height: clamp(20px, 10vw, 50px);
+  font-size: clamp(10px, 3vw, 15px);
   justify-content: center;
   align-items: center;
   background-color: rgb(0, 64, 128);
@@ -1748,7 +1781,9 @@ tr:nth-child(even) {
   .bottom-nav {
     position: sticky;
     bottom: 0;
+    z-index: 1;
   }
+
 
   .header-left {
     display: flex;
@@ -2389,6 +2424,8 @@ tr:nth-child(even) {
   font-weight: bold;
   margin-right: 8px; /* Add space between buttons */
   transition: background-color 0.3s ease;
+  font-size: clamp(8px, 1vw, 16px);
+  width: 100%;
 }
 
 .admin1-solve-button:hover {
@@ -2405,6 +2442,8 @@ tr:nth-child(even) {
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.3s ease;
+  font-size: clamp(8px, 1vw, 16px);
+  width: 100%;
 }
 
 .admin1-unsolve-button:hover {
@@ -3010,7 +3049,7 @@ html {
 }
 
 .admin1-profile-name span {
-  font-size: clamp(2px, 2vw, 14px);
+  font-size: clamp(8px, 2vw, 14px);
 }
 
 .admin1-profile-icon {
@@ -3425,6 +3464,15 @@ html {
   word-break: break-word;
 }
 
+.messageadmin {
+  max-width: 70%;
+  margin-bottom: 15px;
+  padding: 12px 16px;
+  border-radius: 15px;
+  position: relative;
+  word-break: break-word;
+}
+
 .message.user {
   background: #e3f2fd;
   align-self: flex-start;
@@ -3437,12 +3485,32 @@ html {
   color: white;
 }
 
+.messageadmin.admin {
+  background: #060e57;
+  align-self: flex-start;
+  color: #212529;
+}
+
+.messageadmin.user {
+  background: #e3f2fd;
+  align-self: flex-end;
+  color: white;
+}
+
 .message small {
   font-size: 0.7em;
   opacity: 0.7;
   display: block;
   margin-top: 4px;
 }
+
+.messageadmin small {
+  font-size: 0.7em;
+  opacity: 0.7;
+  display: block;
+  margin-top: 4px;
+}
+
 
 .chat-input {
   padding: 10px;
@@ -3699,6 +3767,11 @@ html {
   max-width: 70%;
 }
 
+.messageadmin {
+  margin-bottom: 10px;
+  max-width: 70%;
+}
+
 .message.user {
   text-align: right;
   margin-left: auto;
@@ -3708,6 +3781,22 @@ html {
 }
 
 .message.admin {
+  text-align: right;
+  margin-right: auto; /* Aligns admin messages to the left */
+  background-color: #060e57; /* Optional: Different background for admin messages */
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.messageadmin.admin {
+  text-align: right;
+  margin-left: auto; /* Aligns admin messages to the left */
+  background-color: #e0f7fa; /* Optional: Different background for admin messages */
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.messageadmin.user {
   text-align: left;
   margin-right: auto; /* Aligns admin messages to the left */
   background-color: #060e57; /* Optional: Different background for admin messages */
