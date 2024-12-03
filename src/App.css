@@ -1200,7 +1200,7 @@ body::before {
   width: 100%;
   justify-content: start;
   align-items: center;
-  margin: 0px 0px 20px 10px;
+  margin: 0px 10px 20px 10px;
   font-size: 18px; /* Adjust font size for the title */
   color: #060e57; /* Set text color to your theme */
   padding: 10px; /* Adjust padding for spacing */
