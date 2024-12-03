@@ -122,41 +122,69 @@ const Admin = () => {
       setMessages(data || []);
     };
 
-    if (showChat && selectedStudent) {
-      fetchMessages();
+    const setupSubscription = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
       subscription = supabase
-        .channel('chat-channel')
+        .channel('any_channel_name')
         .on(
           'postgres_changes',
           { 
-            event: '*', 
+            event: '*',  // Listen to all events (INSERT, UPDATE, DELETE)
             schema: 'public', 
             table: 'chats'
           },
           async (payload) => {
-            if (!selectedStudent) return;
-            
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return;
-
             if (payload.new && 
-                ((payload.new.sender_id === selectedStudent.id && payload.new.receiver_id === user.id) ||
-                 (payload.new.sender_id === user.id && payload.new.receiver_id === selectedStudent.id))) {
-              setMessages(current => [...current, payload.new]);
+                ((payload.new.sender_id === selectedStudent?.id && payload.new.receiver_id === user.id) ||
+                 (payload.new.sender_id === user.id && payload.new.receiver_id === selectedStudent?.id))) {
+              setMessages((currentMessages) => [...currentMessages, payload.new]); // Add new message to state
               scrollToBottom();
             }
           }
         )
-        .subscribe();
-    }
+        .subscribe((status) => {
+          console.log('Subscription status:', status); // Debug log
+        });
+    };
+
+    setupSubscription(); // Set up real-time updates on component mount
 
     return () => {
       if (subscription) {
         subscription.unsubscribe();
       }
     };
-  }, [selectedStudent, showChat]);
+  }, [selectedStudent]);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (!selectedStudent) return;
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('chats')
+        .select('*')
+        .or(`and(sender_id.eq.${selectedStudent.id},receiver_id.eq.${user.id}),and(sender_id.eq.${user.id},receiver_id.eq.${selectedStudent.id})`)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching messages:', error);
+        return;
+      }
+      setMessages(data || []);
+    };
+
+    if (showChat && selectedStudent) {
+      fetchMessages(); // Initial fetch
+      const interval = setInterval(fetchMessages, 2000); // Poll every 2 seconds
+
+      return () => clearInterval(interval); // Cleanup on unmount
+    }
+  }, [showChat, selectedStudent]);
 
   useEffect(() => {
     const fetchConversations = async () => {
@@ -342,7 +370,6 @@ const Admin = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    // Fetch messages for the selected student
     const { data: messages, error } = await supabase
       .from('chats')
       .select('*')
@@ -670,18 +697,18 @@ const Admin = () => {
                 <>
                   <div className="chat-messages">
                     {messages.map((msg) => (
-                      <div
-                        key={msg.id}
-                        className={`messageadmin ${
-                          msg.sender_id === selectedStudent.id
-                            ? "user"
-                            : "admin"
-                        }`}
-                      >
-                        <p>{msg.message}</p>
-                        <small>
-                          {new Date(msg.created_at).toLocaleTimeString()}
-                        </small>
+                      <div key={msg.id} className="message-wrapper">
+                        <p className={`message-sender ${msg.sender_id === selectedStudent.id ? "left" : "right"}`}>
+                          <strong>
+                            {msg.sender_id === selectedStudent.id ? selectedStudent.student_id : "You"}
+                          </strong>
+                        </p>
+                        <div className={`messageadmin ${msg.sender_id === selectedStudent.id ? "user" : "admin"}`}>
+                          <div className="message-content">
+                            <p>{msg.message}</p>
+                            <small>{new Date(msg.created_at).toLocaleTimeString()}</small>
+                          </div>
+                        </div>
                       </div>
                     ))}
                     <div ref={messagesEndRef} />
