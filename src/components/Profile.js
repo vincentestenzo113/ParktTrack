@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./utils/supabaseClient";
 import { toast } from "react-toastify";
@@ -69,54 +69,50 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-      if (userError) {
-        console.error("Error getting user:", userError.message);
-        toast.error("Failed to get user data. Please log in again.");
-        navigate("/login");
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error("Error getting user:", error.message);
         return;
       }
-      if (user) {
-        if (user.email === "admin@gmail.com") {
-          await handleLogout();
-          return;
-        }
-
-        const { data, error } = await supabase
-          .from("profiles")
-          .select(
-            "student_id, name, email, motorcycle_model, motorcycle_colorway, contact_number"
-          )
-          .eq("id", user.id)
-          .single();
-        if (error) {
-          console.error("Error fetching user data:", error.message);
-          toast.error("Error fetching user profile data.");
-          return;
-        }
-        setUserInfo(data);
-        checkReportCooldown(data.student_id);
-      } else {
-        navigate("/login");
-      }
+      setUserInfo(user);
     };
 
     fetchUserData();
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
-    let subscription;
-
     const fetchMessages = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      if (!userInfo) return;
+
+      const { data: adminUser } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("email", "admin@gmail.com")
+        .single();
+
+      const { data, error } = await supabase
+        .from("chats")
+        .select("*")
+        .or(
+          `and(sender_id.eq.${userInfo.id},receiver_id.eq.${adminUser.id}),and(sender_id.eq.${adminUser.id},receiver_id.eq.${userInfo.id})`
+        )
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching messages:", error);
+        return;
+      }
+      setMessages(data || []);
+    };
+
+    fetchMessages();
+  }, [userInfo]);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Get admin ID
       const { data: adminUser } = await supabase
         .from("profiles")
         .select("id")
@@ -139,48 +135,11 @@ const Profile = () => {
     };
 
     if (showChat) {
-      fetchMessages();
+      fetchMessages(); // Initial fetch
+      const interval = setInterval(fetchMessages, 2000); // Poll every 2 seconds
 
-      subscription = supabase
-        .channel("chat-channel")
-        .on(
-          "postgres_changes",
-          {
-            event: "*",
-            schema: "public",
-            table: "chats",
-          },
-          async (payload) => {
-            const {
-              data: { user },
-            } = await supabase.auth.getUser();
-            if (!user) return;
-
-            const { data: adminUser } = await supabase
-              .from("profiles")
-              .select("id")
-              .eq("email", "admin@gmail.com")
-              .single();
-
-            if (
-              payload.new &&
-              ((payload.new.sender_id === user.id &&
-                payload.new.receiver_id === adminUser.id) ||
-                (payload.new.sender_id === adminUser.id &&
-                  payload.new.receiver_id === user.id))
-            ) {
-              setMessages((current) => [...current, payload.new]);
-            }
-          }
-        )
-        .subscribe();
+      return () => clearInterval(interval); // Cleanup on unmount
     }
-
-    return () => {
-      if (subscription) {
-        subscription.unsubscribe();
-      }
-    };
   }, [showChat]);
 
   useEffect(() => {
@@ -287,7 +246,7 @@ const Profile = () => {
     return `${hours}h:${minutes}m`;
   };
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error("Error signing out:", error.message);
@@ -296,6 +255,34 @@ const Profile = () => {
     }
     localStorage.removeItem("isAuthenticated");
     navigate("/login");
+  }, [navigate]);
+
+  const fetchMessages = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+
+    // Get admin ID
+    const { data: adminUser } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("email", "admin@gmail.com")
+      .single();
+
+    const { data, error } = await supabase
+      .from("chats")
+      .select("*")
+      .or(
+        `and(sender_id.eq.${user.id},receiver_id.eq.${adminUser.id}),and(sender_id.eq.${adminUser.id},receiver_id.eq.${user.id})`
+      )
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      console.error("Error fetching messages:", error);
+      return;
+    }
+    setMessages(data || []);
   };
 
   const handleSendMessage = async (e) => {
@@ -326,7 +313,25 @@ const Profile = () => {
       return;
     }
 
+    // Immediately update the state with the new message
+    setMessages((current) => [
+      ...current,
+      {
+        id: Date.now(), // Temporary ID until real-time update
+        sender_id: user.id,
+        receiver_id: adminUser.id,
+        message: message.trim(),
+        created_at: new Date().toISOString(),
+        is_admin: false,
+      },
+    ]);
+
     setMessage(""); // Clear the input field after sending
+
+    // Fetch the latest messages to ensure the chat is up-to-date
+    await fetchMessages();
+
+    scrollToBottom(); // Scroll to the bottom to show the new message
   };
 
   const toggleChat = () => {
@@ -494,16 +499,18 @@ const Profile = () => {
               </div>
               <div className="chat-messages">
                 {messages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`message ${msg.is_admin ? "admin" : "user"}`}
-                  >
-                    <p>
-                      <strong>{msg.is_admin ? "Admin" : "You"}:</strong> {msg.message}
+                  <div key={msg.id} className="message-wrapper">
+                    <p className={`message-sender ${msg.sender_id === userInfo.id ? "right" : "left"}`}>
+                      <strong>
+                        {msg.sender_id === userInfo.id ? "You" : "Admin"}
+                      </strong>
                     </p>
-                    <small>
-                      {new Date(msg.created_at).toLocaleTimeString()}
-                    </small>
+                    <div className={`message ${msg.sender_id === userInfo.id ? "user" : "admin"}`}>
+                      <div className="message-content">
+                        <p>{msg.message}</p>
+                        <small>{new Date(msg.created_at).toLocaleTimeString()}</small>
+                      </div>
+                    </div>
                   </div>
                 ))}
                 <div ref={messagesEndRef} />

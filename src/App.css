@@ -3812,7 +3812,6 @@ html {
 .message.admin {
   text-align: right;
   margin-right: auto; /* Aligns admin messages to the left */
-  background-color: #060e57; /* Optional: Different background for admin messages */
   padding: 5px;
   border-radius: 10px;
 }
@@ -3820,7 +3819,6 @@ html {
 .messageadmin.admin {
   text-align: right;
   margin-left: auto; /* Aligns admin messages to the left */
-  background-color: #e0f7fa; /* Optional: Different background for admin messages */
   padding: 5px;
   border-radius: 10px;
 }
@@ -3828,7 +3826,6 @@ html {
 .messageadmin.user {
   text-align: left;
   margin-right: auto; /* Aligns admin messages to the left */
-  background-color: #060e57; /* Optional: Different background for admin messages */
   padding: 5px;
   border-radius: 10px;
 }
@@ -3849,7 +3846,6 @@ html {
 .chat-input button {
   margin-left: 10px;
   padding: 5px 10px;
-  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
@@ -3860,4 +3856,28 @@ html {
   .chat-overlay {
     height: 50%; /* Increase the height to make the chatbox longer */
   }
+}
+
+.message-wrapper {
+  margin-bottom: 10px;
+}
+
+.message-sender {
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.message-sender.left {
+  text-align: left;
+}
+
+.message-sender.right {
+  text-align: right;
+}
+
+.message-content {
+  background-color: #001f5b; /* Example color */
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
 }
