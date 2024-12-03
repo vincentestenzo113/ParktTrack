@@ -91,8 +91,10 @@ const Profile = () => {
       console.log("Fetched profile data:", profile); // Debugging: Log the profile data
       setUserInfo({ ...user, ...profile });
 
-      // Check cooldown status after fetching user data
-      checkReportCooldown(user.id);
+      // Check cooldown status using student_id from profile
+      if (profile && profile.student_id) {
+        checkReportCooldown(profile.student_id);
+      }
     };
 
     fetchUserData();
@@ -187,7 +189,7 @@ const Profile = () => {
               notificationMessage = `Your report #${updatedReport.id} is not solved`;
             }
 
-            if (notificationMessage) {
+            if (notificationMessage) {  
               setNotifications((prev) => [
                 ...prev,
                 { id: updatedReport.id, message: notificationMessage },
@@ -222,6 +224,8 @@ const Profile = () => {
   }, [userInfo]);
 
   const checkReportCooldown = async (student_id) => {
+    console.log("Checking cooldown for student_id:", student_id);
+
     const { data: reports, error } = await supabase
       .from("incident_report")
       .select("submitted_at")
@@ -235,37 +239,55 @@ const Profile = () => {
       return;
     }
 
-    if (reports.length > 0) {
+    console.log("Found reports:", reports);
+
+    if (reports && reports.length > 0) {
       const lastSubmittedAt = new Date(reports[0].submitted_at);
       const currentTime = new Date();
       const timeDiff = currentTime - lastSubmittedAt;
+      console.log("Time difference:", timeDiff);
 
       if (timeDiff < 86400000) {
         setHasCooldown(true);
         setCooldownTime(Math.floor((86400000 - timeDiff) / 1000));
 
-        const countdown = setInterval(() => {
+        // Clear any existing interval before setting a new one
+        if (window.cooldownInterval) {
+          clearInterval(window.cooldownInterval);
+        }
+
+        window.cooldownInterval = setInterval(() => {
           setCooldownTime((prev) => {
             if (prev <= 1) {
-              clearInterval(countdown);
+              clearInterval(window.cooldownInterval);
               setHasCooldown(false);
               return 0;
             }
             return prev - 1;
           });
         }, 1000);
+
+        // Cleanup interval when component unmounts
+        return () => {
+          if (window.cooldownInterval) {
+            clearInterval(window.cooldownInterval);
+          }
+        };
       } else {
         setHasCooldown(false);
+        setCooldownTime(0);
       }
     } else {
       setHasCooldown(false);
+      setCooldownTime(0);
     }
   };
 
   const formatCooldownTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    return `${hours}h:${minutes}m`;
+    const secondsLeft = seconds % 60;
+    return `${hours}h:${minutes}m:${secondsLeft}s`;
   };
 
   const handleLogout = useCallback(async () => {
@@ -488,7 +510,7 @@ const Profile = () => {
                     <span className="cooldown-text">1</span>
                   )}
                 </p>
-                <h3>Report Available</h3>
+                <h3>{hasCooldown ? "Cooldown Active" : "Report Available"}</h3>
               </div>
             </div>
             <div className="cooldown-container">
