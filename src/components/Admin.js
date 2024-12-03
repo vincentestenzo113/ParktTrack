@@ -144,6 +144,7 @@ const Admin = () => {
                 ((payload.new.sender_id === selectedStudent.id && payload.new.receiver_id === user.id) ||
                  (payload.new.sender_id === user.id && payload.new.receiver_id === selectedStudent.id))) {
               setMessages(current => [...current, payload.new]);
+              scrollToBottom();
             }
           }
         )
@@ -300,8 +301,7 @@ const Admin = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    // Insert the new message from the admin
-    const { error: insertError } = await supabase
+    const { error } = await supabase
       .from('chats')
       .insert([
         {
@@ -313,28 +313,26 @@ const Admin = () => {
         }
       ]);
 
-    if (insertError) {
-      console.error('Error sending message:', insertError);
+    if (error) {
+      console.error('Error sending message:', error);
       return;
     }
 
-    // Log the IDs being used for the update
-    console.log('Updating messages from sender_id:', selectedStudent.id, 'to receiver_id:', user.id);
+    // Immediately update the state with the new message
+    setMessages((current) => [
+      ...current,
+      {
+        id: Date.now(), // Temporary ID until real-time update
+        sender_id: user.id,
+        receiver_id: selectedStudent.id,
+        message: chatMessage.trim(),
+        created_at: new Date().toISOString(),
+        is_admin: true,
+      },
+    ]);
 
-    // Mark all messages from the student as read
-    const { error: updateError } = await supabase
-      .from('chats')
-      .update({ is_read: true })
-      .eq('sender_id', selectedStudent.id)
-      .eq('receiver_id', user.id);
-
-    if (updateError) {
-      console.error('Error updating message read status:', updateError);
-    } else {
-      console.log('All messages from the student marked as read successfully.');
-    }
-
-    setChatMessage('');
+    setChatMessage(''); // Clear the input field after sending
+    scrollToBottom(); // Scroll to the bottom to show the new message
   };
 
   const handleSelectConversation = async (student) => {

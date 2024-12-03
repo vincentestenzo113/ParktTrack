@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./utils/supabaseClient";
 import { toast } from "react-toastify";
@@ -170,6 +170,7 @@ const Profile = () => {
                   payload.new.receiver_id === user.id))
             ) {
               setMessages((current) => [...current, payload.new]);
+              scrollToBottom(); // Ensure the chat scrolls to the bottom when a new message is added
             }
           }
         )
@@ -287,7 +288,7 @@ const Profile = () => {
     return `${hours}h:${minutes}m`;
   };
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error("Error signing out:", error.message);
@@ -296,7 +297,7 @@ const Profile = () => {
     }
     localStorage.removeItem("isAuthenticated");
     navigate("/login");
-  };
+  }, [navigate]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
@@ -326,7 +327,21 @@ const Profile = () => {
       return;
     }
 
+    // Immediately update the state with the new message
+    setMessages((current) => [
+      ...current,
+      {
+        id: Date.now(), // Temporary ID until real-time update
+        sender_id: user.id,
+        receiver_id: adminUser.id,
+        message: message.trim(),
+        created_at: new Date().toISOString(),
+        is_admin: false,
+      },
+    ]);
+
     setMessage(""); // Clear the input field after sending
+    scrollToBottom(); // Scroll to the bottom to show the new message
   };
 
   const toggleChat = () => {
