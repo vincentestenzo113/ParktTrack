@@ -88,7 +88,6 @@ const Profile = () => {
         return;
       }
 
-      console.log("Fetched profile data:", profile); // Debugging: Log the profile data
       setUserInfo({ ...user, ...profile });
 
       // Check cooldown status using student_id from profile
@@ -163,61 +162,79 @@ const Profile = () => {
   }, [showChat]);
 
   useEffect(() => {
+    const fetchExistingNotifications = async () => {
+      if (!userInfo?.student_id) return;
+
+      const { data, error } = await supabase
+        .from('incident_report')
+        .select('*')
+        .eq('student_id', userInfo.student_id)
+        .eq('is_read', false)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching notifications:', error);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        const formattedNotifications = data.map(report => ({
+          id: report.id,
+          message: getNotificationMessage(report),
+        }));
+        setNotifications(formattedNotifications);
+        setHasUnreadNotifications(true);
+      }
+    };
+
+    fetchExistingNotifications();
+  }, [userInfo]);
+
+  const getNotificationMessage = (report) => {
+    if (report.progress === 1 && report.remarks) {
+      return `Your report #${report.id} has been updated`;
+    } else if (report.progress === 2) {
+      return `Your report #${report.id} has been solved`;
+    } else if (report.progress === 0) {
+      return `Your report #${report.id} is not solved`;
+    }
+    return '';
+  };
+
+  useEffect(() => {
     const subscribeToReportUpdates = () => {
-      if (!userInfo) return;
+      if (!userInfo?.student_id) return;
 
       const subscription = supabase
-        .channel("report-updates")
+        .channel('report-updates')
         .on(
-          "postgres_changes",
+          'postgres_changes',
           {
-            event: "UPDATE",
-            schema: "public",
-            table: "incident_report",
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'incident_report',
             filter: `student_id=eq.${userInfo.student_id}`,
           },
           (payload) => {
-            console.log("Received payload:", payload); // Add logging to verify payload
+            console.log('Received update payload:', payload);
             const { new: updatedReport } = payload;
-            let notificationMessage = "";
+            const notificationMessage = getNotificationMessage(updatedReport);
 
-            if (updatedReport.progress === 1 && updatedReport.remarks) {
-              notificationMessage = `Your report #${updatedReport.id} has been updated`;
-            } else if (updatedReport.progress === 2) {
-              notificationMessage = `Your report #${updatedReport.id} has been solved`;
-            } else if (updatedReport.progress === 0) {
-              notificationMessage = `Your report #${updatedReport.id} is not solved`;
-            }
-
-            if (notificationMessage) {  
-              setNotifications((prev) => [
-                ...prev,
+            if (notificationMessage) {
+              setNotifications(prev => [
                 { id: updatedReport.id, message: notificationMessage },
+                ...prev
               ]);
               setHasUnreadNotifications(true);
-
-              // Mark the report as read
-              supabase
-                .from("incident_report")
-                .update({ is_read: true })
-                .eq("id", updatedReport.id)
-                .then(({ error }) => {
-                  if (error) {
-                    console.error("Error marking report as read:", error);
-                  }
-                });
             }
           }
         )
         .subscribe();
 
-      return () => {
-        subscription.unsubscribe();
-      };
+      return () => subscription.unsubscribe();
     };
 
     const unsubscribe = subscribeToReportUpdates();
-
     return () => {
       if (unsubscribe) unsubscribe();
     };
@@ -385,7 +402,17 @@ const Profile = () => {
   };
 
   const toggleNotifications = () => {
-    setShowNotifications((prev) => !prev);
+    setShowNotifications(prev => !prev);
+    if (!showNotifications) {
+      setHasUnreadNotifications(false);
+      // Mark notifications as read in the database
+      notifications.forEach(async (notification) => {
+        await supabase
+          .from('incident_report')
+          .update({ is_read: true })
+          .eq('id', notification.id);
+      });
+    }
   };
 
   if (!userInfo) {
@@ -431,7 +458,18 @@ const Profile = () => {
             <FontAwesomeIcon icon={faBell} />
             {hasUnreadNotifications && <span className="notification-badge">!</span>}
           </div>
-          <div>{userInfo.name}</div>
+          {showNotifications && (
+            <div className="notification-bubble">
+              {notifications.length > 0 ? (
+                notifications.map((notification) => (
+                  <p key={notification.id}>{notification.message}</p>
+                ))
+              ) : (
+                <p>No notifications today</p>
+              )}
+            </div>
+          )}
+          <div>{userInfo?.name}</div>
         </div>
       </div>
       <div className="profile-sidebar">
@@ -575,17 +613,6 @@ const Profile = () => {
                 </button>
               </form>
             </div>
-          </div>
-        )}
-        {showNotifications && (
-          <div className="notification-bubble">
-            {notifications.length > 0 ? (
-              notifications.map((notification) => (
-                <p key={notification.id}>{notification.message}</p>
-              ))
-            ) : (
-              <p>No notifications today</p>
-            )}
           </div>
         )}
       </div>
