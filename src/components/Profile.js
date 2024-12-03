@@ -78,7 +78,7 @@ const Profile = () => {
       // Fetch the user's profile from the profiles table
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
-        .select("name")
+        .select("name, student_id, motorcycle_model, motorcycle_colorway, contact_number")
         .eq("id", user.id)
         .single();
 
@@ -88,7 +88,10 @@ const Profile = () => {
       }
 
       console.log("Fetched profile data:", profile); // Debugging: Log the profile data
-      setUserInfo({ ...user, name: profile.name });
+      setUserInfo({ ...user, ...profile });
+
+      // Check cooldown status after fetching user data
+      checkReportCooldown(user.id);
     };
 
     fetchUserData();
@@ -250,7 +253,11 @@ const Profile = () => {
             return prev - 1;
           });
         }, 1000);
+      } else {
+        setHasCooldown(false);
       }
+    } else {
+      setHasCooldown(false);
     }
   };
 
@@ -447,7 +454,7 @@ const Profile = () => {
               <strong>Email:</strong> {userInfo.email}
             </p>
             <p>
-              <strong>Student ID:</strong> {userInfo.student_id}
+              <strong>Student ID:</strong> {userInfo.student_id || "No student ID available"}
             </p>
             <p>
               <strong>Motorcycle Details:</strong>
