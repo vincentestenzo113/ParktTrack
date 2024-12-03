@@ -74,7 +74,21 @@ const Profile = () => {
         console.error("Error getting user:", error.message);
         return;
       }
-      setUserInfo(user);
+
+      // Fetch the user's profile from the profiles table
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("name")
+        .eq("id", user.id)
+        .single();
+
+      if (profileError) {
+        console.error("Error fetching profile:", profileError.message);
+        return;
+      }
+
+      console.log("Fetched profile data:", profile); // Debugging: Log the profile data
+      setUserInfo({ ...user, name: profile.name });
     };
 
     fetchUserData();
@@ -394,7 +408,7 @@ const Profile = () => {
         <div className="profile-icon-inner">
           <img src={favicon}></img>
         </div>
-        <p>{userInfo.name}</p>
+        <p>{userInfo.name || "No name available"}</p>
         <button className="profile-sidebar-button-active">
           <FontAwesomeIcon icon={faUser} /> Profile
         </button>
@@ -423,7 +437,7 @@ const Profile = () => {
       <div className="profile-content">
         <div className="profile-welcome">
           <span className="admin1-header-text">
-            Welcome to PARKTRACK, {userInfo.name}
+            Welcome to PARKTRACK, {userInfo.name || "User"}
           </span>
         </div>
         <div className="profile-boxcontainer">
