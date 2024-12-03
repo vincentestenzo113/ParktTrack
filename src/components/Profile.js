@@ -10,6 +10,7 @@ import {
   faUser,
   faBell,
   faPaperPlane,
+  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import favicon from "./public/profile-icon.png";
 import logo from "./public/parktracklogo.png";
@@ -389,6 +390,10 @@ const Profile = () => {
             <FontAwesomeIcon icon={faComments} />
             <span>Chat</span>
           </button>
+          <button style={{backgroundColor: "#FF0000"}} onClick={handleLogout}>
+            <FontAwesomeIcon icon={faRightFromBracket} />
+            <span>Logout</span>
+          </button>
         </div>
       </div>
       <div className="header-container">
@@ -460,7 +465,7 @@ const Profile = () => {
               <strong>Motorcycle Details:</strong>
               {userInfo.motorcycle_model && userInfo.motorcycle_colorway
                 ? `${userInfo.motorcycle_model} - ${userInfo.motorcycle_colorway}`
-                : "No motorcycle inputted"}
+                : " No motorcycle inputted"}
             </p>
             <p>
               <strong>Contact Number:</strong>{" "}

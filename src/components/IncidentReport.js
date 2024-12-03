@@ -162,19 +162,20 @@ const IncidentReport = () => {
             />
           </div>
           <div className="report1-button-group">
-            <button
-              type="submit"
-              className="report1-submit-button"
-              disabled={isCooldown}
-            >
-              Submit
-            </button>
+        
             <button
               type="button"
               className="report1-back-button"
               onClick={() => navigate('/profile')}
             >
               Back to Profile
+            </button>
+            <button
+              type="submit"
+              className="report1-submit-button"
+              disabled={isCooldown}
+            >
+              Submit
             </button>
           </div>
         </form>
