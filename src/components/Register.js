@@ -164,8 +164,9 @@ const Register = () => {
               <ErrorMessage name="contactNumber" component="div" className="register1-error-message" />
             </div>
             <div className="register1-button-group">
-              <button type="submit" className="register1-submit-button">Register</button>
+              
               <button type="button" className="register1-register-button" onClick={() => navigate('/Login')}>Back to Login</button>
+              <button type="submit" className="register1-submit-button">Register</button>
             </div>
           </Form>
         </Formik>
