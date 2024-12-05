@@ -11,10 +11,13 @@ import {
   faBell,
   faPaperPlane,
   faRightFromBracket,
+  faCog,
+  faCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
 import favicon from "./public/profile-icon.png";
 import logo from "./public/parktracklogo.png";
 import logo2 from "./public/logosaparktrack.png";
+import Settings from './Settings';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -29,6 +32,8 @@ const Profile = () => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const tips = [
     "Remember to submit proof for all complaints to increase processing speed.",
     "Check your cooldown status before submitting another report.",
@@ -399,6 +404,10 @@ const Profile = () => {
     }
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   if (!userInfo) {
     return <div>Loading...</div>;
   }
@@ -453,7 +462,19 @@ const Profile = () => {
               )}
             </div>
           )}
-          <div>{userInfo?.name}</div>
+          <div className="user-info">
+            <span>{userInfo?.name}</span>
+            <button onClick={toggleDropdown} className="dropdown-button">
+              <FontAwesomeIcon icon={faCaretDown} />
+            </button>
+            {isDropdownOpen && (
+              <div className="dropdown-menu">
+                <button onClick={() => setIsSettingsOpen(true)}>
+                  <FontAwesomeIcon icon={faCog} /> Settings
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <div className="profile-sidebar">
@@ -485,6 +506,12 @@ const Profile = () => {
           onClick={toggleChat}
         >
           <FontAwesomeIcon icon={faComments} /> Chat with Admin
+        </button>
+        <button
+          className="profile-sidebar-button"
+          onClick={() => setIsSettingsOpen(true)}
+        >
+          <FontAwesomeIcon icon={faCog} /> Settings
         </button>
         <button className="profile-logout-button" onClick={handleLogout}>
           <FontAwesomeIcon icon={faSignOutAlt} /> Logout
@@ -595,6 +622,10 @@ const Profile = () => {
           </div>
         )}
       </div>
+      <Settings 
+        isOpen={isSettingsOpen} 
+        onClose={() => setIsSettingsOpen(false)} 
+      />
     </div>
   );
 };
