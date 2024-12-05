@@ -313,11 +313,11 @@ const ViewComplaint = () => {
     <div className="profile-container">
       <div className="bottom-nav-container">
         <div className="bottom-nav">
-          <button className="active">
+          <button onClick={() => navigate("/profile")}>
             <FontAwesomeIcon icon={faUser} />
             <span>Profile</span>
           </button>
-          <button onClick={() => navigate("/view-complaints")}>
+          <button onClick={() => navigate("/view-complaints")} className="active">
             <FontAwesomeIcon icon={faComments} />
             <span>Complaints</span>
           </button>
