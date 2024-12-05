@@ -29,7 +29,6 @@ const Profile = () => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
-  const [slotsLeft, setSlotsLeft] = useState(150); // Initial state
   const tips = [
     "Remember to submit proof for all complaints to increase processing speed.",
     "Check your cooldown status before submitting another report.",
@@ -46,27 +45,6 @@ const Profile = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  // Function to fetch the current slots left from the Flask API
-  const fetchSlotsLeft = async () => {
-    try {
-      const response = await fetch("http://192.168.1.12:5000/get_slots"); // Update with the Flask server URL
-      if (!response.ok) {
-        throw new Error("Failed to fetch slots");
-      }
-      const data = await response.json();
-      setSlotsLeft(data.slots_left); // Update the state with the fetched slots
-    } catch (error) {
-      console.error("Error fetching slots:", error);
-    }
-  };
-
-  // Use `useEffect` to fetch slots when the component loads and every 2 seconds
-  useEffect(() => {
-    fetchSlotsLeft(); // Initial fetch
-    const interval = setInterval(fetchSlotsLeft, 2000); // Fetch every 2 seconds
-    return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -549,14 +527,6 @@ const Profile = () => {
                   )}
                 </p>
                 <h3>{hasCooldown ? "Cooldown Active" : "Report Available"}</h3>
-              </div>
-            </div>
-            <div className="cooldown-container">
-              <div className="cooldown-inner">
-                <p>
-                  <span className="cooldown-text">{slotsLeft}</span>
-                </p>
-                <h3>Slot Left</h3>
               </div>
             </div>
           </div>
