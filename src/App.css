@@ -1845,7 +1845,7 @@ tr:nth-child(even) {
   }
 
   .profile-content {
-    padding: 10px 0px 80px 0px;
+    padding: 10px 5px 80px 5px;
   }
 
   .profile-parktrack-title {
@@ -1911,7 +1911,7 @@ tr:nth-child(even) {
   }
 
   .profile-content {
-    padding: 10px 0px 80px 0px;
+    padding: 10px 5px 80px 5px;
     justify-content: start;
     align-items: start;
   }

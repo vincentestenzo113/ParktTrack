@@ -54,6 +54,12 @@ const Profile = () => {
         return;
       }
 
+      // Check if the user is admin and logout
+      if (user.email === "admin@gmail.com") {
+        handleLogout();
+        return;
+      }
+
       // Fetch the user's profile from the profiles table
       const { data: profile, error: profileError } = await supabase
         .from("profiles")

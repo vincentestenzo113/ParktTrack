@@ -11,6 +11,7 @@ import {
   faBell,
   faCaretDown,
   faPaperPlane,
+  faRightFromBracket
 } from "@fortawesome/free-solid-svg-icons";
 import favicon from "./public/profile-icon.png";
 import logo from "./public/parktracklogo.png";
@@ -68,6 +69,13 @@ const ViewComplaint = () => {
         }
         setUserInfo(data);
         checkReportCooldown(data.student_id);
+
+
+        if (user.email === "admin@gmail.com") {
+          handleLogout();
+          return;
+        }
+
       } else {
         navigate("/login");
       }
@@ -305,14 +313,21 @@ const ViewComplaint = () => {
     <div className="profile-container">
       <div className="bottom-nav-container">
         <div className="bottom-nav">
-          <button onClick={() => navigate("/profile")}>
+          <button className="active">
             <FontAwesomeIcon icon={faUser} />
+            <span>Profile</span>
           </button>
-          <button className="active" onClick={() => navigate("/view-complaints")}>
+          <button onClick={() => navigate("/view-complaints")}>
             <FontAwesomeIcon icon={faComments} />
+            <span>Complaints</span>
           </button>
           <button onClick={() => navigate("/incident-report")}>
             <FontAwesomeIcon icon={faFileAlt} />
+            <span>Report</span>
+          </button>
+          <button style={{backgroundColor: "#FF0000"}} onClick={handleLogout}>
+            <FontAwesomeIcon icon={faRightFromBracket} />
+            <span>Logout</span>
           </button>
         </div>
       </div>
