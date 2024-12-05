@@ -2137,11 +2137,6 @@ tr:nth-child(even) {
   margin-right: 8px; /* Adjust spacing between icon and text */
 }
 
-.admin1-sidebar-button:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
-  color: #060e57; /* Slightly lighter text on hover */
-}
-
 .admin1-profile {
   display: flex;
   align-items: center;
@@ -2197,8 +2192,14 @@ tr:nth-child(even) {
   margin-top: 30px;
 }
 
-.admin1-sidebar-button:hover {
+.admin1-complaints .admin1-sidebar-button:hover {
   background-color: #ffffff;
+  color: #060e57;
+}
+
+.admin1-sidebar-button:hover {
+  color: #060e57;
+  background-color: white;
 }
 
 .admin1-logout-button {

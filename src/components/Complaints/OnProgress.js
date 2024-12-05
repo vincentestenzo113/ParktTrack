@@ -239,7 +239,7 @@ const OnProgress = () => {
             onClick={() => navigate("/Admin")}
             className="admin1-sidebar-button"
           >
-            <FontAwesomeIcon icon={faTachometerAlt} className="admin1-icon" />
+            <FontAwesomeIcon icon={faHome} /> 
             Dashboard
           </button>
           <button className="admin1-sidebar-button">
