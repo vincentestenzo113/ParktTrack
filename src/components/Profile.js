@@ -8,7 +8,6 @@ import {
   faFileAlt,
   faSignOutAlt,
   faUser,
-  faBell,
   faPaperPlane,
   faRightFromBracket,
   faCog,
@@ -29,9 +28,6 @@ const Profile = () => {
   );
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [notifications, setNotifications] = useState([]);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const tips = [
@@ -149,85 +145,6 @@ const Profile = () => {
       return () => clearInterval(interval); // Cleanup on unmount
     }
   }, [showChat]);
-
-  useEffect(() => {
-    const fetchExistingNotifications = async () => {
-      if (!userInfo?.student_id) return;
-
-      const { data, error } = await supabase
-        .from('incident_report')
-        .select('*')
-        .eq('student_id', userInfo.student_id)
-        .eq('is_read', false)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching notifications:', error);
-        return;
-      }
-
-      if (data && data.length > 0) {
-        const formattedNotifications = data.map(report => ({
-          id: report.id,
-          message: getNotificationMessage(report),
-        }));
-        setNotifications(formattedNotifications);
-        setHasUnreadNotifications(true);
-      }
-    };
-
-    fetchExistingNotifications();
-  }, [userInfo]);
-
-  const getNotificationMessage = (report) => {
-    if (report.progress === 1 && report.remarks) {
-      return `Your report #${report.id} has been updated`;
-    } else if (report.progress === 2) {
-      return `Your report #${report.id} has been solved`;
-    } else if (report.progress === 0) {
-      return `Your report #${report.id} is not solved`;
-    }
-    return '';
-  };
-
-  useEffect(() => {
-    const subscribeToReportUpdates = () => {
-      if (!userInfo?.student_id) return;
-
-      const subscription = supabase
-        .channel('report-updates')
-        .on(
-          'postgres_changes',
-          {
-            event: 'UPDATE',
-            schema: 'public',
-            table: 'incident_report',
-            filter: `student_id=eq.${userInfo.student_id}`,
-          },
-          (payload) => {
-            console.log('Received update payload:', payload);
-            const { new: updatedReport } = payload;
-            const notificationMessage = getNotificationMessage(updatedReport);
-
-            if (notificationMessage) {
-              setNotifications(prev => [
-                { id: updatedReport.id, message: notificationMessage },
-                ...prev
-              ]);
-              setHasUnreadNotifications(true);
-            }
-          }
-        )
-        .subscribe();
-
-      return () => subscription.unsubscribe();
-    };
-
-    const unsubscribe = subscribeToReportUpdates();
-    return () => {
-      if (unsubscribe) unsubscribe();
-    };
-  }, [userInfo]);
 
   const checkReportCooldown = async (student_id) => {
     console.log("Checking cooldown for student_id:", student_id);
@@ -390,20 +307,6 @@ const Profile = () => {
     localStorage.setItem("showChat", JSON.stringify(newShowChat));
   };
 
-  const toggleNotifications = () => {
-    setShowNotifications(prev => !prev);
-    if (!showNotifications) {
-      setHasUnreadNotifications(false);
-      // Mark notifications as read in the database
-      notifications.forEach(async (notification) => {
-        await supabase
-          .from('incident_report')
-          .update({ is_read: true })
-          .eq('id', notification.id);
-      });
-    }
-  };
-
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -447,21 +350,6 @@ const Profile = () => {
           </div>
         </div>
         <div className="header-right">
-          <div onClick={toggleNotifications} style={{ position: "relative", cursor: "pointer" }}>
-            <FontAwesomeIcon icon={faBell} />
-            {hasUnreadNotifications && <span className="notification-badge">!</span>}
-          </div>
-          {showNotifications && (
-            <div className="notification-bubble">
-              {notifications.length > 0 ? (
-                notifications.map((notification) => (
-                  <p key={notification.id}>{notification.message}</p>
-                ))
-              ) : (
-                <p>No notifications today</p>
-              )}
-            </div>
-          )}
           <div className="user-info">
             <span>{userInfo?.name}</span>
             <button onClick={toggleDropdown} className="dropdown-button">

@@ -8,7 +8,6 @@ import {
   faFileAlt,
   faSignOutAlt,
   faUser,
-  faBell,
   faCaretDown,
   faPaperPlane,
   faRightFromBracket
@@ -340,9 +339,6 @@ const ViewComplaint = () => {
           </div>
         </div>
         <div className="header-right">
-          <div>
-            <FontAwesomeIcon icon={faBell} />
-          </div>
           <div>{userInfo.name}</div>
         </div>
       </div>
