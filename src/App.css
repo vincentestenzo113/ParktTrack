@@ -764,7 +764,8 @@ textarea {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  width: 400px; /* Fixed width for the login box */
+  max-width: 400px; /* Fixed width for the login box */
+  width: 70%;
   position: relative; /* Required for positioning the header */
 }
 
@@ -791,7 +792,10 @@ textarea {
   padding: 10px 15px;
   border-radius: 4px;
   cursor: pointer;
-  margin-left: 310px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 10px 20px 0px 0px;
 }
 
 .login1-header {
@@ -900,8 +904,10 @@ body {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  width: 400px; /* Fixed width for the register box */
+  max-width: 400px; /* Fixed width for the register box */
   position: relative; /* Required for positioning the header */
+  width: 70%;
+
 }
 
 .register1-header {

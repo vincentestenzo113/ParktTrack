@@ -506,10 +506,10 @@ const Profile = () => {
               <strong>Student ID:</strong> {userInfo.student_id || "No student ID available"}
             </p>
             <p>
-              <strong>Motorcycle Details:</strong>
+              <strong>Motorcycle Details: </strong>
               {userInfo.motorcycle_model && userInfo.motorcycle_colorway
                 ? `${userInfo.motorcycle_model} - ${userInfo.motorcycle_colorway}`
-                : " No motorcycle inputted"}
+                : "No motorcycle inputted"}
             </p>
             <p>
               <strong>Contact Number:</strong>{" "}
