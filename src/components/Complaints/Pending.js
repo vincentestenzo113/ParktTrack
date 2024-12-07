@@ -23,8 +23,6 @@ const Pending = () => {
   const [selectedReportId, setSelectedReportId] = useState(null); // Store report ID
   const [remarksInput, setRemarksInput] = useState("");
   const [showSendModal, setShowSendModal] = useState(false);
-  const [showViewModal, setShowViewModal] = useState(false);
-  const [viewRemarks, setViewRemarks] = useState("");
   const [proofUrl, setProofUrl] = useState("");
   const [showProofModal, setShowProofModal] = useState(false);
   const [notification, setNotification] = useState({
@@ -38,10 +36,9 @@ const Pending = () => {
     const { data, error } = await supabase
       .from("incident_report")
       .select(
-        "id, student_id, description, proof_of_incident, remarks, submitted_at, incident_date"
+        "id, student_id, description, proof_of_incident, submitted_at, incident_date"
       )
-      .eq("progress", 0)
-      .is("remarks", null);
+      .eq("progress", 0);
 
     if (error) {
       console.error("Error fetching reports:", error.message);
@@ -121,16 +118,6 @@ const Pending = () => {
     } else {
       console.warn("Remarks input or selectedReportId is empty");
     }
-  };
-
-  const openViewModal = (remarks) => {
-    setViewRemarks(remarks || "No remarks available");
-    setShowViewModal(true);
-  };
-
-  const closeViewModal = () => {
-    setShowViewModal(false);
-    setViewRemarks("");
   };
 
   const viewProof = (proofUrl) => {
@@ -257,7 +244,6 @@ const Pending = () => {
                   <th>Date and Time Submitted</th>
                   <th>Incident Date</th>
                   <th className="description-column">Description</th>
-                  <th>Remarks</th>
                   <th>Proof</th>
                   <th>Take Action</th>
                 </tr>
@@ -265,8 +251,7 @@ const Pending = () => {
               <tbody>
                 {reports.map((report) => (
                   <tr key={report.id}>
-                    <td className="ticket-column">{report.id}</td>{" "}
-                    {/* Changed to show the actual report ID */}
+                    <td className="ticket-column">{report.id}</td>
                     <td>{report.student_id}</td>
                     <td>{new Date(report.submitted_at).toLocaleString()}</td>
                     <td>
@@ -282,14 +267,6 @@ const Pending = () => {
                         : "N/A"}
                     </td>
                     <td>{report.description}</td>
-                    <td>
-                      <button
-                        onClick={() => openViewModal(report.remarks)}
-                        className="admin1-view-remarks-button"
-                      >
-                        View Remarks
-                      </button>
-                    </td>
                     <td className="admin1-send-button-column">
                       <button
                         onClick={() => viewProof(report.proof_of_incident)}
@@ -331,19 +308,6 @@ const Pending = () => {
             </button>
             <button onClick={closeSendModal} className="admin1-cancel-button">
               Cancel
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* View Remarks Modal */}
-      {showViewModal && (
-        <div className="admin1-modal">
-          <div className="admin1-modal-content">
-            <h2>View Remarks</h2>
-            <p>{viewRemarks}</p>
-            <button onClick={closeViewModal} className="admin1-close-button">
-              Close
             </button>
           </div>
         </div>
