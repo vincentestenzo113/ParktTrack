@@ -257,8 +257,8 @@ const Pending = () => {
                   <th>Date and Time Submitted</th>
                   <th>Incident Date</th>
                   <th className="description-column">Description</th>
-                  <th>Proof</th>
                   <th>Remarks</th>
+                  <th>Proof</th>
                   <th>Take Action</th>
                 </tr>
               </thead>
@@ -282,20 +282,20 @@ const Pending = () => {
                         : "N/A"}
                     </td>
                     <td>{report.description}</td>
-                    <td className="admin1-send-button-column">
-                      <button
-                        onClick={() => viewProof(report.proof_of_incident)}
-                        className="admin1-view-proof-button"
-                      >
-                        View Proof
-                      </button>
-                    </td>
                     <td>
                       <button
                         onClick={() => openViewModal(report.remarks)}
                         className="admin1-view-remarks-button"
                       >
                         View Remarks
+                      </button>
+                    </td>
+                    <td className="admin1-send-button-column">
+                      <button
+                        onClick={() => viewProof(report.proof_of_incident)}
+                        className="admin1-view-proof-button"
+                      >
+                        View Proof
                       </button>
                     </td>
                     <td>
