@@ -21,6 +21,7 @@ import AdminLogin from "./components/AdminLogin";
 import ProtectedRoute from "./components/utils/ProtectedRoutes";
 import { supabase } from "./components/utils/supabaseClient";
 import ParkingData from "./components/ParkingData";
+import Settings from './components/Settings';
 
 function App() {
   const [authenticated, setAuthenticated] = useState(null);
@@ -206,6 +207,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </Router>
   );

@@ -12,7 +12,7 @@ const Users = () => {
     const fetchUsers = async () => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('student_id, created_at, motorcycle_model, motorcycle_colorway, contact_number');
+        .select('student_id, created_at, motorcycle_model, motorcycle_colorway, contact_number, rfid_tag');
       if (error) {
         console.error('Error fetching users:', error.message);
       } else if (data) {
@@ -60,6 +60,7 @@ const Users = () => {
               <th>#</th>
               <th>Student ID</th>
               <th>Motorcycle Details</th>
+              <th>RFID</th>
               <th>Contact Number</th>
               <th>Date Created</th>
             </tr>
@@ -75,6 +76,7 @@ const Users = () => {
                       ? `${user.motorcycle_model} - ${user.motorcycle_colorway}` 
                       : "No motorcycle inputted"}
                   </td>
+                  <td>{user.rfid_tag ? "Tagged" : "Not Tagged"}</td>
                   <td>{user.contact_number || "No contact number"}</td>
                   <td>{new Date(user.created_at).toLocaleDateString()}</td>
                 </tr>

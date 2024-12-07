@@ -17,7 +17,6 @@ import {
   faUser,
   faSquareParking,
   faTicket,
-  faBell,
   faPaperPlane,
   faInbox,
   faArrowLeft,
