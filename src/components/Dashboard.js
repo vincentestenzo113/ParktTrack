@@ -41,7 +41,7 @@ const Dashboard = () => {
         <div className="dashboard2-slots-container">
           <div className='dashboard2-slots-inner'>
           <h2 className="dashboard2-slots-number">{slotsLeft}</h2>
-          <p className="dashboard2-slots-text">SLOTS LEFT</p>
+          <p className="dashboard2-slots-text">SLOTS</p>
           </div>
         </div>
 
