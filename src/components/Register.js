@@ -89,8 +89,9 @@ const Register = () => {
         return;
       }
 
-      toast.success('Registration successful! Please check your email to confirm your account.');
-      navigate('/'); // Redirect to the home page after successful registration    
+      toast.success('Registration successful! Please check your email to confirm your account.', {
+        onClose: () => navigate('/login') // Redirect to login after toast closes
+      });
     } catch (error) {
       console.error('Error during sign up:', error.message);
       toast.error(`Error: ${error.message}`);

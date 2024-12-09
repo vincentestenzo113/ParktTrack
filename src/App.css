@@ -2834,6 +2834,7 @@ tr:nth-child(even) {
   flex-direction: column;
   align-items: center;
   justify-content: start;
+  overflow: auto;
 }
 
 .user1-table {

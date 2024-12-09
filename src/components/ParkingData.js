@@ -33,7 +33,12 @@ const ParkingData = () => {
         if (error) {
           console.error("Error fetching parking data:", error);
         } else {
-          setParkingData(data);
+          const sortedData = data.sort((a, b) => {
+            const dateA = new Date(`${a.entry_date}T${a.entry_time}`);
+            const dateB = new Date(`${b.entry_date}T${b.entry_time}`);
+            return dateB - dateA;
+          });
+          setParkingData(sortedData);
         }
       } catch (error) {
         console.error("Error during data fetch:", error);
@@ -155,17 +160,17 @@ const ParkingData = () => {
         <tbody>
           {currentItems.map((entry, index) => (
             <tr key={index}>
-              <td>{entry.student_id}</td>
-              <td>{entry.profiles?.contact_number || "No contact number"}</td>
+              <td>{entry.student_id || "No data"}</td>
+              <td>{entry.profiles?.contact_number || "No data"}</td>
               <td>
                 {entry.profiles?.motorcycle_model && entry.profiles?.motorcycle_colorway
                   ? `${entry.profiles.motorcycle_model} - ${entry.profiles.motorcycle_colorway}`
-                  : "No motorcycle inputted"}
+                  : "No data"}
               </td>
-              <td>{formatTime(entry.entry_time, entry.entry_date)}</td>
-              <td>{formatTime(entry.exit_time, entry.exit_date)}</td>
-              <td>{formatDate(entry.entry_date)}</td>
-              <td>{formatDate(entry.exit_date)}</td>
+              <td>{entry.entry_time ? formatTime(entry.entry_time, entry.entry_date) : "No data"}</td>
+              <td>{entry.exit_time ? formatTime(entry.exit_time, entry.exit_date) : "No data"}</td>
+              <td>{entry.entry_date ? formatDate(entry.entry_date) : "No data"}</td>
+              <td>{entry.exit_date ? formatDate(entry.exit_date) : "No data"}</td>
             </tr>
           ))}
         </tbody>
