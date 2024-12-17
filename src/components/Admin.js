@@ -675,7 +675,7 @@ const Admin = () => {
                       onClick={() => handleSelectConversation(conv)}
                     >
                       <div className="conversation-info">
-                        <span className="student-id">{conv.student_id}</span>
+                        <span className="student-id">Student ID: {conv.student_id}</span>
                         {conv.unreadCount > 0 && (
                           <span className="unread-badge">
                             {conv.unreadCount}

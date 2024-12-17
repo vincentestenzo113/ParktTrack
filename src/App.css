@@ -682,7 +682,9 @@ textarea {
 .table-title-solved {
   background-color: #84ff74;
 }
-
+.table-title-unsolved {
+  background-color: #808080;
+}
 /* Media queries for responsive design */
 @media (max-width: 768px) {
 
@@ -4085,4 +4087,26 @@ html {
 
 .current-timex {
   margin-left: 1160px;
+}
+
+/* src/App.css */
+
+.admin-status {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-left: 10px; /* Space between text and status circle */
+}
+
+.admin-status.online {
+  background-color: green;
+}
+
+.admin-status.afk {
+  background-color: orange;
+}
+
+.admin-status.offline {
+  background-color: gray;
 }

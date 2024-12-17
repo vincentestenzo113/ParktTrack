@@ -98,7 +98,7 @@ const Pending = () => {
           setNotification({
             visible: true,
             message:
-              "Remarks sent successfully! The report will be On Progress.",
+              "Remarks sent successfully! The report will be In Progress.",
             icon: "success",
           });
           await fetchReports();
@@ -158,6 +158,10 @@ const Pending = () => {
             <button onClick={() => navigate("/Solved")} className="solved">
               <FontAwesomeIcon icon={faClipboardCheck} size="1x" />
             </button>
+            <button onClick={() => navigate("/Unsolved")} className="unsolved">
+              <FontAwesomeIcon icon={faClipboardCheck} size="1x" />
+              Unsolved
+            </button>
           </div>
           <button onClick={() => navigate("/users")}>
             <FontAwesomeIcon icon={faUsers} />
@@ -204,7 +208,7 @@ const Pending = () => {
                 icon={faClipboardCheck}
                 className="admin1-icon"
               />
-              On Progress
+              In Progress
             </button>
             <button
               className="admin1-sidebar-button"
@@ -215,6 +219,16 @@ const Pending = () => {
                 className="admin1-icon"
               />
               Solved
+            </button>
+            <button
+              className="admin1-sidebar-button"
+              onClick={() => navigate("/Unsolved")}
+            >
+              <FontAwesomeIcon
+                icon={faClipboardCheck}
+                className="admin1-icon"
+              />
+              Unsolved
             </button>
           </div>
           <button

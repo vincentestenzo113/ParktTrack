@@ -208,6 +208,9 @@ const ViewComplaint = () => {
       return { text: "ON PROGRESS", color: "orange" };
     if (complaint.remarks && complaint.progress === 2)
       return { text: "SOLVED", color: "green" };
+    if (complaint.progress === 3) {
+      return { text: "UNSOLVED", color: "gray" };
+    }
     return { text: "UNKNOWN", color: "gray" };
   };
 
@@ -397,12 +400,10 @@ const ViewComplaint = () => {
                     <td>{complaint.student_id}</td>
                     <td>{complaint.submission_date}</td>
                     <td>{complaint.completed_at}</td>
-                    <td className="description-column" >{complaint.description}</td>
+                    <td className="description-column">{complaint.description}</td>
                     <td className="admin1-send-button-column">
                       <button
-                        onClick={() =>
-                          handleShowProof(complaint.proof_of_incident)
-                        }
+                        onClick={() => handleShowProof(complaint.proof_of_incident)}
                         className="admin1-view-proof-button"
                       >
                         <span className="view-button2"><FontAwesomeIcon icon={faCaretDown}/></span>
@@ -410,13 +411,17 @@ const ViewComplaint = () => {
                       </button>
                     </td>
                     <td className="admin1-send-button-column">
-                      <button
-                        onClick={() => handleShowRemarks(complaint.remarks)}
-                        className="admin1-view-remarks-button"
-                      >
-                        <span className="view-button2"><FontAwesomeIcon icon={faCaretDown}/></span>
-                        <p className="view-button">View Remarks</p>
-                      </button>
+                      {complaint.progress === 0 ? (
+                        <span>{complaint.remarks || "No remarks available."}</span>
+                      ) : (
+                        <button
+                          onClick={() => handleShowRemarks(complaint.remarks)}
+                          className="admin1-view-remarks-button"
+                        >
+                          <span className="view-button2"><FontAwesomeIcon icon={faCaretDown}/></span>
+                          <p className="view-button">View Remarks</p>
+                        </button>
+                      )}
                     </td>
                     <td style={{ backgroundColor: complaint.status.color }}>
                       {complaint.status.text}

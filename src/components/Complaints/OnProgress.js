@@ -31,6 +31,9 @@ const OnProgress = () => {
     message: "",
     icon: "",
   });
+  const [showUnsolvedModal, setShowUnsolvedModal] = useState(false);
+  const [unsolvedReason, setUnsolvedReason] = useState("");
+  const [selectedReportId, setSelectedReportId] = useState(null);
   const navigate = useNavigate();
 
   const fetchReports = async () => {
@@ -56,8 +59,7 @@ const OnProgress = () => {
         .select(
           "id, student_id, description, submitted_at, completed_at, remarks, proof_of_incident, incident_date"
         )
-        .eq("progress", 1) // Only solved reports
-        .not("remarks", "is", null); // Ensure remarks are not null
+        .eq("progress", 1); // Only solved reports
 
       if (error) {
         console.error("Error fetching reports:", error.message);
@@ -144,7 +146,7 @@ const OnProgress = () => {
     const { error } = await supabase
       .from("incident_report")
       .update({
-        progress: 0,
+        progress: 3,
         remarks: null,
       })
       .eq("id", reportId); // Use 'id' here
@@ -154,7 +156,6 @@ const OnProgress = () => {
       alert(`Error: ${error.message}`);
     } else {
       triggerNotification(
-        "This report will be moved back to pending",
         "unsolved"
       );
       fetchReports();
@@ -186,6 +187,38 @@ const OnProgress = () => {
     setTimeout(() => {
       setNotification({ visible: false, message: "", icon: "" });
     }, 3000);
+  };
+
+  const openUnsolvedModal = (reportId) => {
+    setSelectedReportId(reportId);
+    setShowUnsolvedModal(true);
+  };
+
+  const closeUnsolvedModal = () => {
+    setShowUnsolvedModal(false);
+    setUnsolvedReason("");
+  };
+
+  const submitUnsolvedReason = async () => {
+    if (unsolvedReason && selectedReportId) {
+      const { error } = await supabase
+        .from("incident_report")
+        .update({
+          reason: unsolvedReason,
+          progress: 3, // Set progress to 3 for unsolved
+        })
+        .eq("id", selectedReportId);
+
+      if (error) {
+        console.error("Error updating report:", error.message);
+      } else {
+        alert("Reason for unsolved report submitted successfully.");
+        await fetchReports(); // Refresh the reports
+      }
+      closeUnsolvedModal();
+    } else {
+      console.warn("Reason input is empty or report ID is not set.");
+    }
   };
 
   return (
@@ -262,7 +295,7 @@ const OnProgress = () => {
                 icon={faClipboardCheck}
                 className="admin1-icon"
               />
-              On Progress
+              In Progress
             </button>
             <button
               className="admin1-sidebar-button"
@@ -273,6 +306,16 @@ const OnProgress = () => {
                 className="admin1-icon"
               />
               Solved
+            </button>
+            <button
+              className="admin1-sidebar-button"
+              onClick={() => navigate("/Unsolved")}
+            >
+              <FontAwesomeIcon
+                icon={faClipboardCheck}
+                className="admin1-icon"
+              />
+              Unsolved
             </button>
           </div>
           <button
@@ -290,7 +333,7 @@ const OnProgress = () => {
       </div>
       <div className="profile-content">
         <div className="profile-complaints-table">
-          <div className="admin1-table-title">On Progress Complaints</div>
+          <div className="admin1-table-title">In Progress Complaints</div>
           {loading ? (
             <p>Loading reports...</p>
           ) : reports.length > 0 ? (
@@ -353,7 +396,7 @@ const OnProgress = () => {
                         Solve
                       </button>
                       <button
-                        onClick={() => handleUnsolve(report.id)}
+                        onClick={() => openUnsolvedModal(report.id)}
                         className="admin1-unsolve-button"
                       >
                         Unsolve
@@ -420,6 +463,26 @@ const OnProgress = () => {
               />
               <button onClick={closeProofModal} className="admin1-close-button">
                 Close
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Unsolved Reason Modal */}
+        {showUnsolvedModal && (
+          <div className="admin1-modal">
+            <div className="admin1-modal-content">
+              <h2>Reason for Unsolved</h2>
+              <textarea
+                value={unsolvedReason}
+                onChange={(e) => setUnsolvedReason(e.target.value)}
+                placeholder="Enter reason here..."
+              />
+              <button onClick={submitUnsolvedReason} className="admin1-send-button">
+                Submit
+              </button>
+              <button onClick={closeUnsolvedModal} className="admin1-cancel-button">
+                Cancel
               </button>
             </div>
           </div>

@@ -17,11 +17,13 @@ import ViewComplaint from "./components/ViewComplaint";
 import Pending from "./components/Complaints/Pending";
 import OnProgress from "./components/Complaints/OnProgress";
 import Solved from "./components/Complaints/Solved";
+import Unsolved from "./components/Complaints/Unsolved";
 import AdminLogin from "./components/AdminLogin";
 import ProtectedRoute from "./components/utils/ProtectedRoutes";
 import { supabase } from "./components/utils/supabaseClient";
 import ParkingData from "./components/ParkingData";
-import Settings from './components/Settings';
+import Settings from "./components/Settings";
+import ConfirmationPage from "./components/utils/ConfirmationPage";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(null);
@@ -60,7 +62,11 @@ function App() {
         <Route
           path="/"
           element={
-            authenticated ? <Navigate to="/profile" replace /> : <Navigate to="/login" replace />
+            authenticated ? (
+              <Navigate to="/profile" replace />
+            ) : (
+              <Navigate to="/login" replace />
+            )
           }
         />
 
@@ -190,6 +196,18 @@ function App() {
           }
         />
         <Route
+          path="/Unsolved"
+          element={
+            authenticated ? (
+              <ProtectedRoute>
+                <Unsolved />
+              </ProtectedRoute>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
           path="/parking-data"
           element={
             <ProtectedRoute>
@@ -198,6 +216,9 @@ function App() {
           }
         />
         <Route path="/settings" element={<Settings />} />
+
+        {/* Confirmation Page Route */}
+        <Route path="/confirm-email" element={<ConfirmationPage />} />
       </Routes>
     </Router>
   );
