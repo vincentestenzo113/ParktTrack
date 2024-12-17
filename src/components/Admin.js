@@ -29,8 +29,7 @@ const Admin = () => {
   const [pendingCount, setPendingCount] = useState(0);
   const [onProgressCount, setOnProgressCount] = useState(0);
   const [solvedCount, setSolvedCount] = useState(0);
-  const [currentTime, setCurrentTime] = useState("");
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date().toLocaleString());
   const [session, setSession] = useState(null);
   const [studentId, setStudentId] = useState("");
   const [rfidTag, setRfidTag] = useState("");
@@ -42,6 +41,7 @@ const Admin = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [conversations, setConversations] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const Admin = () => {
     fetchReportCounts();
 
     const timer = setInterval(() => {
-      setCurrentTime(new Date().toLocaleTimeString());
+      setCurrentTime(new Date().toLocaleString());
     }, 1000);
 
     return () => clearInterval(timer);
@@ -433,10 +433,6 @@ const Admin = () => {
             <FontAwesomeIcon icon={faSquareParking} />
             <span>Park Data</span>
           </button>
-          <button onClick={toggleModal}>
-            <FontAwesomeIcon icon={faTicket} />
-            <span>Assign RFID</span>
-          </button>
           <button
             onClick={() => {
               setShowChat(true);
@@ -513,31 +509,6 @@ const Admin = () => {
             </span>
           )}
         </button>
-        <div className="rfid-form">
-          <h3 className="form-title">Assign RFID to Student</h3>
-          <form onSubmit={handleFormSubmit} className="admin1-rfid-form">
-            <label className="admin1-form-label">Student ID:</label>
-            <input
-              type="text"
-              value={studentId}
-              onChange={(e) => setStudentId(e.target.value)}
-              className="admin1-form-input"
-              placeholder="Enter Student ID"
-            />
-            <label className="admin1-form-label">RFID Tag:</label>
-            <input
-              type="text"
-              value={rfidTag}
-              onChange={(e) => setRfidTag(e.target.value)}
-              className="admin1-form-input"
-              placeholder="Enter RFID Tag"
-            />
-            <button type="submit" className="admin1-submit-button">
-              Assign
-            </button>
-          </form>
-          {message && <p className="admin1-message">{message}</p>}
-        </div>
         <button className="profile-logout-button" onClick={handleLogout}>
           <FontAwesomeIcon icon={faSignOutAlt} /> Logout
         </button>
@@ -583,6 +554,8 @@ const Admin = () => {
         <div className="profile-welcome">
           <FontAwesomeIcon icon={faHome} className="admin1-header-icon" />
           <span className="admin1-header-text">DASHBOARD</span>
+          <span className="current-time">
+          {currentTime}</span>
         </div>
         <div className="admin1-no-edge-box">
           <div className="admin1-parktrack-title">PARKTRACK</div>
@@ -626,6 +599,31 @@ const Admin = () => {
                   dateFormat="MM/dd/yyyy"
                 />
               </div>
+              <div className="rfid-form">
+                <h3 className="form-title">Assign RFID to Student</h3>
+                <form onSubmit={handleFormSubmit} className="admin1-rfid-form">
+                  <label className="admin1-form-label">Student ID:</label>
+                  <input
+                    type="text"
+                    value={studentId}
+                    onChange={(e) => setStudentId(e.target.value)}
+                    className="admin1-form-input"
+                    placeholder="Enter Student ID"
+                  />
+                  <label className="admin1-form-label">RFID Tag:</label>
+                  <input
+                    type="text"
+                    value={rfidTag}
+                    onChange={(e) => setRfidTag(e.target.value)}
+                    className="admin1-form-input"
+                    placeholder="Enter RFID Tag"
+                  />
+                  <button type="submit" className="admin1-submit-button">
+                    Assign
+                  </button>
+                </form>
+                {message && <p className="admin1-message">{message}</p>}
+              </div>
             </div>
           </div>
         </div>
@@ -645,8 +643,8 @@ const Admin = () => {
             <div className="chat-header">
               <h3>
                 {selectedStudent
-                  ? `Chat with ${selectedStudent.student_id}`
-                  : "Select a conversation"}
+                  ? `Chat with student ${selectedStudent.student_id}`
+                  : "Inbox"}
               </h3>
               {selectedStudent && (
                 <button
@@ -699,7 +697,7 @@ const Admin = () => {
                       <div key={msg.id} className="message-wrapper">
                         <p className={`message-sender ${msg.sender_id === selectedStudent.id ? "left" : "right"}`}>
                           <strong>
-                            {msg.sender_id === selectedStudent.id ? selectedStudent.student_id : "You"}
+                            {msg.sender_id === selectedStudent.id ? `Student: ${selectedStudent.student_id}` : "You" }
                           </strong>
                         </p>
                         <div className={`messageadmin ${msg.sender_id === selectedStudent.id ? "user" : "admin"}`}>

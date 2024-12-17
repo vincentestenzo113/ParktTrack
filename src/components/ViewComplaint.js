@@ -497,6 +497,14 @@ const ViewComplaint = () => {
           </div>
         </div>
       )}
+      <div className="bottom-section">
+          <footer className="admin1-footer">
+            <p>
+              &copy; 2024 PARKTRACK INC Tel: +639355380789 | Got bugs or errors?
+              Contact us here: support@parktrack.com
+            </p>
+          </footer>
+        </div>
     </div>
   );
 };

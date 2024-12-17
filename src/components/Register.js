@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from './utils/supabaseClient';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import logo from "./public/logosaparktrack.png";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -100,7 +101,11 @@ const Register = () => {
 
   return (
     <div className="register1-page">
-      <h1 className="parktrack-title">WELCOME TO PARKTRACK</h1>
+      <h1 className="login1-title"><
+        img src={logo} alt="ParkTrack Logo" className="parktrack-logo" />
+       PARKTRACK
+      </h1>
+      
       <ToastContainer />
       <div className="register1-container">
         <h2 className="register1-header">Register</h2>

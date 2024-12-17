@@ -21,6 +21,7 @@ import Settings from './Settings';
 const Profile = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date().toLocaleString());
   const [hasCooldown, setHasCooldown] = useState(false);
   const [cooldownTime, setCooldownTime] = useState(0);
   const [showChat, setShowChat] = useState(
@@ -145,6 +146,14 @@ const Profile = () => {
       return () => clearInterval(interval); // Cleanup on unmount
     }
   }, [showChat]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().toLocaleString());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const checkReportCooldown = async (student_id) => {
     console.log("Checking cooldown for student_id:", student_id);
@@ -408,8 +417,10 @@ const Profile = () => {
       <div className="profile-content">
         <div className="profile-welcome">
           <span className="admin1-header-text">
-            Welcome to PARKTRACK, {userInfo.name || "User"}
+            Hello, {userInfo.name || "User"}
           </span>
+          <span className="current-timex">
+          {currentTime}</span>
         </div>
         <div className="profile-boxcontainer">
           <div className="profile-information">
@@ -479,7 +490,7 @@ const Profile = () => {
               </div>
               <div className="chat-messages">
                 {messages.map((msg) => (
-                  <div key={msg.id} className="message-wrapper">
+                  <div key={msg.id} className={`message-wrapper`}>
                     <p className={`message-sender ${msg.sender_id === userInfo.id ? "right" : "left"}`}>
                       <strong>
                         {msg.sender_id === userInfo.id ? "You" : "Admin"}
@@ -488,7 +499,7 @@ const Profile = () => {
                     <div className={`message ${msg.sender_id === userInfo.id ? "user" : "admin"}`}>
                       <div className="message-content">
                         <p>{msg.message}</p>
-                        <small>{new Date(msg.created_at).toLocaleTimeString()}</small>
+                        <small>{new Date(msg.created_at).toLocaleString()}</small>
                       </div>
                     </div>
                   </div>

@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { supabase } from './utils/supabaseClient';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import logo from "./public/logosaparktrack.png"
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -56,7 +57,10 @@ const AdminLogin = () => {
   return (
     <div className="login1-page">
       <ToastContainer />
-      <h1 className="login1-title">PARKTRACK</h1>
+      <h1 className="login1-title">
+        <img src={logo} alt="ParkTrack Logo" className="parktrack-logo" />
+        PARKTRACK
+      </h1>
       <div className="login1-container">
         <h2 className="login1-header">Admin Login</h2>
         <Formik

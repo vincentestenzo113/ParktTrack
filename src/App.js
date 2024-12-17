@@ -60,16 +60,6 @@ function App() {
         <Route
           path="/"
           element={
-            <div>
-              <Dashboard />
-            </div>
-          }
-        />
-
-        {/* Redirect to /profile or /login based on authentication */}
-        <Route
-          path="/"
-          element={
             authenticated ? <Navigate to="/profile" replace /> : <Navigate to="/login" replace />
           }
         />
