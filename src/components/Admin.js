@@ -580,7 +580,7 @@ const Admin = () => {
                 <FontAwesomeIcon icon={faSpinner} size="1x" />
               </section>
               <section className="count">{onProgressCount}</section>
-              <section className="label">On Progress</section>
+              <section className="label">In Progress</section>
             </div>
             <div className="admin1-solved" onClick={() => navigate("/Solved")}>
               <section className="admin1-icon solved-icon">

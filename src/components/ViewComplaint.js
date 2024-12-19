@@ -205,7 +205,7 @@ const ViewComplaint = () => {
     if (!complaint.remarks && complaint.progress === 0)
       return { text: "PENDING", color: "red" };
     if (complaint.remarks && complaint.progress === 1)
-      return { text: "ON PROGRESS", color: "orange" };
+      return { text: "IN PROGRESS", color: "orange" };
     if (complaint.remarks && complaint.progress === 2)
       return { text: "SOLVED", color: "green" };
     if (complaint.progress === 3) {

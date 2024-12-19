@@ -31,6 +31,7 @@ const Profile = () => {
   const [messages, setMessages] = useState([]);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [adminStatus, setAdminStatus] = useState("offline");
   const tips = [
     "Remember to submit proof for all complaints to increase processing speed.",
     "Check your cooldown status before submitting another report.",
@@ -154,6 +155,71 @@ const Profile = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          console.warn("User is not logged in. Setting admin status to offline.");
+          setAdminStatus("offline");
+          return; // Exit if user is not logged in
+        }
+
+        const { data: adminUser, error: adminError } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("email", "admin@gmail.com")
+          .single();
+
+        // If there's an error or no admin user, set status to offline
+        if (adminError || !adminUser) {
+          console.warn("Admin user not found or error occurred. Setting status to offline.");
+          setAdminStatus("offline");
+          return;
+        }
+
+        // Admin is logged in, now check for message activity
+        const { data, error } = await supabase
+          .from("chats")
+          .select("*")
+          .or(`and(sender_id.eq.${adminUser.id},receiver_id.eq.${user.id}),and(sender_id.eq.${user.id},receiver_id.eq.${adminUser.id})`)
+          .order("created_at", { ascending: false })
+          .limit(1);
+
+        // Check if there was an error fetching messages
+        if (error) {
+          console.error("Error fetching messages:", error);
+          setAdminStatus("offline"); // Set to offline if there's an error
+          return;
+        }
+
+        if (data.length > 0) {
+          const lastMessageTime = new Date(data[0].created_at);
+          const currentTime = new Date();
+          const timeDiff = currentTime - lastMessageTime;
+
+          if (timeDiff < 180000) { // Less than 3 minutes (180,000 milliseconds)
+            setAdminStatus("online");
+          } else if (timeDiff < 600000) { // Between 3 and 10 minutes (600,000 milliseconds)
+            setAdminStatus("afk");
+          } else {
+            setAdminStatus("offline");
+          }
+        } else {
+          // No messages means admin is AFK if logged in
+          setAdminStatus("afk");
+        }
+      } catch (error) {
+        console.error("Error checking admin status:", error);
+        setAdminStatus("offline");
+      }
+    };
+
+    checkAdminStatus(); // Initial check on component mount
+    const interval = setInterval(checkAdminStatus, 2000); // Check every 2 seconds
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [userInfo]);
 
   const checkReportCooldown = async (student_id) => {
     console.log("Checking cooldown for student_id:", student_id);
@@ -486,6 +552,7 @@ const Profile = () => {
             <div className="chat-container">
               <div className="chat-header">
                 <h3>Chat with Admin</h3>
+                <span className={`admin-status ${adminStatus}`}></span>
                 <button onClick={toggleChat}>×</button>
               </div>
               <div className="chat-messages">
