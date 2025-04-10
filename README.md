@@ -1,61 +1,68 @@
-# PARKTRACK 🚀
+ParkTrack
+Prerequisites
+Node.js (v18.0.0 or higher)
 
-Welcome to the **PARKTRACK** project! Our mission is to revolutionize the way parking is managed through innovative technology.
+npm (v9.0.0 or higher)
 
-## Meet the Team 👥
+Installation
+Clone the repository
+git clone <repository-url>
+cd ParktTrack-main
 
-### Vincent Estenzo
+Install dependencies
+npm install
 
-_Role: Full Stack Developer_
+Set up configuration in supabaseClient.js:
 
-- Passionate about technology and innovation.
-- Loves coding and problem-solving.
+const supabaseUrl = "your_supabase_url";
+const supabaseKey = "your_supabase_anon_key";
 
----
+Set up your Resend API key in your email handling logic:
 
-### Gmarc Collados
+const resendApiKey = "your_resend_api_key";
 
-_Role: Full Stack Developer_
 
-- Enthusiastic about both frontend and backend development.
-- Enjoys building seamless user experiences.
+Required Services
+Supabase
+Create a Supabase account at https://supabase.com
 
----
 
-### Jerome Lagria
+Resend Email Service
+Create a Resend account at https://resend.com
 
-_Role: IoT Specialist_
+Generate an API key
 
-- Specializes in IoT technology and smart solutions.
-- Aims to integrate innovative technologies into everyday systems.
+Configure your transactional email templates as needed
 
----
+Development
+Start the development server:
+npm start
 
-### Jayvee Contiñedo
+Production Build
+Create a production-ready build:
+npm run build
 
-_Role: IoT and Capstone Paper Manager_
+Deployment
+This project can be deployed using any static hosting platform (e.g., Vercel, Netlify). Ensure your API keys and environment-specific configurations are handled securely.
 
-- Focused on IoT implementation and project documentation.
-- Enjoys coordinating team efforts and ensuring quality research.
+Technology Stack
+React – frontend framework
 
----
+React Router DOM – page navigation
 
-## Project Overview 📊
+Supabase – backend/database services
 
-**PARKTRACK** is designed to streamline parking management for schools, businesses, and other organizations. Our system utilizes RFID technology to efficiently track parking spaces, manage user access, and generate reports.
+CSS – styling
 
-### Features 🌟
+Axios – API requests
 
-- Real-time parking space availability tracking
-- User login and registration
-- Incident report management
-- Comprehensive dashboard for administrators
+Resend – email services
 
-## Getting Started 🛠️
+Formik & Yup – form handling and validation
 
-To get started with PARKTRACK, clone the repository and follow the installation instructions in the documentation.
+GSAP & Lottie React – animations
 
-```bash
-git clone https://github.com/yourusername/PARKTRACK.git
-cd PARKTRACK
-```
+React Calendar & React DatePicker – date/time inputs
+
+React Toastify – notifications
+
