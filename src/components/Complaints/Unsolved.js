@@ -28,12 +28,12 @@ const Unsolved = () => {
         .select(
           "id, student_id, description, submitted_at, incident_date, reason"
         )
-        .eq("progress", 3); // Only unsolved reports
+        .eq("progress", 3); 
 
       if (error) {
         console.error("Error fetching reports:", error.message);
       } else {
-        // Sort reports by submitted_at in descending order (latest first)
+        
         const sortedReports = data.sort(
           (a, b) => new Date(b.submitted_at) - new Date(a.submitted_at)
         );

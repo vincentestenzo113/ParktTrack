@@ -32,13 +32,13 @@ const Solved = () => {
         .select(
           "id, student_id, description, submitted_at, completed_at, remarks, proof_of_incident, incident_date"
         )
-        .eq("progress", 2) // Only solved reports
-        .not("remarks", "is", null); // Ensure remarks are not null
+        .eq("progress", 2) 
+        .not("remarks", "is", null); 
 
       if (error) {
         console.error("Error fetching reports:", error.message);
       } else {
-        // Sort reports by submitted_at in descending order (latest first)
+        
         const sortedReports = data.sort(
           (a, b) => new Date(b.submitted_at) - new Date(a.submitted_at)
         );
@@ -215,7 +215,7 @@ const Solved = () => {
                   <th>Student ID</th>
                   <th>Date and Time Submitted</th>
                   <th>Incident Date</th>
-                  <th>Date and Time Solved</th> {/* New column */}
+                  <th>Date and Time Solved</th> {}
                   <th className="description-column">Description</th>
                   <th>Remarks</th>
                   <th>Proof</th>
@@ -244,7 +244,7 @@ const Solved = () => {
                         ? new Date(report.completed_at).toLocaleString()
                         : "Not solved yet"}
                     </td>{" "}
-                    {/* New column */}
+                    {}
                     <td>{report.description}</td>
                     <td>
                       <button
@@ -272,7 +272,7 @@ const Solved = () => {
         </div>
       </div>
 
-      {/* View Remarks Modal */}
+      {}
       {showViewModal && (
         <div className="admin1-modal">
           <div className="admin1-modal-content">
@@ -285,7 +285,7 @@ const Solved = () => {
         </div>
       )}
 
-      {/* View Proof Modal */}
+      {}
       {showProofModal && (
         <div className="admin1-modal">
           <div className="admin1-modal-content">

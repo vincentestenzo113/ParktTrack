@@ -1,32 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTachometerAlt, faExclamationCircle, faUserCog } from '@fortawesome/free-solid-svg-icons'; // Icons import
+import { faTachometerAlt, faExclamationCircle, faUserCog } from '@fortawesome/free-solid-svg-icons'; 
 import logosaparktrack from '../components/public/logosaparktrack.png';
 
 const Dashboard = () => {
-  const [slotsLeft, setSlotsLeft] = useState(150); // Initial state
+  const [slotsLeft, setSlotsLeft] = useState(150); 
   const navigate = useNavigate();
 
-  // Function to fetch the current slots left from the Flask API
+  
   const fetchSlotsLeft = async () => {
     try {
-      const response = await fetch('http://192.168.1.12:5000/get_slots'); // Update with the Flask server URL
+      const response = await fetch('http://192.168.1.12:5000/get_slots'); 
       if (!response.ok) {
         throw new Error('Failed to fetch slots');
       }
       const data = await response.json();
-      setSlotsLeft(data.slots_left); // Update the state with the fetched slots
+      setSlotsLeft(data.slots_left); 
     } catch (error) {
       console.error('Error fetching slots:', error);
     }
   };
 
-  // Use `useEffect` to fetch slots when the component loads and every 5 seconds
+  
   useEffect(() => {
-    fetchSlotsLeft(); // Initial fetch
-    const interval = setInterval(fetchSlotsLeft, 2000); // Fetch every 5 seconds
-    return () => clearInterval(interval); // Cleanup interval on component unmount
+    fetchSlotsLeft(); 
+    const interval = setInterval(fetchSlotsLeft, 2000); 
+    return () => clearInterval(interval); 
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-// Login.js
+
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +22,7 @@ const Login = () => {
   });
 
   const onSubmit = async (values, { setSubmitting }) => {
-    // Prevent login for admin email
+    
     const adminEmail = 'admin@gmail.com';
     if (values.email === adminEmail) {
       toast.error('Admin cannot log in here.');
@@ -44,7 +44,7 @@ const Login = () => {
 
       localStorage.setItem('isAuthenticated', 'true');
 
-      // Redirecting to the user profile page after successful login
+      
       toast.success('Login successful! Redirecting to dashboard...');
       navigate('/profile');
     } catch (error) {

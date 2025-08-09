@@ -93,10 +93,10 @@ const IncidentReport = () => {
 
   useEffect(() => {
     if (showChat) {
-      fetchMessages(); // Initial fetch
-      const interval = setInterval(fetchMessages, 2000); // Poll every 2 seconds
+      fetchMessages(); 
+      const interval = setInterval(fetchMessages, 2000); 
 
-      return () => clearInterval(interval); // Cleanup on unmount
+      return () => clearInterval(interval); 
     }
   }, [showChat, userInfo]);
 
@@ -133,7 +133,7 @@ const IncidentReport = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate required fields
+    
     if (!studentId) {
       setMessage('Student ID is not set. Please try again.');
       return;
@@ -159,7 +159,7 @@ const IncidentReport = () => {
 
     const publicUrl = `${supabase.storageUrl}/object/public/incident-report/${filePath}`;
     const reportData = {
-      student_id: studentId, // Use the automatically detected student ID
+      student_id: studentId, 
       description,
       proof_of_incident: publicUrl,
       incident_date: incidentDate,
@@ -186,7 +186,7 @@ const IncidentReport = () => {
   };
 
   const handleSendMessage = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault(); 
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user || !message.trim()) return;
@@ -213,11 +213,11 @@ const IncidentReport = () => {
       return;
     }
 
-    // Immediately update the state with the new message
+    
     setMessages((current) => [
       ...current,
       {
-        id: Date.now(), // Temporary ID until real-time update
+        id: Date.now(), 
         sender_id: user.id,
         receiver_id: adminUser.id,
         message: message.trim(),
@@ -266,7 +266,7 @@ const IncidentReport = () => {
         <button className="profile-sidebar-button" onClick={() => setIsSettingsOpen(true)}>
           <FontAwesomeIcon icon={faCog} /> Settings
         </button>
-        <button className="profile-logout-button" onClick={() => {/* handleLogout logic */}}>
+        <button className="profile-logout-button" onClick={() => {}}>
           <FontAwesomeIcon icon={faSignOutAlt} /> Logout
         </button>
       </div>

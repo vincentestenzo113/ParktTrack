@@ -36,18 +36,18 @@ const Register = () => {
       .required('Confirm password is required'),
     motorcycleModel: Yup.string()
       .matches(/^[A-Za-z0-9\s]{1,30}$/, 'Motorcycle model must be alphanumeric and up to 30 characters')
-      .required('Motorcycle model is required'),  // Validation for motorcycle model
+      .required('Motorcycle model is required'),  
     motorcycleColorway: Yup.string()
       .matches(/^[A-Za-z\s]{1,30}$/, 'Motorcycle colorway must be alphabetic and up to 30 characters')
-      .required('Motorcycle colorway is required'),  // Validation for motorcycle colorway
+      .required('Motorcycle colorway is required'),  
     contactNumber: Yup.string()
       .matches(/^[0-9]{10,11}$/, 'Contact number must be 10 or 11 digits')
-      .required('Contact number is required'),  // Updated validation for contact number
+      .required('Contact number is required'),  
   });
 
   const onSubmit = async (values) => {
     try {
-      // Sign up the user with Supabase Auth
+      
       const { data, error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
@@ -55,9 +55,9 @@ const Register = () => {
           data: {
             studentId: values.studentId,
             name: values.name,
-            motorcycleModel: values.motorcycleModel,  // Include motorcycle model in the user metadata
-            motorcycleColorway: values.motorcycleColorway,  // Include motorcycle colorway in the user metadata
-            contactNumber: values.contactNumber,  // Include contact number in the user metadata
+            motorcycleModel: values.motorcycleModel,  
+            motorcycleColorway: values.motorcycleColorway,  
+            contactNumber: values.contactNumber,  
           },
         },
       });
@@ -68,19 +68,19 @@ const Register = () => {
         return;
       }
 
-      // Insert the user's profile into the profiles table
+      
       const { error: profileError } = await supabase
         .from('profiles')
         .insert([
           {
-            id: data.user.id,             // Using the auth.uid() (data.user.id)
-            student_id: values.studentId,  // student ID from the registration form
-            name: values.name,             // user name from the registration form
-            email: values.email,           // email from the registration form
+            id: data.user.id,             
+            student_id: values.studentId,  
+            name: values.name,             
+            email: values.email,           
             password: values.password,
-            motorcycle_model: values.motorcycleModel,  // Save motorcycle model to the table
-            motorcycle_colorway: values.motorcycleColorway,  // Save motorcycle colorway to the table
-            contact_number: values.contactNumber,  // Save contact number to the table
+            motorcycle_model: values.motorcycleModel,  
+            motorcycle_colorway: values.motorcycleColorway,  
+            contact_number: values.contactNumber,  
           },
         ]);
 
@@ -91,7 +91,7 @@ const Register = () => {
       }
 
       toast.success('Registration successful! Please check your email to confirm your account.', {
-        onClose: () => navigate('/login') // Redirect to login after toast closes
+        onClose: () => navigate('/login') 
       });
     } catch (error) {
       console.error('Error during sign up:', error.message);
@@ -160,7 +160,7 @@ const Register = () => {
               <Field 
                 name="contactNumber" 
                 className="register1-form-input" 
-                maxLength="11"  // Limit input to 11 characters
+                maxLength="11"  
                 onKeyPress={(event) => {
                   if (!/[0-9]/.test(event.key) && event.key !== 'Backspace') {
                     event.preventDefault();

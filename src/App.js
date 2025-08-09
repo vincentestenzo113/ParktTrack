@@ -28,29 +28,29 @@ import ConfirmationPage from "./components/utils/ConfirmationPage";
 function App() {
   const [authenticated, setAuthenticated] = useState(null);
 
-  // Check if the user is authenticated
+  
   useEffect(() => {
     const checkAuth = async () => {
       const { data } = await supabase.auth.getSession();
-      setAuthenticated(!!data.session); // Set true if a session exists
+      setAuthenticated(!!data.session); 
     };
 
-    // Listen for session changes
+    
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        setAuthenticated(!!session); // Update authenticated state based on session
+        setAuthenticated(!!session); 
       }
     );
 
-    checkAuth(); // Initial check
+    checkAuth(); 
 
-    // Cleanup listener on unmount
+    
     return () => {
       authListener.subscription.unsubscribe();
     };
   }, []);
 
-  // Show a loader until authentication status is determined
+  
   if (authenticated === null) {
     return <div>Loading...</div>;
   }
@@ -58,7 +58,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Default Route */}
+        {}
         <Route
           path="/"
           element={
@@ -70,7 +70,7 @@ function App() {
           }
         />
 
-        {/* Login Route */}
+        {}
         <Route
           path="/login"
           element={
@@ -78,7 +78,7 @@ function App() {
           }
         />
 
-        {/* Register Route */}
+        {}
         <Route
           path="/register"
           element={
@@ -86,7 +86,7 @@ function App() {
           }
         />
 
-        {/* Admin Login Route */}
+        {}
         <Route
           path="/admin-login"
           element={
@@ -94,7 +94,7 @@ function App() {
           }
         />
 
-        {/* Admin Route */}
+        {}
         <Route
           path="/admin"
           element={
@@ -108,7 +108,7 @@ function App() {
           }
         />
 
-        {/* Users Route - Admin only */}
+        {}
         <Route
           path="/users"
           element={
@@ -122,7 +122,7 @@ function App() {
           }
         />
 
-        {/* User Routes */}
+        {}
         <Route
           path="/profile"
           element={
@@ -217,7 +217,7 @@ function App() {
         />
         <Route path="/settings" element={<Settings />} />
 
-        {/* Confirmation Page Route */}
+        {}
         <Route path="/confirm-email" element={<ConfirmationPage />} />
       </Routes>
     </Router>

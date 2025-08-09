@@ -20,7 +20,7 @@ import {
 const Pending = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedReportId, setSelectedReportId] = useState(null); // Store report ID
+  const [selectedReportId, setSelectedReportId] = useState(null); 
   const [remarksInput, setRemarksInput] = useState("");
   const [showSendModal, setShowSendModal] = useState(false);
   const [proofUrl, setProofUrl] = useState("");
@@ -43,7 +43,7 @@ const Pending = () => {
     if (error) {
       console.error("Error fetching reports:", error.message);
     } else {
-      // Sort reports by submitted_at in descending order (latest first)
+      
       const sortedReports = data.sort(
         (a, b) => new Date(b.submitted_at) - new Date(a.submitted_at)
       );
@@ -66,7 +66,7 @@ const Pending = () => {
   };
 
   const openSendModal = (reportId) => {
-    setSelectedReportId(reportId); // Store the selected report ID
+    setSelectedReportId(reportId); 
     setShowSendModal(true);
   };
 
@@ -83,7 +83,7 @@ const Pending = () => {
           remarks: remarksInput,
           progress: 1,
         })
-        .eq("id", selectedReportId) // Use report ID to update the specific report
+        .eq("id", selectedReportId) 
         .select("id, remarks");
 
       if (error) {
@@ -307,7 +307,7 @@ const Pending = () => {
         </div>
       </div>
 
-      {/* Send Remarks Modal */}
+      {}
       {showSendModal && (
         <div className="admin1-modal">
           <div className="admin1-modal-content">
@@ -327,7 +327,7 @@ const Pending = () => {
         </div>
       )}
 
-      {/* View Proof Modal */}
+      {}
       {showProofModal && (
         <div className="admin1-modal">
           <div className="admin1-modal-content">

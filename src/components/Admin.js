@@ -130,7 +130,7 @@ const Admin = () => {
         .on(
           'postgres_changes',
           { 
-            event: '*',  // Listen to all events (INSERT, UPDATE, DELETE)
+            event: '*',  
             schema: 'public', 
             table: 'chats'
           },
@@ -138,17 +138,17 @@ const Admin = () => {
             if (payload.new && 
                 ((payload.new.sender_id === selectedStudent?.id && payload.new.receiver_id === user.id) ||
                  (payload.new.sender_id === user.id && payload.new.receiver_id === selectedStudent?.id))) {
-              setMessages((currentMessages) => [...currentMessages, payload.new]); // Add new message to state
+              setMessages((currentMessages) => [...currentMessages, payload.new]); 
               scrollToBottom();
             }
           }
         )
         .subscribe((status) => {
-          console.log('Subscription status:', status); // Debug log
+          console.log('Subscription status:', status); 
         });
     };
 
-    setupSubscription(); // Set up real-time updates on component mount
+    setupSubscription(); 
 
     return () => {
       if (subscription) {
@@ -178,10 +178,10 @@ const Admin = () => {
     };
 
     if (showChat && selectedStudent) {
-      fetchMessages(); // Initial fetch
-      const interval = setInterval(fetchMessages, 2000); // Poll every 2 seconds
+      fetchMessages(); 
+      const interval = setInterval(fetchMessages, 2000); 
 
-      return () => clearInterval(interval); // Cleanup on unmount
+      return () => clearInterval(interval); 
     }
   }, [showChat, selectedStudent]);
 
@@ -200,7 +200,7 @@ const Admin = () => {
         return;
       }
 
-      // Get the latest message and unread count for each student
+      
       const conversationsWithLastMessage = await Promise.all(
         profiles.map(async (profile) => {
           const { data: messages, error: messagesError } = await supabase
@@ -225,7 +225,7 @@ const Admin = () => {
         })
       );
 
-      // Sort conversations by the timestamp of the last message
+      
       conversationsWithLastMessage.sort((a, b) => {
         const dateA = a.lastMessage ? new Date(a.lastMessage.created_at) : new Date(0);
         const dateB = b.lastMessage ? new Date(b.lastMessage.created_at) : new Date(0);
@@ -238,7 +238,7 @@ const Admin = () => {
     if (session?.session) {
       fetchConversations();
       
-      // Subscribe to new messages
+      
       const subscription = supabase
         .channel('chats')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'chats' }, () => {
@@ -273,11 +273,11 @@ const Admin = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    // Trim inputs to prevent leading/trailing spaces
+    
     const trimmedStudentId = studentId.trim();
     const trimmedRfidTag = rfidTag.trim();
 
-    // Check if inputs are valid
+    
     if (!trimmedStudentId || !trimmedRfidTag) {
       setMessage("Please provide both Student ID and RFID Tag.");
       return;
@@ -289,12 +289,12 @@ const Admin = () => {
     });
 
     try {
-      // Update rfid_tag for the matching student_id
+      
       const { data, error } = await supabase
         .from("profiles")
         .update({ rfid_tag: trimmedRfidTag })
         .eq("student_id", trimmedStudentId)
-        .select(); // Select the updated data to check
+        .select(); 
 
       if (error) {
         console.error("Supabase Update Error:", error.message);
@@ -312,7 +312,7 @@ const Admin = () => {
       setMessage("An error occurred. Please try again.");
     }
 
-    // Reset form fields
+    
     setStudentId("");
     setRfidTag("");
   };
@@ -514,7 +514,7 @@ const Admin = () => {
         </button>
       </div>
 
-      {/* Modal for RFID Form */}
+      {}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">

@@ -59,12 +59,12 @@ const OnProgress = () => {
         .select(
           "id, student_id, description, submitted_at, completed_at, remarks, proof_of_incident, incident_date"
         )
-        .eq("progress", 1); // Only solved reports
+        .eq("progress", 1); 
 
       if (error) {
         console.error("Error fetching reports:", error.message);
       } else {
-        // Sort reports by submitted_at in descending order (latest first)
+        
         const sortedReports = data.sort(
           (a, b) => new Date(b.submitted_at) - new Date(a.submitted_at)
         );
@@ -98,8 +98,8 @@ const OnProgress = () => {
           remarks: remarksInput,
           progress: 1,
         })
-        .eq("id", selectedStudentId) // Use the 'id' (primary key) here
-        .select("id, remarks"); // Select the updated report's 'id' and 'remarks'
+        .eq("id", selectedStudentId) 
+        .select("id, remarks"); 
 
       if (error) {
         console.error("Error sending remarks:", error);
@@ -130,9 +130,9 @@ const OnProgress = () => {
       .from("incident_report")
       .update({
         progress: 2,
-        completed_at: new Date().toISOString(), // Set current timestamp when solved
+        completed_at: new Date().toISOString(), 
       })
-      .eq("id", reportId); // Use 'id' here
+      .eq("id", reportId); 
     if (error) {
       console.error("Error marking as solved:", error.message);
       alert(`Error: ${error.message}`);
@@ -149,7 +149,7 @@ const OnProgress = () => {
         progress: 3,
         remarks: null,
       })
-      .eq("id", reportId); // Use 'id' here
+      .eq("id", reportId); 
 
     if (error) {
       console.error("Error marking as unsolved:", error.message);
@@ -205,7 +205,7 @@ const OnProgress = () => {
         .from("incident_report")
         .update({
           reason: unsolvedReason,
-          progress: 3, // Set progress to 3 for unsolved
+          progress: 3, 
         })
         .eq("id", selectedReportId);
 
@@ -213,7 +213,7 @@ const OnProgress = () => {
         console.error("Error updating report:", error.message);
       } else {
         alert("Reason for unsolved report submitted successfully.");
-        await fetchReports(); // Refresh the reports
+        await fetchReports(); 
       }
       closeUnsolvedModal();
     } else {
@@ -354,9 +354,9 @@ const OnProgress = () => {
                 {reports.map((report) => (
                   <tr key={report.id}>
                     {" "}
-                    {/* Ensure that the 'id' field is being used here */}
+                    {}
                     <td className="ticket-column">{report.id}</td>{" "}
-                    {/* Display the 'id' as the Ticket # */}
+                    {}
                     <td>{report.student_id}</td>
                     <td>{new Date(report.submitted_at).toLocaleString()}</td>
                     <td>
@@ -411,14 +411,14 @@ const OnProgress = () => {
           )}
         </div>
 
-        {/* Notification Box */}
+        {}
         {notification.visible && (
           <div className={`notification-box ${notification.icon}`}>
             {notification.message}
           </div>
         )}
 
-        {/* Send Remarks Modal */}
+        {}
         {showSendModal && (
           <div className="modal-overlay">
             <div className="modal-content">
@@ -434,7 +434,7 @@ const OnProgress = () => {
           </div>
         )}
 
-        {/* View Remarks Modal */}
+        {}
         {showViewModal && (
           <div className="modal-overlay">
             <div className="modal-content">
@@ -447,7 +447,7 @@ const OnProgress = () => {
           </div>
         )}
 
-        {/* View Proof Modal */}
+        {}
         {showProofModal && (
           <div className="modal-overlay">
             <div className="modal-content">
@@ -468,7 +468,7 @@ const OnProgress = () => {
           </div>
         )}
 
-        {/* Unsolved Reason Modal */}
+        {}
         {showUnsolvedModal && (
           <div className="admin1-modal">
             <div className="admin1-modal-content">

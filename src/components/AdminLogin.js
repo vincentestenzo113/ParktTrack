@@ -1,4 +1,4 @@
-// AdminLogin.js
+
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate } from 'react-router-dom';
@@ -43,7 +43,7 @@ const AdminLogin = () => {
 
       localStorage.setItem('isAuthenticated', 'true');
 
-      // Redirecting to the admin dashboard after successful login
+      
       toast.success('Login successful! Redirecting to admin page...');
       navigate('/admin');
     } catch (error) {

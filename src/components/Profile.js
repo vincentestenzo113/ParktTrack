@@ -57,13 +57,13 @@ const Profile = () => {
         return;
       }
 
-      // Check if the user is admin and logout
+      
       if (user.email === "admin@gmail.com") {
         handleLogout();
         return;
       }
 
-      // Fetch the user's profile from the profiles table
+      
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("name, student_id, motorcycle_model, motorcycle_colorway, contact_number")
@@ -77,7 +77,7 @@ const Profile = () => {
 
       setUserInfo({ ...user, ...profile });
 
-      // Check cooldown status using student_id from profile
+      
       if (profile && profile.student_id) {
         checkReportCooldown(profile.student_id);
       }
@@ -141,10 +141,10 @@ const Profile = () => {
     };
 
     if (showChat) {
-      fetchMessages(); // Initial fetch
-      const interval = setInterval(fetchMessages, 2000); // Poll every 2 seconds
+      fetchMessages(); 
+      const interval = setInterval(fetchMessages, 2000); 
 
-      return () => clearInterval(interval); // Cleanup on unmount
+      return () => clearInterval(interval); 
     }
   }, [showChat]);
 
@@ -163,7 +163,7 @@ const Profile = () => {
         if (!user) {
           console.warn("User is not logged in. Setting admin status to offline.");
           setAdminStatus("offline");
-          return; // Exit if user is not logged in
+          return; 
         }
 
         const { data: adminUser, error: adminError } = await supabase
@@ -172,14 +172,14 @@ const Profile = () => {
           .eq("email", "admin@gmail.com")
           .single();
 
-        // If there's an error or no admin user, set status to offline
+        
         if (adminError || !adminUser) {
           console.warn("Admin user not found or error occurred. Setting status to offline.");
           setAdminStatus("offline");
           return;
         }
 
-        // Admin is logged in, now check for message activity
+        
         const { data, error } = await supabase
           .from("chats")
           .select("*")
@@ -187,10 +187,10 @@ const Profile = () => {
           .order("created_at", { ascending: false })
           .limit(1);
 
-        // Check if there was an error fetching messages
+        
         if (error) {
           console.error("Error fetching messages:", error);
-          setAdminStatus("offline"); // Set to offline if there's an error
+          setAdminStatus("offline"); 
           return;
         }
 
@@ -199,15 +199,15 @@ const Profile = () => {
           const currentTime = new Date();
           const timeDiff = currentTime - lastMessageTime;
 
-          if (timeDiff < 180000) { // Less than 3 minutes (180,000 milliseconds)
+          if (timeDiff < 180000) { 
             setAdminStatus("online");
-          } else if (timeDiff < 600000) { // Between 3 and 10 minutes (600,000 milliseconds)
+          } else if (timeDiff < 600000) { 
             setAdminStatus("afk");
           } else {
             setAdminStatus("offline");
           }
         } else {
-          // No messages means admin is AFK if logged in
+          
           setAdminStatus("afk");
         }
       } catch (error) {
@@ -216,9 +216,9 @@ const Profile = () => {
       }
     };
 
-    checkAdminStatus(); // Initial check on component mount
-    const interval = setInterval(checkAdminStatus, 2000); // Check every 2 seconds
-    return () => clearInterval(interval); // Cleanup on unmount
+    checkAdminStatus(); 
+    const interval = setInterval(checkAdminStatus, 2000); 
+    return () => clearInterval(interval); 
   }, [userInfo]);
 
   const checkReportCooldown = async (student_id) => {
@@ -249,7 +249,7 @@ const Profile = () => {
         setHasCooldown(true);
         setCooldownTime(Math.floor((86400000 - timeDiff) / 1000));
 
-        // Clear any existing interval before setting a new one
+        
         if (window.cooldownInterval) {
           clearInterval(window.cooldownInterval);
         }
@@ -265,7 +265,7 @@ const Profile = () => {
           });
         }, 1000);
 
-        // Cleanup interval when component unmounts
+        
         return () => {
           if (window.cooldownInterval) {
             clearInterval(window.cooldownInterval);
@@ -305,7 +305,7 @@ const Profile = () => {
     } = await supabase.auth.getUser();
     if (!user) return;
 
-    // Get admin ID
+    
     const { data: adminUser } = await supabase
       .from("profiles")
       .select("id")
@@ -328,7 +328,7 @@ const Profile = () => {
   };
 
   const handleSendMessage = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault(); 
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user || !message.trim()) return;
@@ -355,11 +355,11 @@ const Profile = () => {
       return;
     }
 
-    // Immediately update the state with the new message
+    
     setMessages((current) => [
       ...current,
       {
-        id: Date.now(), // Temporary ID until real-time update
+        id: Date.now(), 
         sender_id: user.id,
         receiver_id: adminUser.id,
         message: message.trim(),

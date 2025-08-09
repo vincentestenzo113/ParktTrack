@@ -42,7 +42,7 @@ const ViewComplaint = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Fetch logged-in user data and complaints
+  
   useEffect(() => {
     const fetchUserData = async () => {
       const {
@@ -83,7 +83,7 @@ const ViewComplaint = () => {
     fetchUserData();
   }, [navigate]);
 
-  // Fetch complaints and check cooldown after user data is loaded
+  
   useEffect(() => {
     if (userInfo) {
       fetchComplaints();
@@ -91,7 +91,7 @@ const ViewComplaint = () => {
     }
   }, [userInfo]);
 
-  // Fetch chat messages
+  
   useEffect(() => {
     const fetchMessages = async () => {
       const {
@@ -163,7 +163,7 @@ const ViewComplaint = () => {
     }
   }, [showChat]);
 
-  // Send a message
+  
   const handleSendMessage = async (e) => {
     e.preventDefault();
 
@@ -225,7 +225,7 @@ const ViewComplaint = () => {
     navigate("/login");
   };
 
-  // Check if the user is on cooldown
+  
   const checkReportCooldown = async (student_id) => {
     const { data: reports, error } = await supabase
       .from("incident_report")
@@ -260,7 +260,7 @@ const ViewComplaint = () => {
     }
   };
 
-  // Fetch complaints for the logged-in user
+  
   const fetchComplaints = async () => {
     if (!userInfo) return;
     const { data, error } = await supabase
@@ -287,7 +287,7 @@ const ViewComplaint = () => {
     setComplaints(mappedComplaints);
   };
 
-  // Modal handlers
+  
   const handleShowProof = (proofUrl) => {
     setProofUrl(proofUrl);
     setIsProofModalOpen(true);

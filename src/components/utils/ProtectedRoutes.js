@@ -13,9 +13,9 @@ const ProtectedRoute = ({ children }) => {
       try {
         const { data, error } = await supabase.auth.getUser();
         if (error || !data.user) {
-          setUser(null); // No user logged in
+          setUser(null); 
         } else {
-          setUser(data.user); // User logged in
+          setUser(data.user); 
           setLoginPath(window.location.pathname);
         }
       } catch (error) {

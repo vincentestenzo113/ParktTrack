@@ -14,7 +14,7 @@ const ConfirmationPage = () => {
         return;
       }
 
-      // Confirm the token
+      
       const { error } = await supabase.auth.verifyOtp({
         type: "signup",
         token,
